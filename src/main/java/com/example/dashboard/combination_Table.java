@@ -3,12 +3,12 @@ package com.example.dashboard;
 import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleStringProperty;
 
-public class Table {
+public class combination_Table {
     private final SimpleStringProperty combination;
     private final SimpleIntegerProperty combinationNumber;
     private final SimpleIntegerProperty customerCount;
 
-    public Table(String combinations, int combinationNumber, int customerCount){
+    public combination_Table(String combinations, int combinationNumber, int customerCount){
         this.combinationNumber = new SimpleIntegerProperty(combinationNumber);
         this.combination = new SimpleStringProperty(combinations);
         this.customerCount = new SimpleIntegerProperty(customerCount);
