@@ -12,6 +12,7 @@ import java.util.List;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
+import javafx.event.Event;
 import javafx.fxml.FXML;
 import javafx.scene.chart.BarChart;
 import javafx.scene.chart.CategoryAxis;
@@ -86,6 +87,8 @@ public class Controller {
     private List<int[]> offerSize;
 
     @FXML
+    private TableView<Ingest_CustomerInfo> Customer_details;
+    @FXML
     private TableColumn Offer_ID = new TableColumn("Offer_ID");
     @FXML
     private TableColumn Offer_name = new TableColumn("Offer_name");
@@ -107,6 +110,16 @@ public class Controller {
     private TableColumn Funeral_pol = new TableColumn("Funeral_pol");
     @FXML
     private TableColumn Customers = new TableColumn("Customers");
+
+    private String CustomerExcel = "";
+
+    public String getCustomerExcel() {
+        return CustomerExcel;
+    }
+
+    public void setCustomerExcel(String customerExcel) {
+        CustomerExcel = customerExcel;
+    }
 
     @FXML
     private TextField Ingest;
@@ -140,6 +153,57 @@ public class Controller {
             this.errBox(errMessage);
         }
 
+    }
+
+    private void customerBandTable(){
+
+        Ingest_CustomerInfo customer_Details = new Ingest_CustomerInfo();
+        customer_Details.
+
+        if (inputExcel.isError()) {
+            this.errBox(inputExcel.getErrMessage());
+        } else {
+            this.tableChart.getItems().clear();
+            this.overlapCharts.setVisible(true);
+            Processor offerDetails = new Processor();
+            List<int[]> position = offerDetails.offerPositions(inputExcel.getCombination());
+            List<int[]> sort = offerDetails.sortOffers(position);
+            this.combinationList = offerDetails.offerCombos(inputExcel.getCombination(), sort, inputExcel);
+            this.customerNumberList = offerDetails.customerCount(inputExcel.getCombination(), sort);
+            this.offerSize = offerDetails.getOfferCount();
+            int count = 1;
+            this.tableChart.setVisible(true);
+            this.totalCustomers = 0;
+
+            for(int index = 0; index < this.offerSize.size(); ++count) {
+                this.tableValues.add(new combination_Table(count + ". " + (String)this.combinationList.get(index), ((int[])this.offerSize.get(index))[1], (Integer)this.customerNumberList.get(index)));
+                this.totalCustomers = this.totalCustomers + (Integer)this.customerNumberList.get(index);
+                ++index;
+            }
+    }
+
+    @FXML
+    private void processExcel(ActionEvent event){
+        Button display = (Button)selected.getSource();
+
+        if (!this.CustomerExcel.isEmpty() && !Files.notExists(Path.of(this.CustomerExcel), new LinkOption[0])) {
+
+        } else {
+            String errMessage = "Path does not exist. Please check the given path or the excel spreadsheet.";
+            this.errBox(errMessage);
+        }
+    }
+
+    @FXML
+    private void Ingest(ActionEvent event) {
+        TextField loca = (TextField)event.getSource();
+        this.setCustomerExcel(loca.getText());
+    }
+
+    @FXML
+    private void Ingest(MouseEvent event) {
+        TextField loca = (TextField)event.getSource();
+        this.setCustomerExcel(loca.getText());
     }
 
     private void drawTable() {
