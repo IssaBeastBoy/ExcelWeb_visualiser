@@ -15,8 +15,9 @@ public class Ingest_CustomerInfo {
     private String err_Message = "";
     private Dictionary<String, String> combinations = new Hashtable<>();
     private Dictionary<String, String> relationshipStatus = new Hashtable<>();
-    private Map<Integer, List<String>> customerInfo = new HashMap<>();
-
+    private Map<Integer, List<String>> customerInfo;
+    private Dictionary<Integer, Integer> corruptedRows;
+    private static Row.MissingCellPolicy xRow;
     public Ingest_CustomerInfo(){
         combinations.put("IN","Insure");
         combinations.put("SL","SecuredLend");
@@ -29,7 +30,9 @@ public class Ingest_CustomerInfo {
         relationshipStatus.put("W", "Widow");
         relationshipStatus.put("M", "Married");
         relationshipStatus.put("D","Divorced");
-        relationshipStatus.put("U","...");
+        relationshipStatus.put("U","Unknown");
+        customerInfo = new HashMap<>();
+        corruptedRows = new Hashtable<>();
     }
 
     private boolean isThrowErr() {
@@ -70,21 +73,28 @@ public class Ingest_CustomerInfo {
         String[] chars  = offerCodes.split("");
         String offerNames = "";
         if(chars.length%2==0){
-            int charCount = 1;
+            int charCount = 0;
             String offer = "";
-            for (int index = 0; index < chars.length; index++){
-                if(charCount == 2){
-                    offerNames = combinations.get(offer) + " "+offerNames;
-                    charCount=1;
+            if(chars.length>=4) {
+                for (int index = 0; index < chars.length; index++) {
+                    if (charCount == 2) {
+                        offerNames = combinations.get(offer) + ", " + offerNames;
+                        charCount = 0;
+                        offer = "";
+                    }
+                    offer += chars[index];
+                    charCount++;
                 }
-                offer +=chars[index];
-                charCount++;
+                offerNames = offerNames + " " +combinations.get(offer) ;
             }
+            else
+                offerNames = combinations.get(offerCodes);
         }
         else
             throw new RuntimeException("Offer code does not exist");
         return offerNames;
     }
+
 
     public void parseSheet(){
         int rowCount = 1;
@@ -96,87 +106,94 @@ public class Ingest_CustomerInfo {
                     .rowCacheSize(2000)
                     .bufferSize(6000)
                     .open(input);
+            //workbook.setMissingCellPolicy(xRow.CREATE_NULL_AS_BLANK);
             DataFormatter dataFormatter = new DataFormatter();
             Iterator<Sheet> sheets = workbook.sheetIterator();
+
             while (sheets.hasNext()){
                 Sheet sh = sheets.next();
                 sheetName = sh.getSheetName();
                 Iterator<Row> parseRow = sh.iterator();
                 rowCount = 1;
+
                 while (parseRow.hasNext()){
                     Row row = parseRow.next();
-                    Iterator<Cell> parseCell = row.iterator();
+                    Iterator<Cell> parseCell = row.cellIterator();// .iterator();
+                    //Cell cells = row.getCell(1)
                     List<String> customerDetails = new ArrayList<>();
-                    cellNumber = 1;
+                    cellNumber=1;
                     if(rowCount > 1){
                         while (parseCell.hasNext()){
                             Cell cell = parseCell.next();
                             String cellValue =cell.getStringCellValue(); //dataFormatter.formatCellValue(cell.toString());
                             if(cellNumber == 1){
-                                if (cellValue.isEmpty()){
+                                if (cellValue.equals("-1")){
                                     customerDetails.add("No_offers");
+                                    customerDetails.add("No_combinations");
                                 }
-                                else
+                                else{
+                                    customerDetails.add(cellValue);
                                     customerDetails.add(setOffers(cellValue));
+                                }
                             }
                             else if(cellNumber == 2){
-                                if (cellValue.isEmpty()){
+                                if (cellValue.equals("-1")){
                                     customerDetails.add("No_KPI_Risk");
                                 }
                                 else
                                     customerDetails.add(cellValue);
                             }
                             else if(cellNumber == 3){
-                                if (cellValue.isEmpty()){
+                                if (cellValue.equals("-1")){
                                     customerDetails.add("No_segment");
                                 }
                                 else
                                     customerDetails.add(cellValue);
                             }
                             else if(cellNumber == 4){
-                                if (cellValue.isEmpty()){
+                                if (cellValue.equals("-1")){
                                     customerDetails.add("No_ageBend");
                                 }
                                 else
                                     customerDetails.add(setBend(cellValue));
                             }
                             else if(cellNumber == 5){
-                                if (cellValue.isEmpty()){
+                                if (cellValue.equals("-1")){
                                     customerDetails.add("No_incomeBend");
                                 }
                                 else
                                     customerDetails.add(setBend(cellValue));
                             }
                             else if(cellNumber == 6){
-                                if (cellValue.isEmpty()){
+                                if (cellValue.equals("-1")){
                                     customerDetails.add("Has_account(s)");
                                 }
                                 else
                                     customerDetails.add(cellValue);
                             }
                             else if(cellNumber == 7){
-                                if (cellValue.isEmpty()){
+                                if (cellValue.equals("-1")){
                                     customerDetails.add("No_relationshipStatus");
                                 }
                                 else
                                     customerDetails.add(relationshipStatus.get(cellValue));
                             }
                             else if(cellNumber == 8){
-                                if (cellValue.isEmpty()){
+                                if (cellValue.equals("-1")){
                                     customerDetails.add("No_educationInfo");
                                 }
                                 else
                                     customerDetails.add(cellValue);
                             }
                             else if(cellNumber == 9){
-                                if (cellValue.isEmpty()){
+                                if (cellValue.equals("-1")){
                                     customerDetails.add("No_funeralPolicy");
                                 }
                                 else
                                     customerDetails.add(cellValue);
                             }
                             else if(cellNumber == 10){
-                                if (cellValue.isEmpty()){
+                                if (cellValue.equals("-1")){
                                     throw new RuntimeException("No customer count");
                                 }
                                 else
@@ -185,13 +202,17 @@ public class Ingest_CustomerInfo {
                             cellNumber++;
                         }
                         customerInfo.put(rowCount-1,customerDetails);
+//                        else{
+//                            corruptedRows.add(rowCount);
+//                            rowCount--;
+//                        }
+
                     }
                     rowCount++;
                 }
             }
         }
         catch (Exception ex){
-            setThrowErr(true);
             setErr_Message(ex + "\n\t"+"Excel document at: "+ getExcel_loc()+ "\n\t" +"Sheet name: " + sheetName + "\n \t Row Number: " + rowCount + "\n \t Column Number: " + cellNumber + "\n \n Error message -> \n" + ex + "\n \n Error has occured, please check the given locations...");
         }
     }
@@ -200,5 +221,7 @@ public class Ingest_CustomerInfo {
 //        Ingest_CustomerInfo customerInfo = new Ingest_CustomerInfo();
 //        customerInfo.setExcel_loc("C:\\Users\\f5462797\\Applications\\Grad_project\\Customer_Info.xlsx");
 //        customerInfo.parseSheet();
+//        isUnique testing = new isUnique("Affluent", customerInfo.getCustomerInfo());
+//        testing.getUniqueCombination();
 //    }
 }
