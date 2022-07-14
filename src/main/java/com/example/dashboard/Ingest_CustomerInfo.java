@@ -35,7 +35,7 @@ public class Ingest_CustomerInfo {
         corruptedRows = new Hashtable<>();
     }
 
-    private boolean isThrowErr() {
+    public boolean isThrowErr() {
         return throwErr;
     }
 
@@ -52,7 +52,7 @@ public class Ingest_CustomerInfo {
         return customerInfo;
     }
 
-    private void setExcel_loc(String excel_loc) {
+    public void setExcel_loc(String excel_loc) {
         this.excel_loc = excel_loc;
     }
 
@@ -219,7 +219,7 @@ public class Ingest_CustomerInfo {
 
 //    public static void main(String[] args) {
 //        Ingest_CustomerInfo customerInfo = new Ingest_CustomerInfo();
-//        customerInfo.setExcel_loc("C:\\Users\\f5462797\\Applications\\Grad_project\\Customer_Info.xlsx");
+//       customerInfo.setExcel_loc("C:\\Users\\f5462797\\Applications\\Grad_project\\Customer_Info.xlsx");
 //        customerInfo.parseSheet();
 //        isUnique testing = new isUnique("Affluent", customerInfo.getCustomerInfo());
 //        testing.getUniqueCombination();
