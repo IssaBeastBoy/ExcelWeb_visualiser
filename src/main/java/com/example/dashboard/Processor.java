@@ -78,7 +78,7 @@ public class Processor {
         return list;
     }
 
-    public List<String> offerCombos(Dictionary<String[], Integer> combinations, List<int[]> list, Ingest info){
+    public List<String> offerCombos(Dictionary<String[], Integer> combinations, List<int[]> list, Ingest_Overlap info){
         List<String> offers = new ArrayList<>();
         List<String> temp = new ArrayList<>();
         setOfferCount(list);
@@ -113,7 +113,7 @@ public class Processor {
         return customerCount;
     }
 
-    public String decodeOffCode(String[] offerCodes, Ingest offerDetails){
+    public String decodeOffCode(String[] offerCodes, Ingest_Overlap offerDetails){
         String store = "";
         String[] codes = offerDetails.getOffers().get("Codes");
         String[] names = offerDetails.getOffers().get("Names");

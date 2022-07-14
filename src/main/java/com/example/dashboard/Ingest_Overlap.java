@@ -1,6 +1,5 @@
 package com.example.dashboard;
 
-import javafx.scene.chart.AreaChart;
 import org.apache.poi.ss.usermodel.*;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
@@ -9,7 +8,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.util.*;
 
-public class Ingest {
+public class Ingest_Overlap {
 
     private String Excel_loc;
     private Dictionary<String,String[]> offers;
@@ -28,7 +27,7 @@ public class Ingest {
         return error;
     }
 
-    public void setError(boolean error) {
+    private void setError(boolean error) {
         this.error = error;
     }
 
@@ -36,7 +35,7 @@ public class Ingest {
         return ErrMessage;
     }
 
-    public void setErrMessage(String errMessage) {
+    private void setErrMessage(String errMessage) {
         ErrMessage = errMessage;
     }
 
@@ -115,12 +114,12 @@ public class Ingest {
                 this.offers = new Hashtable<>();
                 this.sheetName.add(sheetName);
                 this.Combination = new Hashtable<>();
-                Iterator<Row> parseSheet = sh.iterator();
+                Iterator<Row> parseRow = sh.iterator();
                 rowCount = 1;
                 this.offerNames = false;
                 this.offerCodes = false;
-                while (parseSheet.hasNext()){
-                    Row row = parseSheet.next();
+                while (parseRow.hasNext()){
+                    Row row = parseRow.next();
                     Iterator<Cell> parseCell = row.iterator();
                     cellEmpty = true;
                     cellNumber = 1;
@@ -153,7 +152,7 @@ public class Ingest {
         }
         catch (Exception ex){
             setError(true);
-            this.ErrMessage = "Sheet name: " + this.sheetName + "\n \t Row Number: " + this.rowNumber + "\n \t Column Number: " + this.cellNumber + "\n \n Error message -> \n" + ex + "\n \n Error has occured, please check the given locations...";
+            this.ErrMessage = "Excel document at: "+ getExcel_loc()+ "\n" +"Sheet name: " + this.sheetName + "\n \t Row Number: " + this.rowNumber + "\n \t Column Number: " + this.cellNumber + "\n \n Error message -> \n" + ex + "\n \n Error has occured, please check the given locations...";
         }
     }
 

@@ -39,7 +39,7 @@ public class Overlap {
     public void createExcel(){
         LocalDateTime timeStamp = LocalDateTime.now();
         LocalDate date = LocalDate.now();
-        Ingest pillars = new Ingest();
+        Ingest_Overlap pillars = new Ingest_Overlap();
         pillars.setExcel_loc("C:\\Users\\f5462797\\Applications\\Grad_project\\Overlap_finder\\files\\Offer_Combinations.xlsx");
         pillars.parseSheets();
         Processor offerDetails = new Processor();
@@ -99,7 +99,7 @@ public class Overlap {
     public void createDoc(){
         LocalDateTime timeStamp = LocalDateTime.now();
         LocalDate date = LocalDate.now();
-        Ingest pillars = new Ingest();
+        Ingest_Overlap pillars = new Ingest_Overlap();
         pillars.setExcel_loc("C:\\Users\\f5462797\\Applications\\Grad_project\\Overlap_finder\\files\\Offer_Combinations.xlsx");
         pillars.parseSheets();
         Processor offerDetails = new Processor();
