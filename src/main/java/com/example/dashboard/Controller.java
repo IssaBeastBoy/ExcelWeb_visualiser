@@ -12,13 +12,12 @@ import javafx.scene.layout.AnchorPane;
 
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.text.DecimalFormat;
 import java.util.List;
 
 public class Controller {
 
     @FXML
-    private TableView<Table> tableChart;
+    private TableView<combination_Table> tableChart;
     @FXML
     private TableColumn firstCol = new TableColumn("Pillars");
     @FXML
@@ -69,7 +68,7 @@ public class Controller {
     @FXML
     private RadioButton barGraphSelect;
 
-    private final ObservableList<Table> tableValues = FXCollections.observableArrayList();
+    private final ObservableList<combination_Table> tableValues = FXCollections.observableArrayList();
     private final ObservableList<PieChart.Data> pieChartValues = FXCollections.observableArrayList();
     private final  XYChart.Series<String,Integer> barGraphValues = new XYChart.Series<>();
 
@@ -109,7 +108,7 @@ public class Controller {
     }
 
     private void drawTable() {
-        Ingest inputExcel = new Ingest();
+        Ingest_Overlap inputExcel = new Ingest_Overlap();
         inputExcel.setExcel_loc(getExcel_loc());
         inputExcel.parseSheets();
         if (inputExcel.isError())
@@ -133,7 +132,7 @@ public class Controller {
                 // IntegerProperty cusCount = new
                 // SimpleIntegerProperty(customerNumberList.get(index));
                 // IntegerProperty comBin = new SimpleIntegerProperty(offerSize.get(index)[1]);
-                tableValues.add(new Table(count + ". " + combinationList.get(index), offerSize.get(index)[1],
+                tableValues.add(new combination_Table(count + ". " + combinationList.get(index), offerSize.get(index)[1],
                         customerNumberList.get(index)));
                 totalCustomers += customerNumberList.get(index);
                 // combinations.setIndex(index);
@@ -150,9 +149,9 @@ public class Controller {
                 // cellData.getValue().getcombinationNumber());
             }
 
-            firstCol.setCellValueFactory(new PropertyValueFactory<Table, String>("combination"));
-            secCol.setCellValueFactory(new PropertyValueFactory<Table, Integer>("combinationNumber"));
-            thirdCol.setCellValueFactory(new PropertyValueFactory<Table, Integer>("customerCount"));
+            firstCol.setCellValueFactory(new PropertyValueFactory<combination_Table, String>("combination"));
+            secCol.setCellValueFactory(new PropertyValueFactory<combination_Table, Integer>("combinationNumber"));
+            thirdCol.setCellValueFactory(new PropertyValueFactory<combination_Table, Integer>("customerCount"));
             // overlaps.getColumns().addAll(firstCol,secCol,thirdCol);
             // activeSession.add(combinations);
             tableChart.setItems(tableValues);

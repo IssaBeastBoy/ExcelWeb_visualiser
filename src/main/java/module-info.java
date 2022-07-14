@@ -10,6 +10,8 @@ module com.example.dashboard {
     requires eu.hansolo.tilesfx;
     requires poi;
     requires poi.ooxml;
+    requires com.google.common;
+    requires xlsx.streamer;
 
     opens com.example.dashboard;
     exports com.example.dashboard;
