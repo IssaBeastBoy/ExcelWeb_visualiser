@@ -7,94 +7,86 @@
 <?import javafx.scene.text.*?>
 
 <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="700.0" prefWidth="1300.0" style="-fx-background-color: #56b9cf;" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.dashboard.Controller">
-   <effect>
-      <ColorAdjust />
-   </effect>
-   <children>
-      <Label alignment="CENTER_RIGHT" contentDisplay="CENTER" layoutX="600.0" text="FNB Call Centre Leads Management System" textAlignment="CENTER">
-         <font>
-            <Font name="System Bold" size="18.0" />
-         </font>
-      </Label>
-      <Label layoutY="50.0" text="Combination Excel Location: ">
-         <font>
-            <Font size="14.0" />
-         </font>
-      </Label>
-      <TextField id="com_Loc" layoutX="178.0" layoutY="45.0" onAction="#Location" onMouseExited="#Location" prefHeight="30.0" prefWidth="144.0" promptText="Enter location of excel..." />
-      <Button id="drawCharts" fx:id="drawCharts" layoutX="128.0" layoutY="86.0" mnemonicParsing="false" onAction="#drawCharts" style="-fx-background-radius: 50; -fx-border-radius: 50; -fx-background-color: #0a9ac4;" text="find Overlap(s)">
-         <font>
-            <Font name="System Bold" size="12.0" />
-         </font></Button>
-      <AnchorPane id="overlapCharts" fx:id="overlapCharts" layoutX="4.0" layoutY="123.0" prefHeight="576.0" prefWidth="652.0" visible="false">
-         <children>
-            <TableView id="overlaps" fx:id="tableChart" editable="true" prefHeight="354.0" prefWidth="652.0">
-              <columns>
-                <TableColumn fx:id="firstCol" minWidth="430.0" prefWidth="75.0" sortable="false" text="Pillars" />
-                <TableColumn fx:id="secCol" minWidth="50.0" prefWidth="75.0" text="Products" />
-                 <TableColumn fx:id="thirdCol" minWidth="140.0" prefWidth="75.0" text="Amount of Customers" />
-              </columns>
-            </TableView>
-            <PieChart id="pieChart" fx:id="pieChart" prefHeight="361.0" prefWidth="652.0" visible="false" />
-            <BarChart id="barChart" fx:id="barChart" layoutX="17.0" prefHeight="380.0" prefWidth="614.0" visible="false">
-              <xAxis>
-                <CategoryAxis fx:id="barChartX" />
-              </xAxis>
-              <yAxis>
-                <NumberAxis fx:id="barChartY" prefHeight="340.0" prefWidth="43.0" side="LEFT" />
-              </yAxis>
-            </BarChart>
-            <GridPane layoutX="15.0" layoutY="383.0" prefHeight="30.0" prefWidth="622.0">
-              <columnConstraints>
-                <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-                <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-                  <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-              </columnConstraints>
-              <rowConstraints>
-                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-              </rowConstraints>
-               <children>
-                  <RadioButton id="tableSelect" fx:id="tableSelect" mnemonicParsing="false" onAction="#chartsChangeView" text="Table view" />
-                  <RadioButton id="pieChart" fx:id="pieChartSelect" mnemonicParsing="false" onAction="#chartsChangeView" text="Pie chart view" GridPane.columnIndex="1" />
-                  <RadioButton id="barGraph" fx:id="barGraphSelect" mnemonicParsing="false" onAction="#chartsChangeView" text="Bar graph view" GridPane.columnIndex="2" />
-               </children>
-            </GridPane>
-         </children>
-      </AnchorPane>
-      <AnchorPane fx:id="comparsionCharts" layoutX="649.0" layoutY="94.0" prefHeight="616.0" prefWidth="636.0" visible="false">
-         <children>
-            <Label layoutX="14.0" layoutY="1.0" prefHeight="27.0" prefWidth="210.0" text="Enter Customer Pillar information:">
-               <font>
-                  <Font size="14.0" />
-               </font></Label>
-            <TextField fx:id="comparsionFileLoc" layoutX="232.0" layoutY="-1.0" prefHeight="30.0" prefWidth="192.0" promptText="Enter location of excel..." />
-            <GridPane layoutX="189.0" layoutY="52.0">
-              <columnConstraints>
-                <ColumnConstraints hgrow="SOMETIMES" maxWidth="95.0" minWidth="10.0" prefWidth="83.0" />
-                <ColumnConstraints hgrow="SOMETIMES" maxWidth="117.0" minWidth="10.0" prefWidth="105.60000000000001" />
-                  <ColumnConstraints hgrow="SOMETIMES" maxWidth="133.59999999999997" minWidth="10.0" prefWidth="123.59999999999997" />
-                  <ColumnConstraints hgrow="SOMETIMES" maxWidth="95.0" minWidth="10.0" prefWidth="89.19999999999999" />
-              </columnConstraints>
-              <rowConstraints>
-                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-                  <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-              </rowConstraints>
-               <children>
-                  <RadioButton id="Insure" fx:id="Insure" mnemonicParsing="false" onAction="#subsegmentSelect" text="Insure" />
-                  <RadioButton id="Connect" fx:id="Connect" mnemonicParsing="false" onAction="#subsegmentSelect" text="Connect" GridPane.columnIndex="1" />
-                  <RadioButton id="Invest" fx:id="Invest" mnemonicParsing="false" onAction="#subsegmentSelect" text="Invest" GridPane.columnIndex="2" />
-                  <RadioButton id="Fusion" fx:id="Fusion" mnemonicParsing="false" onAction="#subsegmentSelect" text="Fusion" GridPane.columnIndex="3" />
-                  <RadioButton id="Transact" fx:id="Transact" mnemonicParsing="false" onAction="#subsegmentSelect" text="Transact" GridPane.rowIndex="1" />
-                  <RadioButton id="Secured_Lend" fx:id="Secured_Lend" mnemonicParsing="false" onAction="#subsegmentSelect" text="Secured Lend" GridPane.columnIndex="1" GridPane.rowIndex="1" />
-                  <RadioButton id="Unsecured_Lend" fx:id="Unsecured_Lend" mnemonicParsing="false" onAction="#subsegmentSelect" text="Unsecured Lend" GridPane.columnIndex="2" GridPane.rowIndex="1" />
-               </children>
-            </GridPane>
-            <Button fx:id="submitCompareFile" layoutX="307.0" layoutY="130.0" mnemonicParsing="false" onAction="#plotCompareCharts" prefHeight="20.0" prefWidth="78.0" style="-fx-background-radius: 50; -fx-border-radius: 50; -fx-background-color: #0a9ac4;" text="Submit">
-               <font>
-                  <Font name="System Bold" size="13.0" />
-               </font>
-            </Button>
-         </children></AnchorPane>
+    <effect>
+        <ColorAdjust />
+    </effect>
+    <children>
+        <Label alignment="CENTER_RIGHT" contentDisplay="CENTER" layoutX="600.0" text="FNB Call Centre Leads Management System" textAlignment="CENTER">
+            <font>
+                <Font name="System Bold" size="18.0" />
+            </font>
+        </Label>
+        <Label layoutY="50.0" text="Combination Excel Location: ">
+            <font>
+                <Font size="14.0" />
+            </font>
+        </Label>
+        <TextField id="com_Loc" layoutX="178.0" layoutY="45.0" onAction="#Location" onMouseExited="#Location" prefHeight="30.0" prefWidth="144.0" promptText="Enter location of excel..." />
+        <Button id="drawCharts" fx:id="drawCharts" layoutX="128.0" layoutY="86.0" mnemonicParsing="false" onAction="#drawCharts" style="-fx-background-radius: 50; -fx-border-radius: 50; -fx-background-color: #0a9ac4;" text="find Overlap(s)">
+            <font>
+                <Font name="System Bold" size="12.0" />
+            </font></Button>
+        <AnchorPane id="overlapCharts" fx:id="overlapCharts" layoutX="4.0" layoutY="123.0" prefHeight="576.0" prefWidth="713.0" visible="false">
+            <children>
+                <TableView id="overlaps" fx:id="tableChart" editable="true" prefHeight="207.0" prefWidth="652.0" visible="false">
+                    <columns>
+                        <TableColumn fx:id="firstCol" minWidth="430.0" prefWidth="75.0" sortable="false" text="Pillars" />
+                        <TableColumn fx:id="secCol" minWidth="50.0" prefWidth="75.0" text="Products" />
+                        <TableColumn fx:id="thirdCol" minWidth="140.0" prefWidth="75.0" text="Amount of Customers" />
+                    </columns>
+                </TableView>
+                <PieChart id="pieChart" fx:id="pieChart" prefHeight="214.0" prefWidth="652.0" visible="false" />
+                <BarChart id="barChart" fx:id="barChart" layoutX="17.0" prefHeight="207.0" prefWidth="612.0" visible="false">
+                    <xAxis>
+                        <CategoryAxis fx:id="barChartX" />
+                    </xAxis>
+                    <yAxis>
+                        <NumberAxis fx:id="barChartY" prefHeight="340.0" prefWidth="43.0" side="LEFT" />
+                    </yAxis>
+                </BarChart>
+                <GridPane fx:id="radioButtons" layoutX="29.0" layoutY="214.0" prefHeight="30.0" prefWidth="622.0" visible="false">
+                    <columnConstraints>
+                        <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                        <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                        <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                    </columnConstraints>
+                    <rowConstraints>
+                        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                    </rowConstraints>
+                    <children>
+                        <RadioButton id="tableSelect" fx:id="tableSelect" mnemonicParsing="false" onAction="#chartsChangeView" text="Table view" />
+                        <RadioButton id="pieChart" fx:id="pieChartSelect" mnemonicParsing="false" onAction="#chartsChangeView" text="Pie chart view" GridPane.columnIndex="1" />
+                        <RadioButton id="barGraph" fx:id="barGraphSelect" mnemonicParsing="false" onAction="#chartsChangeView" text="Bar graph view" GridPane.columnIndex="2" />
+                    </children>
+                </GridPane>
+                <TableView fx:id="Customer_details" layoutY="258.0" prefHeight="321.0" prefWidth="714.0" visible="false">
+                    <columns>
+                        <TableColumn fx:id="Offer_ID" prefWidth="51.4000244140625" text="Offer_ID" />
+                        <TableColumn fx:id="Offer_name" prefWidth="70.20001220703125" text="Offer_name" />
+                        <TableColumn fx:id="KPI_risk" prefWidth="53.0" text="KPI_risk" />
+                        <TableColumn fx:id="Segment" prefWidth="54.79998779296875" text="Segment" />
+                        <TableColumn fx:id="Age_bend" prefWidth="60.79998779296875" text="Age_bend" />
+                        <TableColumn fx:id="Income_bend" prefWidth="82.0" text="Income_bend" />
+                        <TableColumn fx:id="Primary_acc" prefWidth="72.5999755859375" text="Primary_acc" />
+                        <TableColumn fx:id="Relationship" prefWidth="63.5999755859375" text="Relationship" />
+                        <TableColumn fx:id="Education" prefWidth="59.20001220703125" text="Education" />
+                        <TableColumn fx:id="Funeral_pol" prefWidth="69.0" text="Funeral_pol" />
+                        <TableColumn fx:id="Customers" prefWidth="73.39996337890625" text="Customers" />
+                    </columns>
+                </TableView>
+            </children>
+        </AnchorPane>
+        <Label layoutX="337.0" layoutY="50.0" text="Customer detail excel">
+            <font>
+                <Font size="14.0" />
+            </font>
+        </Label>
+        <TextField fx:id="Ingest" layoutX="481.0" layoutY="48.0" onAction="#Ingest" onMouseExited="#Ingest" promptText="Enter location of excel..." />
+        <Button fx:id="processExcel" layoutX="481.0" layoutY="82.0" mnemonicParsing="false" onAction="#processExcel" style="-fx-background-radius: 50; -fx-border-radius: 50; -fx-background-color: #0a9ac4;" text="Ingest excel">
+            <font>
+                <Font name="System Bold" size="12.0" />
+            </font>
+        </Button>
 
-   </children>
+    </children>
 </AnchorPane>

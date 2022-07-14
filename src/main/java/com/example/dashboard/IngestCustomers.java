@@ -4,55 +4,55 @@ import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleStringProperty;
 
 public class IngestCustomers {
-    private final SimpleStringProperty offer_ID;
-    private final SimpleStringProperty offer_Name;
+    private final SimpleStringProperty Offer_ID;
+    private final SimpleStringProperty Offer_Name;
     private final SimpleStringProperty KPI_risk;
-    private final SimpleStringProperty segment;
-    private final SimpleStringProperty age_band;
-    private final SimpleStringProperty income_band;
-    private final SimpleStringProperty primary_acc;
-    private final SimpleStringProperty relationahip;
-    private final SimpleStringProperty eductions;
-    private final SimpleStringProperty funeral_pol;
-    private final SimpleIntegerProperty customers;
+    private final SimpleStringProperty Segment;
+    private final SimpleStringProperty Age_bend;
+    private final SimpleStringProperty Income_bend;
+    private final SimpleStringProperty Primary_acc;
+    private final SimpleStringProperty Relationship;
+    private final SimpleStringProperty Eduction;
+    private final SimpleStringProperty Funeral_pol;
+    private final SimpleIntegerProperty Customers;
 
 
-    public IngestCustomers(String offer_id, String offer_name, String kpi_risk, String segment, String age_band, String income_band, String primary_acc, String relationahip, String eductions, String funeral_pol, String customers) {
-        offer_ID = new SimpleStringProperty(offer_id);
-        offer_Name = new SimpleStringProperty(offer_name);
+    public IngestCustomers(String offer_id, String offer_name, String kpi_risk, String segment, String age_band, String income_band, String primary_acc, String relationship, String eduction, String funeral_pol, String customers) {
+        Offer_ID = new SimpleStringProperty(offer_id);
+        Offer_Name = new SimpleStringProperty(offer_name);
         KPI_risk = new SimpleStringProperty(kpi_risk);
-        this.segment = new SimpleStringProperty(segment);
-        this.age_band = new SimpleStringProperty(age_band);
-        this.income_band = new SimpleStringProperty(income_band);
-        this.primary_acc = new SimpleStringProperty(primary_acc);
-        this.relationahip = new SimpleStringProperty(relationahip);
-        this.eductions = new SimpleStringProperty(eductions);
-        this.funeral_pol = new SimpleStringProperty(funeral_pol);
-        this.customers = new SimpleIntegerProperty(Integer.parseInt(customers));
+        this.Segment = new SimpleStringProperty(segment);
+        this.Age_bend = new SimpleStringProperty(age_band);
+        this.Income_bend = new SimpleStringProperty(income_band);
+        this.Primary_acc = new SimpleStringProperty(primary_acc);
+        this.Relationship = new SimpleStringProperty(relationship);
+        this.Eduction = new SimpleStringProperty(eduction);
+        this.Funeral_pol = new SimpleStringProperty(funeral_pol);
+        this.Customers = new SimpleIntegerProperty(Integer.parseInt(customers));
     }
 
     public String getOffer_ID() {
-        return offer_ID.get();
+        return Offer_ID.get();
     }
 
     public SimpleStringProperty offer_IDProperty() {
-        return offer_ID;
+        return Offer_ID;
     }
 
     public void setOffer_ID(String offer_ID) {
-        this.offer_ID.set(offer_ID);
+        this.Offer_ID.set(offer_ID);
     }
 
     public String getOffer_Name() {
-        return offer_Name.get();
+        return Offer_Name.get();
     }
 
     public SimpleStringProperty offer_NameProperty() {
-        return offer_Name;
+        return Offer_Name;
     }
 
     public void setOffer_Name(String offer_Name) {
-        this.offer_Name.set(offer_Name);
+        this.Offer_Name.set(offer_Name);
     }
 
     public String getKPI_risk() {
@@ -68,98 +68,98 @@ public class IngestCustomers {
     }
 
     public String getSegment() {
-        return segment.get();
+        return Segment.get();
     }
 
     public SimpleStringProperty segmentProperty() {
-        return segment;
+        return Segment;
     }
 
     public void setSegment(String segment) {
-        this.segment.set(segment);
+        this.Segment.set(segment);
     }
 
-    public String getAge_band() {
-        return age_band.get();
+    public String getAge_bend() {
+        return Age_bend.get();
     }
 
-    public SimpleStringProperty age_bandProperty() {
-        return age_band;
+    public SimpleStringProperty age_bendProperty() {
+        return Age_bend;
     }
 
-    public void setAge_band(String age_band) {
-        this.age_band.set(age_band);
+    public void setAge_bend(String age_bend) {
+        this.Age_bend.set(age_bend);
     }
 
-    public String getIncome_band() {
-        return income_band.get();
+    public String getIncome_bend() {
+        return Income_bend.get();
     }
 
-    public SimpleStringProperty income_bandProperty() {
-        return income_band;
+    public SimpleStringProperty income_bendProperty() {
+        return Income_bend;
     }
 
-    public void setIncome_band(String income_band) {
-        this.income_band.set(income_band);
+    public void setIncome_bend(String income_bend) {
+        this.Income_bend.set(income_bend);
     }
 
     public String getPrimary_acc() {
-        return primary_acc.get();
+        return Primary_acc.get();
     }
 
     public SimpleStringProperty primary_accProperty() {
-        return primary_acc;
+        return Primary_acc;
     }
 
     public void setPrimary_acc(String primary_acc) {
-        this.primary_acc.set(primary_acc);
+        this.Primary_acc.set(primary_acc);
     }
 
-    public String getRelationahip() {
-        return relationahip.get();
+    public String getRelationship() {
+        return Relationship.get();
     }
 
-    public SimpleStringProperty relationahipProperty() {
-        return relationahip;
+    public SimpleStringProperty relationshipProperty() {
+        return Relationship;
     }
 
-    public void setRelationahip(String relationahip) {
-        this.relationahip.set(relationahip);
+    public void setRelationship(String relationship) {
+        this.Relationship.set(relationship);
     }
 
-    public String getEductions() {
-        return eductions.get();
+    public String getEduction() {
+        return Eduction.get();
     }
 
-    public SimpleStringProperty eductionsProperty() {
-        return eductions;
+    public SimpleStringProperty eductionProperty() {
+        return Eduction;
     }
 
-    public void setEductions(String eductions) {
-        this.eductions.set(eductions);
+    public void setEduction(String eduction) {
+        this.Eduction.set(eduction);
     }
 
     public String getFuneral_pol() {
-        return funeral_pol.get();
+        return Funeral_pol.get();
     }
 
     public SimpleStringProperty funeral_polProperty() {
-        return funeral_pol;
+        return Funeral_pol;
     }
 
     public void setFuneral_pol(String funeral_pol) {
-        this.funeral_pol.set(funeral_pol);
+        this.Funeral_pol.set(funeral_pol);
     }
 
     public int getCustomers() {
-        return customers.get();
+        return Customers.get();
     }
 
     public SimpleIntegerProperty customersProperty() {
-        return customers;
+        return Customers;
     }
 
     public void setCustomers(int customers) {
-        this.customers.set(customers);
+        this.Customers.set(customers);
     }
 }

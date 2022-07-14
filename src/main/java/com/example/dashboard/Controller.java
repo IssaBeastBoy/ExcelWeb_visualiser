@@ -5,17 +5,20 @@ import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.chart.*;
+import javafx.scene.chart.PieChart.Data;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.GridPane;
 
 import java.nio.file.Files;
+import java.nio.file.LinkOption;
 import java.nio.file.Path;
 import java.util.List;
+import java.util.Map;
 
 public class Controller {
-
     @FXML
     private TableView<combination_Table> tableChart;
     @FXML
@@ -24,20 +27,16 @@ public class Controller {
     private TableColumn secCol = new TableColumn("Products");
     @FXML
     private TableColumn thirdCol = new TableColumn("Amount of Customers");
-
     @FXML
     private PieChart pieChart;
-
     @FXML
     private BarChart<String, Integer> barChart;
     @FXML
     private CategoryAxis barChartX = new CategoryAxis();
     @FXML
-    private NumberAxis barChartY  = new NumberAxis();
-
+    private NumberAxis barChartY = new NumberAxis();
     @FXML
     private AnchorPane overlapCharts;
-
     @FXML
     private AnchorPane comparsionCharts;
     @FXML
@@ -58,33 +57,69 @@ public class Controller {
     private RadioButton Unsecured_Lend;
     @FXML
     private Button submitCompareFile;
-
     private Integer totalCustomers;
-
+    @FXML
+    private GridPane radioButtons;
     @FXML
     private RadioButton tableSelect;
     @FXML
     private RadioButton pieChartSelect;
     @FXML
     private RadioButton barGraphSelect;
-
     private final ObservableList<combination_Table> tableValues = FXCollections.observableArrayList();
-    private final ObservableList<PieChart.Data> pieChartValues = FXCollections.observableArrayList();
-    private final  XYChart.Series<String,Integer> barGraphValues = new XYChart.Series<>();
-
+    private final ObservableList<Data> pieChartValues = FXCollections.observableArrayList();
+    private final XYChart.Series<String, Integer> barGraphValues = new XYChart.Series();
     @FXML
     private String excel_loc = "";
-
     private List<String> combinationList;
     private List<Integer> customerNumberList;
     private List<int[]> offerSize;
+
+    @FXML
+    private TableView<IngestCustomers> Customer_details;
+    private final ObservableList<IngestCustomers> customerValues = FXCollections.observableArrayList();
+    @FXML
+    private TableColumn Offer_ID = new TableColumn("Offer_ID");
+    @FXML
+    private TableColumn Offer_name = new TableColumn("Offer_name");
+    @FXML
+    private TableColumn KPI_risk = new TableColumn("KPI_risk");
+    @FXML
+    private TableColumn Segment = new TableColumn("Segment");
+    @FXML
+    private TableColumn Age_bend = new TableColumn("Age_bend");
+    @FXML
+    private TableColumn Income_bend = new TableColumn("Income_bend");
+    @FXML
+    private TableColumn Primary_acc = new TableColumn("Primary_acc");
+    @FXML
+    private TableColumn Relationship = new TableColumn("Relationship");
+    @FXML
+    private TableColumn Education = new TableColumn("Education");
+    @FXML
+    private TableColumn Funeral_pol = new TableColumn("Funeral_pol");
+    @FXML
+    private TableColumn Customers = new TableColumn("Customers");
+
+    private String CustomerExcel = "";
+
+    public String getCustomerExcel() {
+        return CustomerExcel;
+    }
+
+    public void setCustomerExcel(String customerExcel) {
+        CustomerExcel = customerExcel;
+    }
+
+    @FXML
+    private TextField Ingest;
 
     public void setExcel_loc(String excel_loc) {
         this.excel_loc = excel_loc;
     }
 
     public String getExcel_loc() {
-        return excel_loc;
+        return this.excel_loc;
     }
 
     public void errBox(String message) {
@@ -95,234 +130,274 @@ public class Controller {
 
     @FXML
     private void drawCharts(ActionEvent event) {
-        if (excel_loc.isEmpty() || Files.notExists(Path.of(this.excel_loc))) {
-            String errMessage = "Path does not exist. Please check the given path or the excel spreadsheet.";
-            errBox(errMessage);
+        if (!this.excel_loc.isEmpty() && !Files.notExists(Path.of(this.excel_loc), new LinkOption[0])) {
+            this.drawTable();
+            this.drawPieChart();
+            this.drawBarGraph();
+            //this.comparsionCharts.setVisible(true);
         } else {
-
-            drawTable();
-            drawPieChart();
-            drawBarGraph();
-            comparsionCharts.setVisible(true);
+            String errMessage = "Path does not exist. Please check the given path or the excel spreadsheet.";
+            this.errBox(errMessage);
         }
+
     }
 
-    private void drawTable() {
-        Ingest_Overlap inputExcel = new Ingest_Overlap();
-        inputExcel.setExcel_loc(getExcel_loc());
-        inputExcel.parseSheets();
-        if (inputExcel.isError())
-            errBox(inputExcel.getErrMessage());
-        else {
-            tableChart.getItems().clear();
-            overlapCharts.setVisible(true);
-            Processor offerDetails = new Processor();
-            List<int[]> position = offerDetails.offerPositions(inputExcel.getCombination());
-            List<int[]> sort = offerDetails.sortOffers(position);
-            // Combinations combinations = new Combinations();
-            combinationList = offerDetails.offerCombos(inputExcel.getCombination(), sort, inputExcel);
-            customerNumberList = offerDetails.customerCount(inputExcel.getCombination(), sort);
-            offerSize = offerDetails.getOfferCount();
-            int count = 1;
-            // overlaps.getColumns().clear();
-            tableChart.setVisible(true);
-            totalCustomers = 0;
-            for (int index = 0; index < offerSize.size(); index++, count++) {
-                // StringProperty combos = new SimpleStringProperty(combinationList.get(index));
-                // IntegerProperty cusCount = new
-                // SimpleIntegerProperty(customerNumberList.get(index));
-                // IntegerProperty comBin = new SimpleIntegerProperty(offerSize.get(index)[1]);
-                tableValues.add(new combination_Table(count + ". " + combinationList.get(index), offerSize.get(index)[1],
-                        customerNumberList.get(index)));
-                totalCustomers += customerNumberList.get(index);
-                // combinations.setIndex(index);
-                // combinations.appendCombination(combos);
-                // combinations.appendcustomerCount(cusCount);
-                // combinations.appendcombinationNumber(comBin);
-                // Number cusCount = new ();
-                // Number comBin = new SimpleIntegerProperty(offerSize.get(index)[1]);
-                // firstCol.setCellValueFactory(cellData ->
-                // cellData.getValue().getCombination());
-                // secCol.setCellValueFactory(cellData ->
-                // cellData.getValue().getcustomerCount());
-                // thirdCol.setCellValueFactory(cellData ->
-                // cellData.getValue().getcombinationNumber());
-            }
-
-            firstCol.setCellValueFactory(new PropertyValueFactory<combination_Table, String>("combination"));
-            secCol.setCellValueFactory(new PropertyValueFactory<combination_Table, Integer>("combinationNumber"));
-            thirdCol.setCellValueFactory(new PropertyValueFactory<combination_Table, Integer>("customerCount"));
-            // overlaps.getColumns().addAll(firstCol,secCol,thirdCol);
-            // activeSession.add(combinations);
-            tableChart.setItems(tableValues);
-            tableSelect.setSelected(true);
-            pieChartSelect.setSelected(false);
-            pieChart.setVisible(false);
-            barGraphSelect.setSelected(false);
-            barChart.setVisible(false);
+    @FXML
+    private void processExcel (ActionEvent event){
+        Button display = (Button) event.getSource();
+        if (!getCustomerExcel().isEmpty() && !Files.notExists(Path.of(getCustomerExcel()), new LinkOption[0])) {
+            drawCustomerTable();
+            this.overlapCharts.setVisible(true);
+            this.Customer_details.setVisible(true);
+        } else {
+            String errMessage = "Path does not exist. Please check the given path or the excel spreadsheet.";
+            this.errBox(errMessage);
         }
+
     }
 
-    private void drawPieChart() {
-        pieChart.getData().clear();
-        int combinationCount = offerSize.get(0)[1];
-        int combinationSum = customerNumberList.get(0);
-        for (int index = 1; index < offerSize.size(); index++) {
-            if (combinationCount != offerSize.get(index)[1]) {
-                int percentage = combinationSum*100/totalCustomers;
-                pieChartValues.add(new PieChart.Data((String.valueOf(combinationCount)+" Pillars: " + percentage +"%"), combinationSum));
-                combinationCount = offerSize.get(index)[1];
-                combinationSum = customerNumberList.get(index);
+        @FXML
+        private void Ingest (ActionEvent event){
+            TextField loca = (TextField) event.getSource();
+            this.setCustomerExcel(loca.getText());
+        }
+
+        @FXML
+        private void Ingest (MouseEvent event){
+            TextField loca = (TextField) event.getSource();
+            this.setCustomerExcel(loca.getText());
+        }
+
+        private void drawTable() {
+            Ingest_Overlap inputExcel = new Ingest_Overlap();
+            inputExcel.setExcel_loc(this.getExcel_loc());
+            inputExcel.parseSheets();
+            if (inputExcel.isError()) {
+                this.errBox(inputExcel.getErrMessage());
+            } else {
+                this.tableChart.getItems().clear();
+                Processor offerDetails = new Processor();
+                List<int[]> position = offerDetails.offerPositions(inputExcel.getCombination());
+                List<int[]> sort = offerDetails.sortOffers(position);
+                this.combinationList = offerDetails.offerCombos(inputExcel.getCombination(), sort, inputExcel);
+                this.customerNumberList = offerDetails.customerCount(inputExcel.getCombination(), sort);
+                this.offerSize = offerDetails.getOfferCount();
+                int count = 1;
+                this.tableChart.setVisible(true);
+                this.totalCustomers = 0;
+
+                for (int index = 0; index < this.offerSize.size(); ++count) {
+                    this.tableValues.add(new combination_Table(count + ". " + (String) this.combinationList.get(index), ((int[]) this.offerSize.get(index))[1], (Integer) this.customerNumberList.get(index)));
+                    this.totalCustomers = this.totalCustomers + (Integer) this.customerNumberList.get(index);
+                    ++index;
+                }
+
+                this.firstCol.setCellValueFactory(new PropertyValueFactory("combination"));
+                this.secCol.setCellValueFactory(new PropertyValueFactory("combinationNumber"));
+                this.thirdCol.setCellValueFactory(new PropertyValueFactory("customerCount"));
+                this.tableChart.setItems(this.tableValues);
+                this.overlapCharts.setVisible(true);
+                this.radioButtons.setVisible(true);
+                this.tableSelect.setSelected(true);
+                this.pieChartSelect.setSelected(false);
+                this.pieChart.setVisible(false);
+                this.barGraphSelect.setSelected(false);
+                this.barChart.setVisible(false);
             }
-            else if (index+1== offerSize.size()){
-                int percentage = combinationSum*100/totalCustomers;
-                pieChartValues.add(new PieChart.Data((String.valueOf(combinationCount)+" Pillar: " + percentage +"%"), combinationSum));
+
+        }
+
+        private void drawPieChart() {
+            this.pieChart.getData().clear();
+            int combinationCount = ((int[]) this.offerSize.get(0))[1];
+            int combinationSum = (Integer) this.customerNumberList.get(0);
+
+            for (int index = 1; index < this.offerSize.size(); ++index) {
+                int percentage;
+                if (combinationCount != ((int[]) this.offerSize.get(index))[1]) {
+                    percentage = combinationSum * 100 / this.totalCustomers;
+                    this.pieChartValues.add(new Data(String.valueOf(combinationCount) + " Pillars: " + percentage + "%", (double) combinationSum));
+                    combinationCount = ((int[]) this.offerSize.get(index))[1];
+                    combinationSum = (Integer) this.customerNumberList.get(index);
+                } else if (index + 1 == this.offerSize.size()) {
+                    percentage = combinationSum * 100 / this.totalCustomers;
+                    this.pieChartValues.add(new Data(String.valueOf(combinationCount) + " Pillar: " + percentage + "%", (double) combinationSum));
+                } else {
+                    combinationSum += (Integer) this.customerNumberList.get(index);
+                }
+            }
+
+            this.pieChart.setData(this.pieChartValues);
+            this.pieChart.setTitle("Pillar combination count");
+            this.pieChart.setClockwise(true);
+            this.pieChart.setLabelsVisible(true);
+            this.pieChart.setStartAngle(180.0D);
+        }
+
+        private void drawBarGraph () {
+            this.barChart.getData().clear();
+            this.barChartX.setLabel("Pillars");
+            this.barChartY.setLabel("Percentage(%)");
+            this.barChart.setTitle("Pillars percentage distribution");
+            int combinationCount = ((int[]) this.offerSize.get(0))[1];
+            int combinationSum = (Integer) this.customerNumberList.get(0);
+
+            for (int index = 1; index < this.offerSize.size(); ++index) {
+                int percentage;
+                if (combinationCount != ((int[]) this.offerSize.get(index))[1]) {
+                    percentage = combinationSum * 100 / this.totalCustomers;
+                    this.barGraphValues.getData().add(new javafx.scene.chart.XYChart.Data(String.valueOf(combinationCount) + " Pillars", percentage));
+                    combinationCount = ((int[]) this.offerSize.get(index))[1];
+                    combinationSum = (Integer) this.customerNumberList.get(index);
+                } else if (index + 1 == this.offerSize.size()) {
+                    percentage = combinationSum * 100 / this.totalCustomers;
+                    this.barGraphValues.getData().add(new javafx.scene.chart.XYChart.Data(String.valueOf(combinationCount) + " Pillar", percentage));
+                } else {
+                    combinationSum += (Integer) this.customerNumberList.get(index);
+                }
+            }
+
+            this.barChart.getData().add(this.barGraphValues);
+        }
+
+        private void drawCustomerTable(){
+            Ingest_CustomerInfo processExcel = new Ingest_CustomerInfo();
+            processExcel.setExcel_loc(getCustomerExcel());
+            processExcel.parseSheet();
+            if(processExcel.isThrowErr()){
+                errBox(processExcel.getErr_Message());
             }
             else {
-                combinationSum += customerNumberList.get(index);
+                Map<Integer, List<String>> customerInfo = processExcel.getCustomerInfo();
+                Customer_details.getItems().clear();
+                for (int index = 0; index< customerInfo.size(); index++){
+                    int count = index + 1;
+                    List<String> details = customerInfo.get(count);
+                    customerValues.add(new IngestCustomers(details.get(0),details.get(1),details.get(2),details.get(3),details.get(4),details.get(5),details.get(6),details.get(7),details.get(8),details.get(9),details.get(10)));
+                }
+                if(processExcel.isThrowErr())
+                    errBox(processExcel.getErr_Message());
+                Offer_ID.setCellValueFactory(new PropertyValueFactory("Offer_ID"));
+                Offer_name.setCellValueFactory(new PropertyValueFactory("Offer_Name"));
+                KPI_risk.setCellValueFactory(new PropertyValueFactory("KPI_risk"));
+                Segment.setCellValueFactory(new PropertyValueFactory("Segment"));
+                Age_bend.setCellValueFactory(new PropertyValueFactory("Age_bend"));
+                Income_bend.setCellValueFactory(new PropertyValueFactory("Income_bend"));
+                Primary_acc.setCellValueFactory(new PropertyValueFactory("Primary_acc"));
+                Relationship.setCellValueFactory(new PropertyValueFactory("Relationship"));
+                Education.setCellValueFactory(new PropertyValueFactory("Eduction"));
+                Funeral_pol.setCellValueFactory(new PropertyValueFactory("Funeral_pol"));
+                Customers.setCellValueFactory(new PropertyValueFactory("Customers"));
+                Customer_details.setItems(customerValues);
+            }
+        }
+
+        @FXML
+        private void chartsChangeView (ActionEvent selected){
+            RadioButton display = (RadioButton) selected.getSource();
+            if (display.getId().equals("tableSelect")) {
+                this.tableChart.setVisible(true);
+                this.pieChart.setVisible(false);
+                this.barChart.setVisible(false);
+                this.tableSelect.setSelected(true);
+                this.pieChartSelect.setSelected(false);
+                this.barGraphSelect.setSelected(false);
+            } else if (display.getId().equals("pieChart")) {
+                this.tableChart.setVisible(false);
+                this.pieChart.setVisible(true);
+                this.barChart.setVisible(false);
+                this.tableSelect.setSelected(false);
+                this.pieChartSelect.setSelected(true);
+                this.barGraphSelect.setSelected(false);
+            } else if (display.getId().equals("barGraph")) {
+                this.tableChart.setVisible(false);
+                this.pieChart.setVisible(false);
+                this.barChart.setVisible(true);
+                this.tableSelect.setSelected(false);
+                this.pieChartSelect.setSelected(false);
+                this.barGraphSelect.setSelected(true);
             }
 
         }
-        pieChart.setData(pieChartValues);
-        pieChart.setTitle("Pillar combination count");
-        pieChart.setClockwise(true);
-        pieChart.setLabelsVisible(true);
-        pieChart.setStartAngle(180);
-    }
 
-    private void drawBarGraph(){
-        barChart.getData().clear();
-        barChartX.setLabel("Pillars");
-        barChartY.setLabel("Percentage(%)");
-        barChart.setTitle("Pillars percentage distribution");
-        int combinationCount = offerSize.get(0)[1];
-        int combinationSum = customerNumberList.get(0);
-        for (int index = 1; index < offerSize.size(); index++) {
-            if (combinationCount != offerSize.get(index)[1]) {
-                int percentage = combinationSum * 100 / totalCustomers;
-                barGraphValues.getData().add(new XYChart.Data((String.valueOf(combinationCount) + " Pillars"),percentage));
-                combinationCount = offerSize.get(index)[1];
-                combinationSum = customerNumberList.get(index);
-            } else if (index + 1 == offerSize.size()) {
-                int percentage = combinationSum * 100 / totalCustomers;
-                barGraphValues.getData().add(new XYChart.Data((String.valueOf(combinationCount) + " Pillar"),percentage));
-            } else {
-                combinationSum += customerNumberList.get(index);
+        @FXML
+        private void subsegmentSelect (ActionEvent selected){
+            RadioButton selectedSubsegment = (RadioButton) selected.getSource();
+            if (selectedSubsegment.getId().equals("Insure")) {
+                this.Insure.setSelected(true);
+                this.Invest.setSelected(false);
+                this.Connect.setSelected(false);
+                this.Transact.setSelected(false);
+                this.Fusion.setSelected(false);
+                this.Secured_Lend.setSelected(false);
+                this.Unsecured_Lend.setSelected(false);
+            } else if (selectedSubsegment.getId().equals("Invest")) {
+                this.Insure.setSelected(false);
+                this.Invest.setSelected(true);
+                this.Connect.setSelected(false);
+                this.Transact.setSelected(false);
+                this.Fusion.setSelected(false);
+                this.Secured_Lend.setSelected(false);
+                this.Unsecured_Lend.setSelected(false);
+            } else if (selectedSubsegment.getId().equals("Connect")) {
+                this.Insure.setSelected(false);
+                this.Invest.setSelected(false);
+                this.Connect.setSelected(true);
+                this.Transact.setSelected(false);
+                this.Fusion.setSelected(false);
+                this.Secured_Lend.setSelected(false);
+                this.Unsecured_Lend.setSelected(false);
+            } else if (selectedSubsegment.getId().equals("Transact")) {
+                this.Insure.setSelected(false);
+                this.Invest.setSelected(false);
+                this.Connect.setSelected(false);
+                this.Transact.setSelected(true);
+                this.Fusion.setSelected(false);
+                this.Secured_Lend.setSelected(false);
+                this.Unsecured_Lend.setSelected(false);
+            } else if (selectedSubsegment.getId().equals("Fusion")) {
+                this.Insure.setSelected(false);
+                this.Invest.setSelected(false);
+                this.Connect.setSelected(false);
+                this.Transact.setSelected(false);
+                this.Fusion.setSelected(true);
+                this.Secured_Lend.setSelected(false);
+                this.Unsecured_Lend.setSelected(false);
+            } else if (selectedSubsegment.getId().equals("Secured_Lend")) {
+                this.Insure.setSelected(false);
+                this.Invest.setSelected(false);
+                this.Connect.setSelected(false);
+                this.Transact.setSelected(false);
+                this.Fusion.setSelected(false);
+                this.Secured_Lend.setSelected(true);
+                this.Unsecured_Lend.setSelected(false);
+            } else if (selectedSubsegment.getId().equals("Unsecured_Lend")) {
+                this.Insure.setSelected(false);
+                this.Invest.setSelected(false);
+                this.Connect.setSelected(false);
+                this.Transact.setSelected(false);
+                this.Fusion.setSelected(false);
+                this.Secured_Lend.setSelected(false);
+                this.Unsecured_Lend.setSelected(true);
             }
-        }
-        barChart.getData().add(barGraphValues);
-    }
 
-    @FXML
-    private void chartsChangeView(ActionEvent selected) {
-        RadioButton display = (RadioButton) selected.getSource();
-        if (display.getId().equals("tableSelect")) {
-            tableChart.setVisible(true);
-            pieChart.setVisible(false);
-            barChart.setVisible(false);
-            tableSelect.setSelected(true);
-            pieChartSelect.setSelected(false);
-            barGraphSelect.setSelected(false);
-        } else if (display.getId().equals("pieChart")) {
-            tableChart.setVisible(false);
-            pieChart.setVisible(true);
-            barChart.setVisible(false);
-            tableSelect.setSelected(false);
-            pieChartSelect.setSelected(true);
-            barGraphSelect.setSelected(false);
-        } else if (display.getId().equals("barGraph")) {
-            tableChart.setVisible(false);
-            pieChart.setVisible(false);
-            barChart.setVisible(true);
-            tableSelect.setSelected(false);
-            pieChartSelect.setSelected(false);
-            barGraphSelect.setSelected(true);
         }
-    }
 
-    @FXML
-    private void subsegmentSelect(ActionEvent selected){
-        RadioButton selectedSubsegment = (RadioButton) selected.getSource();
-        if (selectedSubsegment.getId().equals("Insure")){
-            Insure.setSelected(true);
-            Invest.setSelected(false);
-            Connect.setSelected(false);
-            Transact.setSelected(false);
-            Fusion.setSelected(false);
-            Secured_Lend.setSelected(false);
-            Unsecured_Lend.setSelected(false);
+        @FXML
+        private void plotCompareCharts (ActionEvent chart){
         }
-        else if (selectedSubsegment.getId().equals("Invest")){
-            Insure.setSelected(false);
-            Invest.setSelected(true);
-            Connect.setSelected(false);
-            Transact.setSelected(false);
-            Fusion.setSelected(false);
-            Secured_Lend.setSelected(false);
-            Unsecured_Lend.setSelected(false);
-        }
-        else if (selectedSubsegment.getId().equals("Connect")){
-            Insure.setSelected(false);
-            Invest.setSelected(false);
-            Connect.setSelected(true);
-            Transact.setSelected(false);
-            Fusion.setSelected(false);
-            Secured_Lend.setSelected(false);
-            Unsecured_Lend.setSelected(false);
-        }
-        else if (selectedSubsegment.getId().equals("Transact")){
-            Insure.setSelected(false);
-            Invest.setSelected(false);
-            Connect.setSelected(false);
-            Transact.setSelected(true);
-            Fusion.setSelected(false);
-            Secured_Lend.setSelected(false);
-            Unsecured_Lend.setSelected(false);
-        }
-        else if (selectedSubsegment.getId().equals("Fusion")){
-            Insure.setSelected(false);
-            Invest.setSelected(false);
-            Connect.setSelected(false);
-            Transact.setSelected(false);
-            Fusion.setSelected(true);
-            Secured_Lend.setSelected(false);
-            Unsecured_Lend.setSelected(false);
-        }
-        else if (selectedSubsegment.getId().equals("Secured_Lend")){
-            Insure.setSelected(false);
-            Invest.setSelected(false);
-            Connect.setSelected(false);
-            Transact.setSelected(false);
-            Fusion.setSelected(false);
-            Secured_Lend.setSelected(true);
-            Unsecured_Lend.setSelected(false);
-        }
-        else if (selectedSubsegment.getId().equals("Unsecured_Lend")){
-            Insure.setSelected(false);
-            Invest.setSelected(false);
-            Connect.setSelected(false);
-            Transact.setSelected(false);
-            Fusion.setSelected(false);
-            Secured_Lend.setSelected(false);
-            Unsecured_Lend.setSelected(true);
-        }
-    }
 
-    @FXML
-    private void  plotCompareCharts(ActionEvent chart){
+        @FXML
+        private void Location (ActionEvent event){
+            TextField loca = (TextField) event.getSource();
+            this.setExcel_loc(loca.getText());
+        }
 
-    }
+        @FXML
+        private void Location (MouseEvent event){
+            TextField loca = (TextField) event.getSource();
+            this.setExcel_loc(loca.getText());
+        }
 
-    @FXML
-    private void Location(ActionEvent event) {
-        TextField loca = (TextField) event.getSource();
-        setExcel_loc(loca.getText());
-    }
-
-    @FXML
-    private void Location(MouseEvent event) {
-        TextField loca = (TextField) event.getSource();
-        setExcel_loc(loca.getText());
-    }
 
 }
