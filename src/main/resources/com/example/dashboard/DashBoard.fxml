@@ -6,7 +6,7 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.*?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="700.0" prefWidth="1300.0" style="-fx-background-color: #56b9cf;" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.dashboard.Controller">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="700.0" prefWidth="1300.0" style="-fx-background-color: #56b9cf;" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.dashboard.Controller">
     <effect>
         <ColorAdjust />
     </effect>
@@ -87,7 +87,7 @@
                 <Font name="System Bold" size="12.0" />
             </font>
         </Button>
-      <AnchorPane fx:id="cust_Views" layoutX="710.0" layoutY="82.0" prefHeight="616.0" prefWidth="576.0">
+      <AnchorPane fx:id="cust_Views" layoutX="710.0" layoutY="82.0" prefHeight="616.0" prefWidth="576.0" visible="false">
          <children>
             <GridPane layoutX="17.0" layoutY="14.0" prefHeight="54.0" prefWidth="494.0">
               <columnConstraints>
@@ -114,7 +114,7 @@
                   <CheckBox fx:id="seg_mnt" mnemonicParsing="false" text="Segment" GridPane.columnIndex="2" />
                </children>
             </GridPane>
-            <BarChart fx:id="Is_Unique_Bar_One" layoutX="26.0" layoutY="68.0" prefHeight="244.0" prefWidth="547.0">
+            <BarChart fx:id="Is_Unique_Bar_One" layoutX="26.0" layoutY="68.0" prefHeight="244.0" prefWidth="547.0" visible="false">
               <xAxis>
                 <CategoryAxis side="BOTTOM" />
               </xAxis>
@@ -122,8 +122,8 @@
                 <NumberAxis side="LEFT" />
               </yAxis>
             </BarChart>
-            <PieChart fx:id="Is_Unique_Pie_One" layoutX="55.0" layoutY="81.0" prefHeight="214.0" prefWidth="507.0" />
-            <BarChart fx:id="Is_Unique_Bar_Two" layoutX="26.0" layoutY="340.0" prefHeight="244.0" prefWidth="547.0">
+            <PieChart fx:id="Is_Unique_Pie_One" layoutX="55.0" layoutY="81.0" prefHeight="214.0" prefWidth="507.0" visible="false" />
+            <BarChart fx:id="Is_Unique_Bar_Two" layoutX="26.0" layoutY="340.0" prefHeight="244.0" prefWidth="547.0" visible="false">
               <xAxis>
                 <CategoryAxis side="BOTTOM" />
               </xAxis>
@@ -131,8 +131,8 @@
                 <NumberAxis side="LEFT" />
               </yAxis>
             </BarChart>
-            <PieChart fx:id="Is_Unique_Pie_Two" layoutX="46.0" layoutY="354.0" prefHeight="207.0" prefWidth="515.0" />
-            <GridPane layoutX="177.0" layoutY="320.0" prefHeight="17.0" prefWidth="348.0">
+            <PieChart fx:id="Is_Unique_Pie_Two" layoutX="46.0" layoutY="354.0" prefHeight="207.0" prefWidth="515.0" visible="false" />
+            <GridPane fx:id="is_unique_grid_one" layoutX="177.0" layoutY="320.0" prefHeight="17.0" prefWidth="348.0" visible="false">
               <columnConstraints>
                 <ColumnConstraints hgrow="SOMETIMES" maxWidth="257.33333333333337" minWidth="10.0" prefWidth="174.66666666666666" />
                 <ColumnConstraints hgrow="SOMETIMES" maxWidth="260.0" minWidth="10.0" prefWidth="173.99999999999997" />
@@ -145,7 +145,7 @@
                   <RadioButton fx:id="Is_Unique_Pie_One_R" mnemonicParsing="false" text="Pie Chart" GridPane.columnIndex="1" />
                </children>
             </GridPane>
-            <GridPane layoutX="187.0" layoutY="576.0" prefHeight="30.0" prefWidth="348.0">
+            <GridPane fx:id="is_unique_grid_two" layoutX="187.0" layoutY="576.0" prefHeight="30.0" prefWidth="348.0" visible="false">
                <columnConstraints>
                   <ColumnConstraints hgrow="SOMETIMES" maxWidth="257.33333333333337" minWidth="10.0" prefWidth="174.66666666666666" />
                   <ColumnConstraints hgrow="SOMETIMES" maxWidth="260.0" minWidth="10.0" prefWidth="173.99999999999997" />
