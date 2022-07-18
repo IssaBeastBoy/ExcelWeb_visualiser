@@ -15,6 +15,8 @@ import javafx.scene.layout.GridPane;
 import java.nio.file.Files;
 import java.nio.file.LinkOption;
 import java.nio.file.Path;
+import java.util.Dictionary;
+import java.util.Enumeration;
 import java.util.List;
 import java.util.Map;
 
@@ -112,8 +114,11 @@ public class Controller {
     @FXML
     private RadioButton Is_Unique_Pie_Two_R;
 
-
-
+    private Map<Integer, List<String>> customerInfo;
+    private final ObservableList<Data> pieChartIsUnqueViewOne = FXCollections.observableArrayList();
+    private final XYChart.Series<String, Integer> barGraphIsUnqueViewOne = new XYChart.Series();
+    private final ObservableList<Data> pieChartIsUnqueViewTwo = FXCollections.observableArrayList();
+    private final XYChart.Series<String, Integer> barGraphIsUnqueViewTwo = new XYChart.Series();
 
     private final ObservableList<combination_Table> tableValues = FXCollections.observableArrayList();
     private final ObservableList<Data> pieChartValues = FXCollections.observableArrayList();
@@ -254,6 +259,86 @@ public class Controller {
 
     }
 
+    @FXML
+    private void isUniqueChartOne(ActionEvent selected){
+        RadioButton display = (RadioButton) selected.getSource();
+        if (display.getId().equals("Is_Unique_Bar_One_R")){
+            Is_Unique_Bar_One.setVisible(true);
+            Is_Unique_Pie_One.setVisible(false);
+        }
+        else if(display.getId().equals("Is_Unique_Pie_One_R")){
+            Is_Unique_Bar_One.setVisible(false);
+            Is_Unique_Pie_One.setVisible(true);
+        }
+    }
+
+    @FXML
+    private void isUniqueChartTwo(ActionEvent selected){
+        RadioButton display = (RadioButton) selected.getSource();
+        if (display.getId().equals("Is_Unique_Bar_Two_R")){
+            Is_Unique_Bar_Two.setVisible(true);
+            Is_Unique_Pie_Two.setVisible(false);
+        }
+        else if(display.getId().equals("Is_Unique_Pie_Two_R")){
+            Is_Unique_Bar_Two.setVisible(false);
+            Is_Unique_Pie_Two.setVisible(true);
+        }
+    }
+
+    //ADJUST PERCENTAGES
+    private void drawBarIsUniqueVone(String segmentName){
+        Is_Unique_Bar_One.getData().clear();
+        isUnique unique = new isUnique(segmentName, customerInfo);
+        Dictionary<String, Integer> combinationCount =  unique.getUniqueCombination();
+        for(Enumeration combination = combinationCount.keys(); combination.hasMoreElements();)
+        {
+            String offer = (String) combination.nextElement();
+            int percentage = (combinationCount.get(offer) * 100)/ combinationCount.get("Total");
+            barGraphIsUnqueViewOne.getData().add(new javafx.scene.chart.XYChart.Data(offer, percentage));
+        }
+        Is_Unique_Bar_One.getData().add(barGraphIsUnqueViewOne);
+    }
+
+    //ADJUST PERCENTAGES
+    private void drawBarIsUniqueVtwo(String segmentName){
+        Is_Unique_Bar_Two.getData().clear();
+        isUnique unique = new isUnique(segmentName, customerInfo);
+        Dictionary<String, Integer> combinationCount =  unique.getUniqueCombination();
+        for(Enumeration combination = combinationCount.keys(); combination.hasMoreElements();)
+        {
+            String offer = (String) combination.nextElement();
+            int percentage = (combinationCount.get(offer) * 100)/ combinationCount.get("Total");
+            barGraphIsUnqueViewTwo.getData().add(new javafx.scene.chart.XYChart.Data(offer, percentage));
+        }
+        Is_Unique_Bar_Two.getData().add(barGraphIsUnqueViewTwo);
+    }
+    //ADJUST PERCENTAGES
+    private void pieChartIsUniqueVone(String segmentName){
+        Is_Unique_Pie_One.getData().clear();
+        isUnique unique = new isUnique(segmentName, customerInfo);
+        Dictionary<String, Integer> combinationCount =  unique.getUniqueCombination();
+        for(Enumeration combination = combinationCount.keys(); combination.hasMoreElements();)
+        {
+            String offer = (String) combination.nextElement();
+            int percentage = (combinationCount.get(offer) * 100)/ combinationCount.get("Total");
+            pieChartIsUnqueViewOne.add(new Data(offer, percentage));
+        }
+        Is_Unique_Pie_One.setData(pieChartIsUnqueViewOne);
+    }
+    //ADJUST PERCENTAGES
+    private void pieChartIsUniqueVtwo(String segmentName){
+        Is_Unique_Pie_Two.getData().clear();
+        isUnique unique = new isUnique(segmentName, customerInfo);
+        Dictionary<String, Integer> combinationCount =  unique.getUniqueCombination();
+        for(Enumeration combination = combinationCount.keys(); combination.hasMoreElements();)
+        {
+            String offer = (String) combination.nextElement();
+            int percentage = (combinationCount.get(offer) * 100)/ combinationCount.get("Total");
+            pieChartIsUnqueViewTwo.add(new Data(offer, percentage));
+        }
+        Is_Unique_Pie_Two.setData(pieChartIsUnqueViewTwo);
+    }
+
         @FXML
         private void Ingest (ActionEvent event){
             TextField loca = (TextField) event.getSource();
@@ -304,8 +389,8 @@ public class Controller {
             }
 
         }
-
-        private void drawPieChart() {
+    //ADJUST PERCENTAGES
+        private void drawPieChart()  {
             this.pieChart.getData().clear();
             int combinationCount = ((int[]) this.offerSize.get(0))[1];
             int combinationSum = (Integer) this.customerNumberList.get(0);
@@ -331,7 +416,7 @@ public class Controller {
             this.pieChart.setLabelsVisible(true);
             this.pieChart.setStartAngle(180.0D);
         }
-
+    //ADJUST PERCENTAGES
         private void drawBarGraph () {
             this.barChart.getData().clear();
             this.barChartX.setLabel("Pillars");
@@ -366,7 +451,7 @@ public class Controller {
                 errBox(processExcel.getErr_Message());
             }
             else {
-                Map<Integer, List<String>> customerInfo = processExcel.getCustomerInfo();
+                customerInfo = processExcel.getCustomerInfo();
                 Customer_details.getItems().clear();
                 for (int index = 0; index< customerInfo.size(); index++){
                     int count = index + 1;

@@ -21,18 +21,21 @@ public class isUnique {
     }
 
     private void setUnique(){
+        int total = 0;
         for (int index = 0; index < customerInfo.size(); index++){
             List<String> row = customerInfo.get(index+1);
             int customerCount = Integer.parseInt(row.get(10));
             if(!row.get(0).equals("No_offers") && uniqueCombination.get(row.get(0))==null && row.get(3).equals(segment)){
                 uniqueCombination.put(row.get(0), customerCount);
+                total += customerCount;
             }
             else if(!row.get(0).equals("No_offers") && uniqueCombination.get(row.get(0))!=null && row.get(3).equals(segment)){
                 int tempCount =  uniqueCombination.get(row.get(0));
                 uniqueCombination.put(row.get(0),customerCount+tempCount);
+                total += customerCount;
             }
-
         }
+        uniqueCombination.put("Total", total);
     }
 
     private String getCombination(List<String> row){

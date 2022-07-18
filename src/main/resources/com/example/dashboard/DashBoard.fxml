@@ -6,7 +6,7 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.*?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="700.0" prefWidth="1300.0" style="-fx-background-color: #56b9cf;" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.dashboard.Controller">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="700.0" prefWidth="1300.0" style="-fx-background-color: #56b9cf;" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.dashboard.Controller">
     <effect>
         <ColorAdjust />
     </effect>
@@ -141,8 +141,8 @@
                 <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
               </rowConstraints>
                <children>
-                  <RadioButton fx:id="Is_Unique_Bar_One_R" mnemonicParsing="false" text="Bar Graph" />
-                  <RadioButton fx:id="Is_Unique_Pie_One_R" mnemonicParsing="false" text="Pie Chart" GridPane.columnIndex="1" />
+                  <RadioButton id="Is_Unique_Bar_One_R" fx:id="Is_Unique_Bar_One_R" mnemonicParsing="false" onAction="#isUniqueChartOne" text="Bar Graph" />
+                  <RadioButton id="Is_Unique_Pie_One_R" fx:id="Is_Unique_Pie_One_R" mnemonicParsing="false" onAction="#isUniqueChartOne" text="Pie Chart" GridPane.columnIndex="1" />
                </children>
             </GridPane>
             <GridPane fx:id="is_unique_grid_two" layoutX="187.0" layoutY="576.0" prefHeight="30.0" prefWidth="348.0" visible="false">
@@ -154,8 +154,8 @@
                   <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                </rowConstraints>
                <children>
-                  <RadioButton fx:id="Is_Unique_Bar_Two_R" mnemonicParsing="false" text="Bar Graph" />
-                  <RadioButton fx:id="Is_Unique_Pie_Two_R" mnemonicParsing="false" text="Pie Chart" GridPane.columnIndex="1" />
+                  <RadioButton id="Is_Unique_Bar_Two_R" fx:id="Is_Unique_Bar_Two_R" mnemonicParsing="false" onAction="#isUniqueChartTwo" text="Bar Graph" />
+                  <RadioButton id="Is_Unique_Pie_Two_R" fx:id="Is_Unique_Pie_Two_R" mnemonicParsing="false" onAction="#isUniqueChartTwo" text="Pie Chart" GridPane.columnIndex="1" />
                </children>
             </GridPane>
          </children></AnchorPane>
