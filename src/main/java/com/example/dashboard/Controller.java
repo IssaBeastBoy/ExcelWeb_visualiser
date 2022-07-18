@@ -117,7 +117,7 @@ public class Controller {
     @FXML
     private CategoryAxis CompareBarTwo_isUniqueX = new CategoryAxis();
     @FXML
-    private NumberAxis CompareBarOne_isUniqueY = new NumberAxis();
+    private NumberAxis CompareBarTwo_isUniqueY = new NumberAxis();
     @FXML
     private PieChart Is_Unique_Pie_Two;
     @FXML
