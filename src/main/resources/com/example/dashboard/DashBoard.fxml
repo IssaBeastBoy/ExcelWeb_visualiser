@@ -87,7 +87,7 @@
                 <Font name="System Bold" size="12.0" />
             </font>
         </Button>
-      <AnchorPane fx:id="cust_Views" layoutX="710.0" layoutY="82.0" prefHeight="616.0" prefWidth="576.0" visible="false">
+      <AnchorPane fx:id="cust_Views" layoutX="719.0" layoutY="48.0" prefHeight="650.0" prefWidth="574.0">
          <children>
             <GridPane layoutX="17.0" layoutY="14.0" prefHeight="54.0" prefWidth="494.0">
               <columnConstraints>
@@ -102,16 +102,16 @@
                 <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
               </rowConstraints>
                <children>
-                  <CheckBox fx:id="off_id" mnemonicParsing="false" text="Offer ID" />
-                  <CheckBox fx:id="_kpi_risks" mnemonicParsing="false" text="KPI Risk" GridPane.columnIndex="1" />
-                  <CheckBox fx:id="prim_acc" mnemonicParsing="false" text="Primary Account" GridPane.rowIndex="1" />
-                  <CheckBox fx:id="relate" mnemonicParsing="false" text="Relationship" GridPane.columnIndex="1" GridPane.rowIndex="1" />
-                  <CheckBox fx:id="Educ" mnemonicParsing="false" text="Education" GridPane.columnIndex="2" GridPane.rowIndex="1" />
-                  <CheckBox fx:id="fun_pol" mnemonicParsing="false" text="Funeral Policy" GridPane.columnIndex="3" GridPane.rowIndex="1" />
-                  <CheckBox fx:id="cust" mnemonicParsing="false" text="Customers" GridPane.columnIndex="4" GridPane.rowIndex="1" />
-                  <CheckBox fx:id="inc_bnd" mnemonicParsing="false" text="Income Band" GridPane.columnIndex="4" />
-                  <CheckBox fx:id="age_bnd" mnemonicParsing="false" text="Age Band" GridPane.columnIndex="3" />
-                  <CheckBox fx:id="seg_mnt" mnemonicParsing="false" text="Segment" GridPane.columnIndex="2" />
+                  <CheckBox id="off_id" fx:id="off_id" mnemonicParsing="false" onAction="#checkBoxsVisibility" text="Offer ID" />
+                  <CheckBox id="_kpi_risks" fx:id="_kpi_risks" mnemonicParsing="false" onAction="#checkBoxsVisibility" text="KPI Risk" GridPane.columnIndex="1" />
+                  <CheckBox id="prim_acc" fx:id="prim_acc" mnemonicParsing="false" onAction="#checkBoxsVisibility" text="Primary Account" GridPane.rowIndex="1" />
+                  <CheckBox id="relate" fx:id="relate" mnemonicParsing="false" onAction="#checkBoxsVisibility" text="Relationship" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+                  <CheckBox id="Educ" fx:id="Educ" mnemonicParsing="false" onAction="#checkBoxsVisibility" text="Education" GridPane.columnIndex="2" GridPane.rowIndex="1" />
+                  <CheckBox id="fun_pol" fx:id="fun_pol" mnemonicParsing="false" onAction="#checkBoxsVisibility" text="Funeral Policy" GridPane.columnIndex="3" GridPane.rowIndex="1" />
+                  <CheckBox id="cust" fx:id="cust" mnemonicParsing="false" onAction="#checkBoxsVisibility" text="Customers" GridPane.columnIndex="4" GridPane.rowIndex="1" />
+                  <CheckBox id="inc_bnd" fx:id="inc_bnd" mnemonicParsing="false" onAction="#checkBoxsVisibility" text="Income Band" GridPane.columnIndex="4" />
+                  <CheckBox id="age_bnd" fx:id="age_bnd" mnemonicParsing="false" onAction="#checkBoxsVisibility" text="Age Band" GridPane.columnIndex="3" />
+                  <CheckBox id="seg_mnt" fx:id="seg_mnt" mnemonicParsing="false" onAction="#checkBoxsVisibility" text="Segment" GridPane.columnIndex="2" />
                </children>
             </GridPane>
             <BarChart fx:id="Is_Unique_Bar_One" layoutX="26.0" layoutY="68.0" prefHeight="244.0" prefWidth="547.0" visible="false">

@@ -206,6 +206,54 @@ public class Controller {
 
     }
 
+    @FXML
+    private void checkBoxsVisibility(ActionEvent selected){
+        CheckBox display = (CheckBox) selected.getSource();
+        if (display.getId().equals("off_id")) {
+
+
+
+        } else if (display.getId().equals("_kpi_risks")) {
+
+
+
+        } else if (display.getId().equals("prim_acc")) {
+
+
+
+        } else if (display.getId().equals("relate")) {
+
+
+
+        } else if (display.getId().equals("Educ")) {
+
+
+
+        } else if (display.getId().equals("fun_pol")) {
+
+
+        } else if (display.getId().equals("cust")) {
+
+
+
+        } else if (display.getId().equals("inc_bnd")) {
+
+
+
+        } else if (display.getId().equals("age_bnd")) {
+
+
+
+        } else if (display.getId().equals("seg_mnt")) {
+
+
+
+        }
+
+
+
+    }
+
         @FXML
         private void Ingest (ActionEvent event){
             TextField loca = (TextField) event.getSource();
