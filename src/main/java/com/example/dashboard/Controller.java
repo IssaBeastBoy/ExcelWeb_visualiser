@@ -89,16 +89,33 @@ public class Controller {
     private CheckBox age_bnd;
     @FXML
     private CheckBox seg_mnt;
+    @FXML
+    private Label enterSegment;
+    @FXML
+    private ChoiceBox segmentOptVone;
+    @FXML
+    private Button segmentNameVone;
+    @FXML
+    private ChoiceBox segmentOptVtwo;
+    @FXML
+    private Button segmentNameVtwo;
 
     @FXML
     private BarChart Is_Unique_Bar_One;
+    @FXML
+    private CategoryAxis CompareBarOne_isUniqueX = new CategoryAxis();
+    @FXML
+    private NumberAxis CompareBarOne_isUniqueY = new NumberAxis();
     @FXML
     private PieChart Is_Unique_Pie_One;
     @FXML
     private BarChart Is_Unique_Bar_Two;
     @FXML
+    private CategoryAxis CompareBarTwo_isUniqueX = new CategoryAxis();
+    @FXML
+    private NumberAxis CompareBarTwo_isUniqueY = new NumberAxis();
+    @FXML
     private PieChart Is_Unique_Pie_Two;
-
     @FXML
     private GridPane is_unique_grid_one;
     @FXML
@@ -127,6 +144,7 @@ public class Controller {
     @FXML
     private TableView<IngestCustomers> Customer_details;
     private final ObservableList<IngestCustomers> customerValues = FXCollections.observableArrayList();
+
     @FXML
     private TableColumn Offer_ID = new TableColumn("Offer_ID");
     @FXML
@@ -210,8 +228,16 @@ public class Controller {
     private void checkBoxsVisibility(ActionEvent selected){
         CheckBox display = (CheckBox) selected.getSource();
         if (display.getId().equals("off_id")) {
-
-
+            this.off_id.setVisible(true);
+            this.seg_mnt.setVisible(true);
+            this._kpi_risks.setVisible(false);
+            this.prim_acc.setVisible(false);
+            this.relate.setVisible(false);
+            this.Educ.setVisible(false);
+            this.fun_pol.setVisible(false);
+            this.cust.setVisible(false);
+            this.inc_bnd.setVisible(false);
+            this.age_bnd.setVisible(false);
 
         } else if (display.getId().equals("_kpi_risks")) {
 
@@ -245,13 +271,14 @@ public class Controller {
 
 
         } else if (display.getId().equals("seg_mnt")) {
-
-
-
+            this.off_id.setVisible(true);
+            this.seg_mnt.setVisible(true);
+            this.segmentOptVone.setVisible(true);
+            this.segmentNameVone.setVisible(true);
+            this.segmentOptVtwo.setVisible(true);
+            this.segmentNameVtwo.setVisible(true);
+            this.enterSegment.setVisible(true);
         }
-
-
-
     }
 
         @FXML
