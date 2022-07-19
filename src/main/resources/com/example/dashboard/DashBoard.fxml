@@ -187,8 +187,8 @@
                   <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                </rowConstraints>
                <children>
-                  <RadioButton fx:id="Is_Unique_Bar_Two_R" mnemonicParsing="false" text="Bar Graph" />
-                  <RadioButton fx:id="Is_Unique_Pie_Two_R" mnemonicParsing="false" text="Pie Chart" GridPane.columnIndex="1" />
+                  <RadioButton id="Is_Unique_Bar_Two_R" fx:id="Is_Unique_Bar_Two_R" mnemonicParsing="false" onAction="#isUniqueChartTwo" text="Bar Graph" />
+                  <RadioButton id="Is_Unique_Pie_Two_R" fx:id="Is_Unique_Pie_Two_R" mnemonicParsing="false" onAction="#isUniqueChartTwo" text="Pie Chart" GridPane.columnIndex="1" />
                </children>
             </GridPane>
          </children></AnchorPane>
