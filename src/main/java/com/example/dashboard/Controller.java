@@ -90,17 +90,13 @@ public class Controller {
     @FXML
     private CheckBox seg_mnt;
     @FXML
-    private ChoiceBox segmentOpt;
-    @FXML
-    private Button segmentName;
-    @FXML
     private Label enterSegment;
     @FXML
     private ChoiceBox segmentOptVone;
     @FXML
     private Button segmentNameVone;
     @FXML
-    private ChoiceBox segmentOpVtwo;
+    private ChoiceBox segmentOptVtwo;
     @FXML
     private Button segmentNameVtwo;
 
@@ -148,6 +144,7 @@ public class Controller {
     @FXML
     private TableView<IngestCustomers> Customer_details;
     private final ObservableList<IngestCustomers> customerValues = FXCollections.observableArrayList();
+
     @FXML
     private TableColumn Offer_ID = new TableColumn("Offer_ID");
     @FXML
@@ -276,13 +273,12 @@ public class Controller {
         } else if (display.getId().equals("seg_mnt")) {
             this.off_id.setVisible(true);
             this.seg_mnt.setVisible(true);
-            this.segmentOpt.setVisible(true);
-            this.segmentName.setVisible(true);
+            this.segmentOptVone.setVisible(true);
+            this.segmentNameVone.setVisible(true);
+            this.segmentOptVtwo.setVisible(true);
+            this.segmentNameVtwo.setVisible(true);
             this.enterSegment.setVisible(true);
         }
-
-
-
     }
 
         @FXML
