@@ -165,6 +165,8 @@ public class Controller {
         CustomerExcel = customerExcel;
     }
 
+    private String[] segmentChoices = {"Entry Wallet", "Entry Banking", "Middle", "Middle Market Premier", "Mass Affluent", "Affluent", "Wealthy"};
+
     @FXML
     private TextField Ingest;
 
