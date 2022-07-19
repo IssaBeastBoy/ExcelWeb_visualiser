@@ -66,6 +66,55 @@ public class Controller {
     private RadioButton pieChartSelect;
     @FXML
     private RadioButton barGraphSelect;
+
+    @FXML
+    private AnchorPane cust_Views;
+    @FXML
+    private CheckBox off_id;
+    @FXML
+    private CheckBox _kpi_risks;
+    @FXML
+    private CheckBox prim_acc;
+    @FXML
+    private CheckBox relate;
+    @FXML
+    private CheckBox Educ;
+    @FXML
+    private CheckBox fun_pol;
+    @FXML
+    private CheckBox cust;
+    @FXML
+    private CheckBox inc_bnd;
+    @FXML
+    private CheckBox age_bnd;
+    @FXML
+    private CheckBox seg_mnt;
+
+    @FXML
+    private BarChart Is_Unique_Bar_One;
+    @FXML
+    private PieChart Is_Unique_Pie_One;
+    @FXML
+    private BarChart Is_Unique_Bar_Two;
+    @FXML
+    private PieChart Is_Unique_Pie_Two;
+
+    @FXML
+    private GridPane is_unique_grid_one;
+    @FXML
+    private GridPane is_unique_grid_twi;
+    @FXML
+    private RadioButton Is_Unique_Bar_One_R;
+    @FXML
+    private RadioButton Is_Unique_Pie_One_R;
+    @FXML
+    private RadioButton Is_Unique_Bar_Two_R;
+    @FXML
+    private RadioButton Is_Unique_Pie_Two_R;
+
+
+
+
     private final ObservableList<combination_Table> tableValues = FXCollections.observableArrayList();
     private final ObservableList<Data> pieChartValues = FXCollections.observableArrayList();
     private final XYChart.Series<String, Integer> barGraphValues = new XYChart.Series();
@@ -149,10 +198,59 @@ public class Controller {
             drawCustomerTable();
             this.overlapCharts.setVisible(true);
             this.Customer_details.setVisible(true);
+            this.cust_Views.setVisible(true);
         } else {
             String errMessage = "Path does not exist. Please check the given path or the excel spreadsheet.";
             this.errBox(errMessage);
         }
+
+    }
+
+    @FXML
+    private void checkBoxsVisibility(ActionEvent selected){
+        CheckBox display = (CheckBox) selected.getSource();
+        if (display.getId().equals("off_id")) {
+
+
+
+        } else if (display.getId().equals("_kpi_risks")) {
+
+
+
+        } else if (display.getId().equals("prim_acc")) {
+
+
+
+        } else if (display.getId().equals("relate")) {
+
+
+
+        } else if (display.getId().equals("Educ")) {
+
+
+
+        } else if (display.getId().equals("fun_pol")) {
+
+
+        } else if (display.getId().equals("cust")) {
+
+
+
+        } else if (display.getId().equals("inc_bnd")) {
+
+
+
+        } else if (display.getId().equals("age_bnd")) {
+
+
+
+        } else if (display.getId().equals("seg_mnt")) {
+
+
+
+        }
+
+
 
     }
 
