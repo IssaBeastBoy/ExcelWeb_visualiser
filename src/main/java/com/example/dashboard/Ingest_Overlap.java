@@ -159,7 +159,7 @@ public class Ingest_Overlap {
 
 //   public static void main(String[] args) {
 //       Overlapfinder.Ingest files = new Overlapfinder.Ingest();
-//       files.setExcel_loc("C:\\Users\\f5462797\\Applications\\Grad_project\\Overlap_finder\\files\\Offer_Combinations.xlsx");
+//       files.setExcel_loc("C:\\Users\\f5462797\\Applications\\Grad_project\\Offer_Combinations.xlsx");
 //       files.parseSheets();
 //   }
 
