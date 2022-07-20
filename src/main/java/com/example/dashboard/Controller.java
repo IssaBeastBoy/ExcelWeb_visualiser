@@ -236,6 +236,8 @@ public class Controller {
     private void checkBoxsVisibility(ActionEvent selected){
         CheckBox display = (CheckBox) selected.getSource();
         if (display.getId().equals("off_id")) {
+            if (display.isSelected())
+            {
             this.off_id.setVisible(true);
             this.seg_mnt.setVisible(true);
             this._kpi_risks.setVisible(false);
@@ -246,6 +248,34 @@ public class Controller {
             this.cust.setVisible(false);
             this.inc_bnd.setVisible(false);
             this.age_bnd.setVisible(false);
+            }
+            else
+            {
+                this.seg_mnt.setSelected(false);
+                this._kpi_risks.setVisible(true);
+                this.prim_acc.setVisible(true);
+                this.relate.setVisible(true);
+                this.Educ.setVisible(true);
+                this.fun_pol.setVisible(true);
+                this.cust.setVisible(true);
+                this.inc_bnd.setVisible(true);
+                this.age_bnd.setVisible(true);
+                this.segmentOptVone.setVisible(false);
+                this.segmentNameVone.setVisible(false);
+                this.segmentOptVtwo.setVisible(false);
+                this.segmentNameVtwo.setVisible(false);
+                this.enterSegment.setVisible(false);
+                Is_Unique_Pie_One.setVisible(false);
+                Is_Unique_Bar_One.setVisible(false);
+                is_unique_grid_one.setVisible(false);
+                Is_Unique_Bar_One_R.setSelected(false);
+                Is_Unique_Pie_One_R.setSelected(false);
+                Is_Unique_Pie_Two.setVisible(false);
+                Is_Unique_Bar_Two.setVisible(false);
+                is_unique_grid_two.setVisible(false);
+                Is_Unique_Bar_Two_R.setSelected(false);
+                Is_Unique_Pie_Two_R.setSelected(false);
+            }
 
         } else if (display.getId().equals("_kpi_risks")) {
 
@@ -279,15 +309,37 @@ public class Controller {
 
 
         } else if (display.getId().equals("seg_mnt")) {
-            this.off_id.setVisible(true);
-            this.seg_mnt.setVisible(true);
-            segmentOptVone.getItems().addAll(FXCollections.observableArrayList(segmentChoices));
-            segmentOptVtwo.getItems().addAll(FXCollections.observableArrayList(segmentChoices));
-            this.segmentOptVone.setVisible(true);
-            this.segmentNameVone.setVisible(true);
-            this.segmentOptVtwo.setVisible(true);
-            this.segmentNameVtwo.setVisible(true);
-            this.enterSegment.setVisible(true);
+            if (seg_mnt.isSelected()) {
+                this.off_id.setVisible(true);
+                this.seg_mnt.setVisible(true);
+                if (segmentOptVone.getItems().isEmpty())
+                    segmentOptVone.getItems().addAll(FXCollections.observableArrayList(segmentChoices));
+                if (segmentOptVtwo.getItems().isEmpty())
+                    segmentOptVtwo.getItems().addAll(FXCollections.observableArrayList(segmentChoices));
+                this.segmentOptVone.setVisible(true);
+                this.segmentNameVone.setVisible(true);
+                this.segmentOptVtwo.setVisible(true);
+                this.segmentNameVtwo.setVisible(true);
+                this.enterSegment.setVisible(true);
+            }
+            else
+            {
+                this.segmentOptVone.setVisible(false);
+                this.segmentNameVone.setVisible(false);
+                this.segmentOptVtwo.setVisible(false);
+                this.segmentNameVtwo.setVisible(false);
+                this.enterSegment.setVisible(false);
+                Is_Unique_Pie_One.setVisible(false);
+                Is_Unique_Bar_One.setVisible(false);
+                is_unique_grid_one.setVisible(false);
+                Is_Unique_Bar_One_R.setSelected(false);
+                Is_Unique_Pie_One_R.setSelected(false);
+                Is_Unique_Pie_Two.setVisible(false);
+                Is_Unique_Bar_Two.setVisible(false);
+                is_unique_grid_two.setVisible(false);
+                Is_Unique_Bar_Two_R.setSelected(false);
+                Is_Unique_Pie_Two_R.setSelected(false);
+            }
         }
     }
 
@@ -297,10 +349,14 @@ public class Controller {
         if (display.getId().equals("Is_Unique_Bar_One_R")){
             Is_Unique_Bar_One.setVisible(true);
             Is_Unique_Pie_One.setVisible(false);
+            Is_Unique_Bar_One_R.setSelected(true);
+            Is_Unique_Pie_One_R.setSelected(false);
         }
         else if(display.getId().equals("Is_Unique_Pie_One_R")){
             Is_Unique_Bar_One.setVisible(false);
             Is_Unique_Pie_One.setVisible(true);
+            Is_Unique_Bar_One_R.setSelected(false);
+            Is_Unique_Pie_One_R.setSelected(true);
         }
     }
 
@@ -310,10 +366,14 @@ public class Controller {
         if (display.getId().equals("Is_Unique_Bar_Two_R")){
             Is_Unique_Bar_Two.setVisible(true);
             Is_Unique_Pie_Two.setVisible(false);
+            Is_Unique_Bar_Two_R.setSelected(true);
+            Is_Unique_Pie_Two_R.setSelected(false);
         }
         else if(display.getId().equals("Is_Unique_Pie_Two_R")){
             Is_Unique_Bar_Two.setVisible(false);
             Is_Unique_Pie_Two.setVisible(true);
+            Is_Unique_Bar_Two_R.setSelected(false);
+            Is_Unique_Pie_Two_R.setSelected(true);
         }
     }
 
@@ -325,6 +385,8 @@ public class Controller {
         Is_Unique_Pie_One.setVisible(false);
         Is_Unique_Bar_One.setVisible(true);
         is_unique_grid_one.setVisible(true);
+        Is_Unique_Bar_One_R.setSelected(true);
+        Is_Unique_Pie_One_R.setSelected(false);
     }
 
     @FXML
@@ -335,6 +397,8 @@ public class Controller {
         Is_Unique_Pie_Two.setVisible(false);
         Is_Unique_Bar_Two.setVisible(true);
         is_unique_grid_two.setVisible(true);
+        Is_Unique_Bar_Two_R.setSelected(true);
+        Is_Unique_Pie_Two_R.setSelected(false);
     }
 
     //ADJUST PERCENTAGES
