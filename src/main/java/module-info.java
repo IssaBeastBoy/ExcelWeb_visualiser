@@ -12,6 +12,7 @@ module com.example.dashboard {
     requires poi.ooxml;
     requires com.google.common;
     requires xlsx.streamer;
+    requires javafx.graphics;
 
     opens com.example.dashboard;
     exports com.example.dashboard;

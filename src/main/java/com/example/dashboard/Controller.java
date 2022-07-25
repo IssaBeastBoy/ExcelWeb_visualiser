@@ -94,7 +94,7 @@ public class Controller {
     @FXML
     private Label enterSegment;
 
-    private final String[] segmentChoices = {"Entry Wallet", "Entry Banking", "Middle", "Middle Market Premier", "Mass Affluent", "Affluent", "Wealthy"};
+    //private final String[] segmentChoices = {"Entry Wallet", "Entry Banking", "Middle", "Middle Market Premier", "Mass Affluent", "Affluent", "Wealthy"};
 
     @FXML
     private ChoiceBox segmentOptVone;// = new ChoiceBox(FXCollections.observableArrayList(segmentChoices));
@@ -310,12 +310,14 @@ public class Controller {
 
         } else if (display.getId().equals("seg_mnt")) {
             if (seg_mnt.isSelected()) {
+                ChoiceBoxSetter options = new ChoiceBoxSetter(3, customerInfo);
                 this.off_id.setVisible(true);
                 this.seg_mnt.setVisible(true);
-                if (segmentOptVone.getItems().isEmpty())
-                    segmentOptVone.getItems().addAll(FXCollections.observableArrayList(segmentChoices));
+                if (segmentOptVone.getItems().isEmpty()){
+                    segmentOptVone.getItems().addAll(FXCollections.observableArrayList(options.getDynamicArray()));
+                }
                 if (segmentOptVtwo.getItems().isEmpty())
-                    segmentOptVtwo.getItems().addAll(FXCollections.observableArrayList(segmentChoices));
+                    segmentOptVtwo.getItems().addAll(FXCollections.observableArrayList(options.getDynamicArray()));
                 this.segmentOptVone.setVisible(true);
                 this.segmentNameVone.setVisible(true);
                 this.segmentOptVtwo.setVisible(true);
