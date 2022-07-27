@@ -15,7 +15,7 @@ public class Ingest_CustomerInfo {
     private String err_Message = "";
     private Dictionary<String, String> combinations = new Hashtable<>();
     private Dictionary<String, String> relationshipStatus = new Hashtable<>();
-    private Map<Integer, List<String>> customerInfo;
+    private Dictionary<Integer, List<String>> customerInfo;
     private Dictionary<Integer, Integer> corruptedRows;
     private static Row.MissingCellPolicy xRow;
     public Ingest_CustomerInfo(){
@@ -31,7 +31,7 @@ public class Ingest_CustomerInfo {
         relationshipStatus.put("M", "Married");
         relationshipStatus.put("D","Divorced");
         relationshipStatus.put("U","Unknown");
-        customerInfo = new HashMap<>();
+        customerInfo = new Hashtable<>();
         corruptedRows = new Hashtable<>();
     }
 
@@ -48,7 +48,7 @@ public class Ingest_CustomerInfo {
         return excel_loc;
     }
 
-    public Map<Integer, List<String>> getCustomerInfo() {
+    public Dictionary<Integer, List<String>> getCustomerInfo() {
         return customerInfo;
     }
 

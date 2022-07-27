@@ -106,6 +106,23 @@ public class Controller {
     private Button segmentNameVtwo;
 
     @FXML
+    private ChoiceBox segmentBoundVoneShow;// = new ChoiceBox(FXCollections.observableArrayList(segmentChoices));
+    @FXML
+    private Button segmentApplyVone;
+    @FXML
+    private ChoiceBox segmentBoundVtwoShow;// = new ChoiceBox(FXCollections.observableArrayList(segmentChoices));;
+    @FXML
+    private Button segmentApplyVtwo;
+    @FXML
+    private ChoiceBox segmentOfferVoneRemove;// = new ChoiceBox(FXCollections.observableArrayList(segmentChoices));
+    @FXML
+    private Button segmentRemoveVone;
+    @FXML
+    private ChoiceBox segmentOfferVtwoRemove;// = new ChoiceBox(FXCollections.observableArrayList(segmentChoices));;
+    @FXML
+    private Button segmentRemoveVtwo;
+
+    @FXML
     private BarChart Is_Unique_Bar_One;
     @FXML
     private CategoryAxis CompareBarOne_isUniqueX = new CategoryAxis();
@@ -134,7 +151,7 @@ public class Controller {
     @FXML
     private RadioButton Is_Unique_Pie_Two_R;
 
-    private Map<Integer, List<String>> customerInfo;
+    private Dictionary<Integer, List<String>> customerInfo;
     private final ObservableList<Data> pieChartIsUnqueViewOne = FXCollections.observableArrayList();
     private final XYChart.Series<String, Integer> barGraphIsUnqueViewOne = new XYChart.Series();
     private final ObservableList<Data> pieChartIsUnqueViewTwo = FXCollections.observableArrayList();
@@ -143,6 +160,18 @@ public class Controller {
     private final ObservableList<combination_Table> tableValues = FXCollections.observableArrayList();
     private final ObservableList<Data> pieChartValues = FXCollections.observableArrayList();
     private final XYChart.Series<String, Integer> barGraphValues = new XYChart.Series();
+
+    private int uniqueOfferCount;
+    private int boundVone = 0;
+    private String excludeSelectedSegmentVone = "";
+    private String selectedSegmentVone = "";
+    private int boundVtwo = 0;
+    private String excludeSelectedSegmentVtwo = "";
+    private String selectedSegmentVtwo = "";
+    private Dictionary<Integer, String> combinationCount;
+    private List<int[]> sortedList;
+    private int totalSelectedOffer = 0;
+
     @FXML
     private String excel_loc = "";
     private List<String> combinationList;
@@ -310,14 +339,19 @@ public class Controller {
 
         } else if (display.getId().equals("seg_mnt")) {
             if (seg_mnt.isSelected()) {
-                ChoiceBoxSetter options = new ChoiceBoxSetter(3, customerInfo);
+                ChoiceBoxSetter<Integer, List<String>> segmentOptions = new ChoiceBoxSetter<Integer, List<String>>(customerInfo);
                 this.off_id.setVisible(true);
                 this.seg_mnt.setVisible(true);
                 if (segmentOptVone.getItems().isEmpty()){
-                    segmentOptVone.getItems().addAll(FXCollections.observableArrayList(options.getDynamicArray()));
+                    segmentOptions.setDynamicArrayColumn(3);
+                    segmentOptVone.getItems().addAll(FXCollections.observableArrayList(segmentOptions.getDynamicArray()));
                 }
-                if (segmentOptVtwo.getItems().isEmpty())
-                    segmentOptVtwo.getItems().addAll(FXCollections.observableArrayList(options.getDynamicArray()));
+                segmentOptVone.setValue("None");
+                if (segmentOptVtwo.getItems().isEmpty()){
+                    segmentOptions.setDynamicArrayColumn(3);
+                    segmentOptVtwo.getItems().addAll(FXCollections.observableArrayList(segmentOptions.getDynamicArray()));
+                }
+                segmentOptVtwo.setValue("None");
                 this.segmentOptVone.setVisible(true);
                 this.segmentNameVone.setVisible(true);
                 this.segmentOptVtwo.setVisible(true);
@@ -380,10 +414,48 @@ public class Controller {
     }
 
     @FXML
+    private void segmentApplyVone(ActionEvent event){
+        String selected = (String) segmentBoundVoneShow.getValue();
+        if (selected.equals("Show all")){
+            boundVone = uniqueOfferCount;
+            drawBarIsUniqueVone(selectedSegmentVone);
+        }
+        else {
+            String[] getBound = selected.split(" ");
+            boundVone = Integer.parseInt(getBound[1]);
+            drawBarIsUniqueVone(selectedSegmentVone);
+        }
+
+    }
+    @FXML
+    private void segmentRemoveVone(ActionEvent event){
+        String  selected = (String) segmentOfferVoneRemove.getValue();
+        excludeSelectedSegmentVone = selected;
+        drawBarIsUniqueVone(selectedSegmentVone);
+    }
+
+    @FXML
     private void segmentViewOne(ActionEvent selected){
         String selectedSegment = (String) segmentOptVone.getValue();
+        isUnique unique = new isUnique(selectedSegment, customerInfo);
+        combinationCount =  unique.getUniqueCombinationIndex();
+        Sorter sorter = new Sorter(unique.getOrderedList());
+        sortedList = sorter.getSortedList();
+        totalSelectedOffer = unique.getTotal();
+        uniqueOfferCount = sortedList.size();
         drawBarIsUniqueVone(selectedSegment);
         pieChartIsUniqueVone(selectedSegment);
+        ChoiceBoxSetter<Integer, String> applySegmentoptions = new ChoiceBoxSetter<Integer, String>(combinationCount);
+        if (segmentBoundVoneShow.getItems().isEmpty()){
+            applySegmentoptions.setDynamicArraySegmentBoundApplyVone();
+            segmentBoundVoneShow.getItems().addAll(FXCollections.observableArrayList(applySegmentoptions.getDynamicArray()));
+        }
+        segmentBoundVoneShow.setValue("Show all");
+        if (segmentOfferVoneRemove.getItems().isEmpty()){
+            applySegmentoptions.setDynamicArraySegmentOfferRemoveVone();
+            segmentOfferVoneRemove.getItems().addAll(FXCollections.observableArrayList(applySegmentoptions.getDynamicArray()));
+        }
+        segmentOfferVoneRemove.setValue("None");
         Is_Unique_Pie_One.setVisible(false);
         Is_Unique_Bar_One.setVisible(true);
         is_unique_grid_one.setVisible(true);
@@ -405,19 +477,22 @@ public class Controller {
 
     //ADJUST PERCENTAGES
     private void drawBarIsUniqueVone(String segmentName){
-        //Is_Unique_Bar_One = new BarChart<>(CompareBarOne_isUniqueX, CompareBarOne_isUniqueY); //.getData().clear();
-        isUnique unique = new isUnique(segmentName, customerInfo);
         Is_Unique_Bar_One.setAnimated(false);
         Is_Unique_Bar_One.getData().clear();
         barGraphIsUnqueViewOne.getData().clear();
         Is_Unique_Bar_One.setAnimated(true);
-        Dictionary<String, Integer> combinationCount =  unique.getUniqueCombination();
-        for(Enumeration combination = combinationCount.keys(); combination.hasMoreElements();)
-        {
-            String offer = (String) combination.nextElement();
-            if (!offer.equals("Total")) {
-                int percentage = (combinationCount.get(offer) * 100) / combinationCount.get("Total");
-                barGraphIsUnqueViewOne.getData().add(new javafx.scene.chart.XYChart.Data(offer, percentage));
+        if(boundVone != 0){
+            for (int index = sortedList.size() - 1; index >= sortedList.size()-boundVone; index --){
+                float offerPercentage = (float) sortedList.get(index)[1]*100/totalSelectedOffer;
+                if(!combinationCount.get(sortedList.get(index)[0]).equals(excludeSelectedSegmentVone))
+                    barGraphIsUnqueViewOne.getData().add(new javafx.scene.chart.XYChart.Data( combinationCount.get(sortedList.get(index)[0]), offerPercentage));
+            }
+        }
+        else{
+            for (int index = sortedList.size()-1; index > 0; index --){
+                float offerPercentage = (float) sortedList.get(index)[1]*100/totalSelectedOffer;
+                if(!combinationCount.get(sortedList.get(index)[0]).equals(excludeSelectedSegmentVone))
+                    barGraphIsUnqueViewOne.getData().add(new javafx.scene.chart.XYChart.Data( combinationCount.get(sortedList.get(index)[0]), offerPercentage));
             }
         }
         Is_Unique_Bar_One.getData().add(barGraphIsUnqueViewOne);
@@ -434,15 +509,15 @@ public class Controller {
         Is_Unique_Bar_Two.setAnimated(true);
         barGraphIsUnqueViewTwo.getData().clear();
         isUnique unique = new isUnique(segmentName, customerInfo);
-        Dictionary<String, Integer> combinationCount =  unique.getUniqueCombination();
-        for(Enumeration combination = combinationCount.keys(); combination.hasMoreElements();)
-        {
-            String offer = (String) combination.nextElement();
-            if (!offer.equals("Total")) {
-                int percentage = (combinationCount.get(offer) * 100) / combinationCount.get("Total");
-                barGraphIsUnqueViewTwo.getData().add(new javafx.scene.chart.XYChart.Data(offer, percentage));
-            }
-        }
+//        Dictionary<String, Integer> combinationCount =  unique.getUniqueCombination();
+//        for(Enumeration combination = combinationCount.keys(); combination.hasMoreElements();)
+//        {
+//            String offer = (String) combination.nextElement();
+//            if (!offer.equals("Total")) {
+//                int percentage = (combinationCount.get(offer) * 100) / combinationCount.get("Total");
+//                barGraphIsUnqueViewTwo.getData().add(new javafx.scene.chart.XYChart.Data(offer, percentage));
+//            }
+//        }
         Is_Unique_Bar_Two.getData().add(barGraphIsUnqueViewTwo);
         CompareBarTwo_isUniqueX.setLabel("Offer Combination");
         CompareBarTwo_isUniqueX.setAnimated(false);
@@ -453,15 +528,15 @@ public class Controller {
         Is_Unique_Pie_One.getData().clear();
         pieChartIsUnqueViewOne.clear();
         isUnique unique = new isUnique(segmentName, customerInfo);
-        Dictionary<String, Integer> combinationCount =  unique.getUniqueCombination();
-        for(Enumeration combination = combinationCount.keys(); combination.hasMoreElements();)
-        {
-            String offer = (String) combination.nextElement();
-            if (!offer.equals("Total")) {
-                int percentage = (combinationCount.get(offer) * 100) / combinationCount.get("Total");
-                pieChartIsUnqueViewOne.add(new Data(offer, percentage));
-            }
-        }
+//        Dictionary<String, Integer> combinationCount =  unique.getUniqueCombination();
+//        for(Enumeration combination = combinationCount.keys(); combination.hasMoreElements();)
+//        {
+//            String offer = (String) combination.nextElement();
+//            if (!offer.equals("Total")) {
+//                int percentage = (combinationCount.get(offer) * 100) / combinationCount.get("Total");
+//                pieChartIsUnqueViewOne.add(new Data(offer, percentage));
+//            }
+//        }
         Is_Unique_Pie_One.setData(pieChartIsUnqueViewOne);
         Is_Unique_Pie_One.setLabelsVisible(true);
         Is_Unique_Pie_One.setClockwise(true);
@@ -471,15 +546,15 @@ public class Controller {
         Is_Unique_Pie_Two.getData().clear();
         pieChartIsUnqueViewTwo.clear();
         isUnique unique = new isUnique(segmentName, customerInfo);
-        Dictionary<String, Integer> combinationCount =  unique.getUniqueCombination();
-        for(Enumeration combination = combinationCount.keys(); combination.hasMoreElements();)
-        {
-            String offer = (String) combination.nextElement();
-            if (!offer.equals("Total")) {
-                int percentage = (combinationCount.get(offer) * 100) / combinationCount.get("Total");
-                pieChartIsUnqueViewTwo.add(new Data(offer, percentage));
-            }
-        }
+//        Dictionary<String, Integer> combinationCount =  unique.getUniqueCombination();
+//        for(Enumeration combination = combinationCount.keys(); combination.hasMoreElements();)
+//        {
+//            String offer = (String) combination.nextElement();
+//            if (!offer.equals("Total")) {
+//                int percentage = (combinationCount.get(offer) * 100) / combinationCount.get("Total");
+//                pieChartIsUnqueViewTwo.add(new Data(offer, percentage));
+//            }
+//        }
         Is_Unique_Pie_Two.setData(pieChartIsUnqueViewTwo);
         Is_Unique_Pie_Two.setLabelsVisible(true);
         Is_Unique_Pie_Two.setClockwise(true);
