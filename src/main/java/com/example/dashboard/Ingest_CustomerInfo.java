@@ -125,6 +125,9 @@ public class Ingest_CustomerInfo {
                     Iterator<Cell> parseCell = row.cellIterator();// .iterator();
                     //Cell cells = row.getCell(1)
                     List<String> customerDetails = new ArrayList<>();
+                    if (rowCount == 466709){
+                        int num = 10;
+                    }
                     cellNumber=1;
                     while (parseCell.hasNext()){
                         Cell cell = parseCell.next();
@@ -139,7 +142,7 @@ public class Ingest_CustomerInfo {
                             colCount++;
                         }
                         else{
-                            if(cellValue.equals("-1") || cell.equals("Null")){
+                            if(cellValue.equals("-1") || cellValue.equals("Null")){
                                 customerDetails.add("No_"+columns.get(cellNumber-1));
                                 if(isColsValues.isEmpty()){
                                     Dictionary<String, String> storeUniqueColsItems = new Hashtable<>();
@@ -154,7 +157,7 @@ public class Ingest_CustomerInfo {
                                         isColsValues.put(cellNumber,storeUniqueColsItems);
                                     }
                                     else {
-                                       if(storeUniqueColsItems.get("No_"+columns.get(cellNumber-1)).equals(null)){
+                                       if(storeUniqueColsItems.get("No_"+columns.get(cellNumber-1)) == null){
                                             storeUniqueColsItems.put("No_"+columns.get(cellNumber-1), columns.get(cellNumber-1));
                                             isColsValues.put(cellNumber,storeUniqueColsItems);
                                         }
@@ -191,7 +194,7 @@ public class Ingest_CustomerInfo {
                     if (rowCount == 1)
                         customerInfo.put(-1,customerDetails);
                     else
-                        customerInfo.put(rowCount,customerDetails);
+                        customerInfo.put(rowCount-1,customerDetails);
                     rowCount++;
                 }
             }
