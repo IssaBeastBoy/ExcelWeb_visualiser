@@ -55,7 +55,7 @@ public class Ingest_CustomerInfo {
         return excel_loc;
     }
 
-    public Map<Integer, List<String>> getCustomerInfo() {
+    public Dictionary<Integer, List<String>> getCustomerInfo() {
         return customerInfo;
     }
 
