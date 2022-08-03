@@ -184,8 +184,8 @@ public class Controller {
 
     @FXML
     private TableColumn Offer_ID = new TableColumn("Offer_ID");
-    @FXML
-    private TableColumn Offer_name = new TableColumn("Offer_name");
+//    @FXML
+//    private TableColumn Offer_name = new TableColumn("Offer_name");
     @FXML
     private TableColumn KPI_risk = new TableColumn("KPI_risk");
     @FXML
@@ -677,12 +677,12 @@ public class Controller {
                 for (int index = 0; index< customerInfo.size(); index++){
                     int count = index + 1;
                     List<String> details = customerInfo.get(count);
-                    customerValues.add(new IngestCustomers(details.get(0),details.get(1),details.get(2),details.get(3),details.get(4),details.get(5),details.get(6),details.get(7),details.get(8),details.get(9),details.get(10)));
+                    customerValues.add(new IngestCustomers(details.get(0),details.get(1),details.get(2),details.get(3),details.get(4),details.get(5),details.get(6),details.get(7),details.get(8),details.get(9)));
                 }
                 if(processExcel.isThrowErr())
                     errBox(processExcel.getErr_Message());
                 Offer_ID.setCellValueFactory(new PropertyValueFactory("Offer_ID"));
-                Offer_name.setCellValueFactory(new PropertyValueFactory("Offer_Name"));
+                //Offer_name.setCellValueFactory(new PropertyValueFactory("Offer_Name"));
                 KPI_risk.setCellValueFactory(new PropertyValueFactory("KPI_risk"));
                 Segment.setCellValueFactory(new PropertyValueFactory("Segment"));
                 Age_bend.setCellValueFactory(new PropertyValueFactory("Age_bend"));

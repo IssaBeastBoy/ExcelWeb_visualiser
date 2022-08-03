@@ -5,7 +5,7 @@ import javafx.beans.property.SimpleStringProperty;
 
 public class IngestCustomers {
     private final SimpleStringProperty Offer_ID;
-    private final SimpleStringProperty Offer_Name;
+    //private final SimpleStringProperty Offer_Name;
     private final SimpleStringProperty KPI_risk;
     private final SimpleStringProperty Segment;
     private final SimpleStringProperty Age_bend;
@@ -17,9 +17,9 @@ public class IngestCustomers {
     private final SimpleIntegerProperty Customers;
 
 
-    public IngestCustomers(String offer_id, String offer_name, String kpi_risk, String segment, String age_band, String income_band, String primary_acc, String relationship, String eduction, String funeral_pol, String customers) {
+    public IngestCustomers(String offer_id, String kpi_risk, String segment, String age_band, String income_band, String primary_acc, String relationship, String eduction, String funeral_pol, String customers) {
         Offer_ID = new SimpleStringProperty(offer_id);
-        Offer_Name = new SimpleStringProperty(offer_name);
+        //Offer_Name = new SimpleStringProperty(offer_name);
         KPI_risk = new SimpleStringProperty(kpi_risk);
         this.Segment = new SimpleStringProperty(segment);
         this.Age_bend = new SimpleStringProperty(age_band);
@@ -43,17 +43,17 @@ public class IngestCustomers {
         this.Offer_ID.set(offer_ID);
     }
 
-    public String getOffer_Name() {
-        return Offer_Name.get();
-    }
-
-    public SimpleStringProperty offer_NameProperty() {
-        return Offer_Name;
-    }
-
-    public void setOffer_Name(String offer_Name) {
-        this.Offer_Name.set(offer_Name);
-    }
+//    public String getOffer_Name() {
+//        return Offer_Name.get();
+//    }
+//
+//    public SimpleStringProperty offer_NameProperty() {
+//        return Offer_Name;
+//    }
+//
+//    public void setOffer_Name(String offer_Name) {
+//        this.Offer_Name.set(offer_Name);
+//    }
 
     public String getKPI_risk() {
         return KPI_risk.get();

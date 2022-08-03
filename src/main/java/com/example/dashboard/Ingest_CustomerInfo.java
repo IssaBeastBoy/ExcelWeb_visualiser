@@ -15,14 +15,17 @@ public class Ingest_CustomerInfo {
     private String err_Message = "";
     private Dictionary<String, String> combinations = new Hashtable<>();
     private Dictionary<String, String> relationshipStatus = new Hashtable<>();
-    private Map<Integer, List<String>> customerInfo;
-    private Map<Integer, Dictionary<String, String>> isColsValues;
+    private Dictionary<Integer, List<String>> customerInfo;
+    private Dictionary<Integer, List<String>> isColsValues;
+    private Dictionary<Integer, Dictionary<String, int[]>> colItemsCustomerCount;
     private Dictionary<Integer, Integer> corruptedRows;
     private static Row.MissingCellPolicy xRow;
+    private int totalCustomerCount;
 
     public Ingest_CustomerInfo() {
-        customerInfo = new HashMap<>();
-        isColsValues = new HashMap<>();
+        isColsValues = new Hashtable<>();
+        totalCustomerCount = 0;
+        colItemsCustomerCount = new Hashtable<>();
         combinations.put("IN", "Insure");
         combinations.put("SL", "SecuredLend");
         combinations.put("UL", "UnsecuredLend");
@@ -35,7 +38,7 @@ public class Ingest_CustomerInfo {
         relationshipStatus.put("M", "Married");
         relationshipStatus.put("D", "Divorced");
         relationshipStatus.put("U", "Unknown");
-        customerInfo = new HashMap<>();
+        customerInfo = new Hashtable<>();
         corruptedRows = new Hashtable<>();
     }
 
@@ -47,7 +50,7 @@ public class Ingest_CustomerInfo {
         this.throwErr = throwErr;
     }
 
-    public Map<Integer, Dictionary<String, String>> getIsColsValues() {
+    public Dictionary<Integer,List<String>> getIsColsValues() {
         return isColsValues;
     }
 
@@ -141,24 +144,24 @@ public class Ingest_CustomerInfo {
                             customerDetails.add(cellValue);
                             colCount++;
                         }
-                        else{
+                        else {
                             if(cellValue.equals("-1") || cellValue.equals("Null")){
                                 customerDetails.add("No_"+columns.get(cellNumber-1));
                                 if(isColsValues.isEmpty()){
-                                    Dictionary<String, String> storeUniqueColsItems = new Hashtable<>();
-                                    storeUniqueColsItems.put("No_"+columns.get(cellNumber-1), columns.get(cellNumber-1));
+                                    List<String> storeUniqueColsItems = new ArrayList<>();
+                                    storeUniqueColsItems.add("No_"+columns.get(cellNumber-1));
                                     isColsValues.put(cellNumber,storeUniqueColsItems);
                                 }
                                 else{
-                                    Dictionary<String, String> storeUniqueColsItems = isColsValues.get(cellNumber);
+                                    List<String> storeUniqueColsItems = isColsValues.get(cellNumber);
                                     if(storeUniqueColsItems == null){
-                                        storeUniqueColsItems = new Hashtable<>();
-                                        storeUniqueColsItems.put("No_"+columns.get(cellNumber-1), columns.get(cellNumber-1));
+                                        storeUniqueColsItems = new ArrayList<>();
+                                        storeUniqueColsItems.add("No_"+columns.get(cellNumber-1));
                                         isColsValues.put(cellNumber,storeUniqueColsItems);
                                     }
                                     else {
-                                       if(storeUniqueColsItems.get("No_"+columns.get(cellNumber-1)) == null){
-                                            storeUniqueColsItems.put("No_"+columns.get(cellNumber-1), columns.get(cellNumber-1));
+                                       if(!storeUniqueColsItems.contains("No_"+columns.get(cellNumber-1))){
+                                            storeUniqueColsItems.add("No_"+columns.get(cellNumber-1));
                                             isColsValues.put(cellNumber,storeUniqueColsItems);
                                         }
                                     }
@@ -168,20 +171,20 @@ public class Ingest_CustomerInfo {
                             else {
                                 customerDetails.add(cellValue);
                                 if(isColsValues.isEmpty()){
-                                    Dictionary<String, String> storeUniqueColsItems = new Hashtable<>();
-                                    storeUniqueColsItems.put(cellValue, columns.get(cellNumber-1));
+                                    List<String> storeUniqueColsItems = new ArrayList<>();
+                                    storeUniqueColsItems.add(cellValue);
                                     isColsValues.put(cellNumber,storeUniqueColsItems);
                                 }
                                 else{
-                                    Dictionary<String, String> storeUniqueColsItems = isColsValues.get(cellNumber);
+                                    List<String> storeUniqueColsItems = isColsValues.get(cellNumber);
                                     if(storeUniqueColsItems == null){
-                                        storeUniqueColsItems = new Hashtable<>();
-                                        storeUniqueColsItems.put(cellValue, columns.get(cellNumber-1));
+                                        storeUniqueColsItems = new ArrayList<>();
+                                        storeUniqueColsItems.add(cellValue);
                                         isColsValues.put(cellNumber,storeUniqueColsItems);
                                     }
                                     else {
-                                        if(storeUniqueColsItems.get(cellValue)==null){
-                                            storeUniqueColsItems.put(cellValue, columns.get(cellNumber-1));
+                                        if(!storeUniqueColsItems.contains(cellValue)){
+                                            storeUniqueColsItems.add(cellValue);
                                             isColsValues.put(cellNumber,storeUniqueColsItems);
                                         }
                                     }
@@ -191,15 +194,39 @@ public class Ingest_CustomerInfo {
                         }
                         cellNumber++;
                     }
-                    if (rowCount == 1)
-                        customerInfo.put(-1,customerDetails);
+                    if (rowCount > 1) {
+                        customerInfo.put(rowCount - 1, customerDetails);
+                        totalCustomerCount = totalCustomerCount + Integer.parseInt(customerDetails.get(customerDetails.size()-1));
+                        for (int index = 0; index<customerDetails.size(); index++){
+                            Dictionary<String, int[]> tempCustomerCount = colItemsCustomerCount.get(index+1);
+                            if (index+1 != customerDetails.size()){
+                                if(tempCustomerCount == null){
+                                    tempCustomerCount = new Hashtable<>();
+                                    int[] tmp = { isColsValues.get(index+1).indexOf(customerDetails.get(index)), Integer.parseInt(customerDetails.get(customerDetails.size()-1))};
+                                    tempCustomerCount.put(customerDetails.get(index), tmp);
+                                    colItemsCustomerCount.put(index+1, tempCustomerCount);
+                                }
+                                else if(tempCustomerCount.get(customerDetails.get(index))==null){
+                                    int[] tmp = { isColsValues.get(index+1).indexOf(customerDetails.get(index)), Integer.parseInt(customerDetails.get(customerDetails.size()-1))};
+                                    tempCustomerCount.put(customerDetails.get(index), tmp);
+                                    colItemsCustomerCount.put(index+1, tempCustomerCount);
+                                }
+                                else if(tempCustomerCount.get(customerDetails.get(index))!=null){
+                                    int[] tempCount = tempCustomerCount.get(customerDetails.get(index));
+                                    tempCount[1] = tempCount[1] + Integer.parseInt(customerDetails.get(customerDetails.size()-1));
+                                    colItemsCustomerCount.put(index+1, tempCustomerCount);
+                                }
+                            }
+                        }
+                    }
                     else
-                        customerInfo.put(rowCount-1,customerDetails);
+                        customerInfo.put(-1,customerDetails);
                     rowCount++;
                 }
             }
         }
         catch (Exception ex){
+            throwErr = true;
             setErr_Message(ex + "\n\t"+"Excel document at: "+ getExcel_loc()+ "\n\t" +"Sheet name: " + sheetName + "\n \t Row Number: " + rowCount + "\n \t Column Number: " + cellNumber + "\n \n Error message -> \n" + ex + "\n \n Error has occured, please check the given locations...");
         }
     }
@@ -210,5 +237,5 @@ public class Ingest_CustomerInfo {
     // customerInfo.parseSheet();
     // isUnique testing = new isUnique("Affluent", customerInfo.getCustomerInfo());
     // testing.getUniqueCombination();
-    // }C:\\Users\\f5462797\\Applications\\Grad_project\\Customer_Info.xlsx
+    // }
 }
