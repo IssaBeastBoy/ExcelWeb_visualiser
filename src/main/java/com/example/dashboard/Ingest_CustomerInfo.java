@@ -42,6 +42,14 @@ public class Ingest_CustomerInfo {
         corruptedRows = new Hashtable<>();
     }
 
+    public int getTotalCustomerCount() {
+        return totalCustomerCount;
+    }
+
+    public Dictionary<Integer, Dictionary<String, int[]>> getColItemsCustomerCount() {
+        return colItemsCustomerCount;
+    }
+
     public boolean isThrowErr() {
         return throwErr;
     }
