@@ -40,14 +40,12 @@ public class Overlap {
         LocalDateTime timeStamp = LocalDateTime.now();
         LocalDate date = LocalDate.now();
         Ingest_Overlap pillars = new Ingest_Overlap();
-        pillars.setExcel_loc("C:\\Users\\f5462797\\Applications\\Grad_project\\Overlap_finder\\files\\Offer_Combinations.xlsx");
         pillars.parseSheets();
         Processor offerDetails = new Processor();
         List<int[]> position = offerDetails.offerPositions(pillars.getCombination());
         List<int[]> sort = offerDetails.sortOffers(position);
         List<String> offerNames = offerDetails.offerCombos(pillars.getCombination(), sort, pillars);
         List<Integer> customerCount = offerDetails.customerCount(pillars.getCombination(), sort);
-        setPath("C:\\Users\\f5462797\\Applications\\Grad_project\\Overlap_finder\\overlaps\\");
 
         if(Files.notExists(getPath())){
             throw new RuntimeException("Path for Word document does not exist. Please check the given path.");
@@ -100,14 +98,12 @@ public class Overlap {
         LocalDateTime timeStamp = LocalDateTime.now();
         LocalDate date = LocalDate.now();
         Ingest_Overlap pillars = new Ingest_Overlap();
-        pillars.setExcel_loc("C:\\Users\\f5462797\\Applications\\Grad_project\\Overlap_finder\\files\\Offer_Combinations.xlsx");
         pillars.parseSheets();
         Processor offerDetails = new Processor();
         List<int[]> position = offerDetails.offerPositions(pillars.getCombination());
         List<int[]> sort = offerDetails.sortOffers(position);
         List<String> offerNames = offerDetails.offerCombos(pillars.getCombination(), sort, pillars);
         List<Integer> customerCount = offerDetails.customerCount(pillars.getCombination(), sort);
-        setPath("C:\\Users\\f5462797\\Applications\\Grad_project\\Overlap_finder\\overlaps\\");
 
         if(Files.notExists(getPath())){
             throw new RuntimeException("Path for Word document does not exist. Please check the given path.");

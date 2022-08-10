@@ -1,31 +1,49 @@
 package com.example.dashboard;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
+import javafx.fxml.FXML;
 
-public class ChoiceBoxSetter {
-    private Map<Integer, List<String>> customerInfo;
+import java.util.*;
+
+public class ChoiceBoxSetter<K,V> {
+    private Dictionary<K, V> choiceBoxItems;
     private List<String> dynamicArray;
-    private int column;
 
-    public ChoiceBoxSetter(int column, Map<Integer, List<String>> customerInfo){
-        this.column = column;
-        dynamicArray = new ArrayList<>();
-        this.customerInfo = customerInfo;
+    public ChoiceBoxSetter( Dictionary<K, V> choiceBoxItems){
+        this.choiceBoxItems = choiceBoxItems;
     }
 
     public List<String> getDynamicArray() {
-        setDynamicArray();
         return dynamicArray;
     }
 
-    private void setDynamicArray(){
-        for (int index = 0; index < customerInfo.size(); index++){
-            List<String> row = customerInfo.get(index+1);
+    public void setDynamicArrayColumn(int column){
+        dynamicArray = new ArrayList<>();
+        for (int index = 0; index < choiceBoxItems.size(); index++){
+            List<String> row = (List<String>) choiceBoxItems.get(index+1);
             if(!dynamicArray.contains(row.get(column))){
                 dynamicArray.add(row.get(column));
             }
         }
     }
+
+
+    public void setDynamicArraySegmentOfferRemoveVone(){
+        dynamicArray = new ArrayList<>();
+        for (Enumeration i = choiceBoxItems.elements(); i.hasMoreElements();){
+            dynamicArray.add((String) i.nextElement());
+        }
+    }
+
+    public void setDynamicArraySegmentBoundApplyVone(){
+        dynamicArray = new ArrayList<>();
+        for (int key = 1; key < choiceBoxItems.size(); key++){
+            if (key+1 == choiceBoxItems.size()){
+                dynamicArray.add("Show all");
+            }
+            else {
+                dynamicArray.add("Top "+ (key+1));
+            }
+        }
+    }
+
 }
