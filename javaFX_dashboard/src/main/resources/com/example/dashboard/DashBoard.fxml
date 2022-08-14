@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.image.*?>
+<?import javafx.scene.layout.*?>
+
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="416.0" prefWidth="623.0" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.dashboard.Controller">
+   <children>
+      <AnchorPane prefHeight="416.0" prefWidth="623.0" style="-fx-background-color: #008080;">
+         <children>
+            <ImageView fitHeight="150.0" fitWidth="200.0" layoutX="162.0" layoutY="100.0" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@login.png" />
+               </image>
+            </ImageView>
+            <Label layoutX="348.0" layoutY="110.0" text="Full Name" />
+            <Label layoutX="348.0" layoutY="166.0" text="Email" />
+            <Label layoutX="337.0" layoutY="216.0" text="Password" />
+            <TextField fx:id="fullName" layoutX="416.0" layoutY="106.0" prefHeight="25.0" prefWidth="150.0" promptText="Full Name" />
+            <TextField fx:id="email" layoutX="414.0" layoutY="162.0" prefHeight="25.0" prefWidth="150.0" promptText="Email" />
+            <PasswordField fx:id="password" layoutX="414.0" layoutY="212.0" promptText="Password" />
+            <Button fx:id="login" layoutX="463.0" layoutY="250.0" mnemonicParsing="false" onAction="#LoginUser" prefHeight="46.0" prefWidth="39.0" style="-fx-background-color: #008080;">
+               <graphic>
+                  <ImageView fitHeight="39.0" fitWidth="51.0" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@login_I.png" />
+                     </image>
+                  </ImageView>
+               </graphic></Button>
+         </children>
+      </AnchorPane>
+   </children>
+</AnchorPane>
