@@ -523,31 +523,39 @@ export const employeesGrid = [
 // FNB X Videos
 export const vidoes = [
   {
-    url: "https://youtu.be/QgNbFxe0UAE"
+    url: 'https://youtube.com/embed/yiObWhli-vk',
+    title: 'You Me and FNB',
+  }, {
+    url: "https://www.youtube.com/embed/5STNvnE16qU",
+    title: 'Being you has more benefits than ever before',
   },
   {
-    url: 'https://youtu.be/q96UV5QMruA'
+    url: 'https://www.youtube.com/embed/ekpeUCAI9cY',
+    title: 'The FNB Business Call Account.',
   },
   {
-    url: 'https://youtu.be/c6YIkRVxqJQ'
+    url: 'https://www.youtube.com/embed/JXhGfuGgCCg',
+    title: 'FNB eBucks partners',
   },
   {
-    url: 'https://youtu.be/7Ws0F6Hr0Qo'
+    url: 'https://www.youtube.com/embed/7Ws0F6Hr0Qo',
+    title: 'This New Year, nav» it all on one app, your FNB App!',
   },
   {
-    url: 'https://youtu.be/Quk9Ioh8kAE'
+    url: 'https://youtube.com/embed/Quk9Ioh8kAE',
+    title: 'Never log into online banking using public Wi-Fi.',
   },
   {
-    url: 'https://youtu.be/o2GEQ3ImY70'
+    url: 'https://youtube.com/embed/o2GEQ3ImY70',
+    title: 'How to load Apple Pay with FNB',
   },
   {
-    url: 'https://youtu.be/43fJsCjK7j8'
+    url: 'https://youtube.com/embed/43fJsCjK7j8',
+    title: 'Virtual Profile Launch 2021',
   },
   {
-    url: 'https://youtu.be/yiObWhli-vk'
-  },
-  {
-    url: 'https://youtu.be/PpVMVpoLYAQ'
+    url: 'https://www.youtube.com/embed/xmthZtCGZwo',
+    title: 'How to port and switch to FNB Connect on the FNB App.',
   }
 ]
 // END OF Videos
@@ -600,7 +608,7 @@ export const links = [
     title: 'Files',
     links: [
       {
-        name: 'Upload Files',
+        name: 'Upload',
         icon: <FiDownload />,
       }
     ],

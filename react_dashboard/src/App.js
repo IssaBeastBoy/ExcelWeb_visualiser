@@ -43,7 +43,7 @@ const App = () => {
                         <div>
                             <Routes>
                                 {/* Files */}
-                                <Route path='/files' element={<Uploaded_Files />} />
+                                <Route path='/Upload' element={<Uploaded_Files />} />
 
                                 {/* User Profile */}
                                 <Route path='/Profile' element={<Profile />} />
