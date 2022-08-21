@@ -38,7 +38,7 @@ const Uploaded_Files = () => {
             setLoading(true);
             const formData = new FormData();
             formData.append('file', file);
-            const API_URL = "http://localhost:8080/files";
+            const API_URL = "http://localhost:8080/file";
             const response = await axios.put(API_URL, formData, config)
             //{ headers: "Access-Control-Allow-Origin": "*" })
             setDownloadUri(response.data.fileDownloadUri);

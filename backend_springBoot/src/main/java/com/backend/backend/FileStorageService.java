@@ -26,6 +26,9 @@ public class FileStorageService {
         this.fileStorageLocation = Paths.get(fileStorageProperties.getUploadDir()).toAbsolutePath();
         try{
             Files.createDirectories(this.fileStorageLocation);
+            String classpath = System.getProperty("user.dir");
+            System.out.println(classpath);
+            System.out.println(Files.createDirectories(this.fileStorageLocation).toString());
         }catch(Exception ex){
             throw  new FileStorageException("Error uploading file");
         }

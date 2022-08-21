@@ -13,6 +13,7 @@ import { TiTick } from 'react-icons/ti';
 import { GiLouvrePyramid } from 'react-icons/gi';
 import { GrLocation } from 'react-icons/gr';
 import avatar from './default_IMG.png';
+import login from './login_I.png';
 import slide1 from './Slide_show1.png';
 import slide2 from './Slide_show2.png';
 import slide3 from './Slide_show3.png';

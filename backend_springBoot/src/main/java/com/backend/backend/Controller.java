@@ -1,32 +1,31 @@
 package com.backend.backend;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Bean;
 import org.springframework.core.io.UrlResource;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
-import org.springframework.web.servlet.config.annotation.CorsRegistry;
-import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
-import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
-import javax.annotation.Resource;
-import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
+import java.util.List;
 
 @RestController
 @CrossOrigin(origins = "*", maxAge = 3600)
-@RequestMapping("files")
 public class Controller {
 
     @Autowired
     private FileStorageService fileStorageService;
 
+//    @GetMapping
+//    @RequestMapping("CheckUser")
+//    public List<String> existingDetails(@RequestParam("CheckUser") )
+
     @PutMapping
+    @RequestMapping("file")
     public ResponseEntity<FileResponse> uploadFile(@RequestParam("file") MultipartFile file){
         String fileName = fileStorageService.storeFile(file);
         String fileDownUri = ServletUriComponentsBuilder.fromCurrentRequestUri().

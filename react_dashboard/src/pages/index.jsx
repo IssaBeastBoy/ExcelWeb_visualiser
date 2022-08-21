@@ -11,3 +11,4 @@ export { default as ViewData } from './Charts/ViewData';
 export { default as Table } from './Charts/Table';
 export { default as PivotTable } from './Charts/PivotTable';
 export { default as Login } from './Login';
+export { default as Register } from './Register';

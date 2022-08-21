@@ -20,7 +20,7 @@ const SideBar = () => {
         <div className='ml-3 h-screen md:overflow-hidden overflow-auto md:hover:overflow-auto pb-10'>
             {activeMenu && (<>
                 <div className='flex justify-between items-center'>
-                    <Link to='/' onClick={() => setActiveMenu(false)} className='items-center gap-3 ml-3 mt-4 flex text-xl 
+                    <Link to='/Welcome' onClick={() => setActiveMenu(false)} className='items-center gap-3 ml-3 mt-4 flex text-xl 
                     font-extrabold tracking-tight dark:text-white text-slate-900'>
                         {handleCloseSideBar}
                         <img src={require("../data/FNB_LOGO.png")} alt={"Logo"} /> <span>FNB LAS</span>
