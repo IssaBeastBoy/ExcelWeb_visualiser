@@ -5,7 +5,7 @@ import { useDropzone } from 'react-dropzone';
 import axios from "axios";
 
 const Uploaded_Files = () => {
-    const { handleUpload, Upload, setActiveMenu } = useStateContext;
+    const { handleUpload, Upload, setActiveMenu, details } = useStateContext();
 
     const [file, setFile] = useState();
 
@@ -38,12 +38,17 @@ const Uploaded_Files = () => {
             setLoading(true);
             const formData = new FormData();
             formData.append('file', file);
+            formData.append('userDetails', details);
+            console.log(formData);
             const API_URL = "http://localhost:8080/file";
-            const response = await axios.put(API_URL, formData, config)
-            //{ headers: "Access-Control-Allow-Origin": "*" })
-            setDownloadUri(response.data.fileDownloadUri);
+            const response = await axios.put(API_URL, formData, config).then(res => {
+                setDownloadUri(res.data.fileDownloadUri);
             setSuccess(true);
             setLoading(false);
+                console.log(res.data.userDetails);
+            })
+            //{ headers: "Access-Control-Allow-Origin": "*" })
+
             // setSuccess(true);
             // setLoading(true);
         } catch (err) {

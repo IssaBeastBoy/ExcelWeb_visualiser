@@ -21,6 +21,9 @@ export const ContextProvider = ({ children }) => {
         setUpload({ ...uploadProcess, [clicked]: true })
     }
 
+    const [details, setState] = useState([])
+
+    const [login, setStatus] = useState(false);
 
     const [activeMenu, setActiveMenu] = useState
         (true);
@@ -31,6 +34,7 @@ export const ContextProvider = ({ children }) => {
     const [screenSize, setScreenSize] = useState(undefined);
 
     const [currentSilde, setCurrentSlide] = useState(0);
+
     const slideCount = slider.length;
     const nextSlide = () => {
         setCurrentSlide(currentSilde == slideCount - 1 ? 0 : currentSilde + 1);
@@ -53,7 +57,7 @@ export const ContextProvider = ({ children }) => {
     return (
         <StateContext.Provider
             value={{
-                activeMenu, handleUpload, Upload, setActiveMenu, isClicked, setIsClicked, handleClick, screenSize,
+                details, setState, login, setStatus, activeMenu, handleUpload, Upload, setActiveMenu, isClicked, setIsClicked, handleClick, screenSize,
                 setScreenSize, currentSilde, setCurrentSlide, nextSlide, preSlide, nextVideo, currentVideo
             }
             }>

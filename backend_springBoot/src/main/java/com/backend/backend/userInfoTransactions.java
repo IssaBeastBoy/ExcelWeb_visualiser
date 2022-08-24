@@ -52,11 +52,11 @@ public class userInfoTransactions {
     }
 
     public Boolean addUser(String password, String Name, String Surname, String email,
-            String phoneNum, String LASnumber) {
+            String contactNum, String LASnumber) {
         Boolean User = true;
         Session session = null;
         Transaction transaction = null;
-        userInformationEntity userAdd = new userInformationEntity(password,Name,Surname,email,phoneNum,LASnumber);
+        userInformationEntity userAdd = new userInformationEntity(password,Name,Surname,email,contactNum,LASnumber);
         try {
             session = sessionFactory.openSession();
             transaction = session.beginTransaction();

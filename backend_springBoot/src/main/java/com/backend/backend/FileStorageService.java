@@ -28,14 +28,14 @@ public class FileStorageService {
             Files.createDirectories(this.fileStorageLocation);
             String classpath = System.getProperty("user.dir");
             System.out.println(classpath);
-            System.out.println(Files.createDirectories(this.fileStorageLocation).toString());
+            System.out.println(this.fileStorageLocation.toString());
         }catch(Exception ex){
             throw  new FileStorageException("Error uploading file");
         }
     }
 
     // File storage function
-    public  String storeFile(MultipartFile file){
+    public  String storeFile(MultipartFile file, String LasNumber){
         String fileName = StringUtils.cleanPath(file.getOriginalFilename());
         try {
             Path targetlocation = this.fileStorageLocation.resolve(fileName);

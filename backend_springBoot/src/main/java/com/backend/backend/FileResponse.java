@@ -5,13 +5,15 @@ public class FileResponse {
     private String fileSize;
     private String fileDownloadUri;
     private String fileContentType;
+    private userInformationEntity userDetails;
 
-    public FileResponse(String fileName, String fileDownloadUri, String fileContentType, long fileSize) {
+    public FileResponse(String fileName, String fileDownloadUri, String fileContentType, long fileSize, userInformationEntity userDetails) {
         super();
         this.fileName = fileName;
         this.fileDownloadUri = fileDownloadUri;
         this.fileContentType = fileContentType;
         this.fileSize = Long.toString(fileSize);
+        this.userDetails = userDetails;
     }
 
     public String getFileName() {
@@ -44,5 +46,13 @@ public class FileResponse {
 
     public void setFileSize(String fileSize) {
         this.fileSize = fileSize;
+    }
+
+    public userInformationEntity getUserDetails() {
+        return userDetails;
+    }
+
+    public void setUserDetails(userInformationEntity userDetails) {
+        this.userDetails = userDetails;
     }
 }

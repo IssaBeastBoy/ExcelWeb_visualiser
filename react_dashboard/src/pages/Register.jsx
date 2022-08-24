@@ -1,67 +1,184 @@
 import React, { Component, useState } from 'react';
-
+import axios from "axios";
+import { BsCloudArrowDown } from "react-icons/bs";
+import { useStateContext } from '../context/ContextProvider';
 
 const Register = () => {
     //const refresh = window.location.reload(false);
+    const { setStatus, setState } = useStateContext();
+
+    const login = () => {
+        setStatus(true);
+    }
+
+    const confirm = () => {
+        setHomePage(true);
+    }
+    const [homepage, setHomePage] = useState(false);
 
     const [user, setUser] = useState({
         name: "", surname: "",
         email: "",
-        phone: "",
+        contact: "",
         password: "",
-        confirm: ""
+        confirm: "",
     })
-    const [error, setError] = useState("");
-    const newUser = event => {
-        event.preventDefault()
-        if (user.confirm == user.password) {
 
+    const [lasNumber, setLasNumber] = useState("")
+    const [registered, setRegistion] = useState(false)
+    const [error, setError] = useState("");
+    const [dupContact, setDupCon] = useState(false);
+    const [dupEmail, setDupEm] = useState(false);
+
+    const userDetails = event => {
+        event.preventDefault()
+        if (user.name === "" || user.surname === "" || user.email === "" || user.contact === ""
+            || user.password === "" || user.confirm === "") {
+            alert("File in all fields");
+        }
+        console.log(user);
+    }
+    const registerUser = event => {
+        if (user.name === "" || user.surname === "" || user.email === "" || user.contact === ""
+            || user.password === "" || user.confirm === "") {
+            alert("File in all fields");
+        }
+        else if (user.password !== user.confirm) {
+            alert("Passwords do not match. Try again.")
         }
         else {
-            alert("Passwords do not match. Please try again.");
+            const API_URL = "http://localhost:8080/Register/all";
+            let uniqueID = 1;
+            const response = axios.get(API_URL).then(res => {
+                const users = res.data;
+                for (let index = 0; index < users.length; index++) {
+                    let details = users[index];
 
+                    if (details.email === user.email) {
+                        setDupEm(true);
+                        break;
+                    }
+                    if (details.contact === user.contact) {
+                        setDupCon(true);
+                        break;
+                    }
+                    uniqueID = users.loginName + 1;
+                }
+            });
+            if (dupEmail) {
+                alert("Email address already exists");
+                setDupEm(false);
+            }
+            else if (dupContact) {
+                alert("Contact number already exists");
+                setDupCon(false);
+            }
+            else {
+                const formData = new FormData();
+                formData.append('lasNumbr', uniqueID);
+                formData.append('name', user.name);
+                formData.append('surname', user.surname);
+                formData.append('email', user.email);
+                formData.append('contact', user.contact);
+                formData.append('password', user.password);
+                const API_URL = "http://localhost:8080/Register/user";
+                const request = axios.post(API_URL, formData).then(res => {
+                    console.log("get User Details");
+                    console.log(res.data);
+                    if (res.data.userAdded) {
+                        setLasNumber(res.data.lasNumber);
+                        setState(res.data.userAdd);
+                        setRegistion(true);
+                    }
+                });
+            }
         }
     }
+
+
     return (
-        <div className='w-fit h-fit items-center'>
-            <form className=' p-5 gap-5 bg-white' onSubmit={newUser} >
+        <div className='w-fit p-2 h-fit items-center'>
+            <form className=' p-5 gap-5 bg-white' onSubmit={userDetails} >
                 <h3>Register</h3>
 
                 <div className="form-group">
-                    <label>First name</label>
-                    <input type="text" name='name' className="form-control" placeholder="First name" onChange={event => setUser({ ...user, name: event.target.value })} value={user.name} />
+                    <label>First name</label><br />
+                    <input type="text" name='name' required className="form-control" placeholder="First name" onChange={event => setUser({ ...user, name: event.target.value })} value={user.name} />
                 </div>
 
                 <div className="form-group">
-                    <label>Last name</label>
-                    <input type="text" name='surname' className="form-control" placeholder="Last name" onChange={event => setUser({ ...user, surname: event.target.value })} value={user.surname} />
+                    <label>Last name</label><br />
+                    <input type="text" name='surname' required className="form-control" placeholder="Last name" onChange={event => setUser({ ...user, surname: event.target.value })} value={user.surname} />
                 </div>
 
                 <div className="form-group">
-                    <label>Email</label>
-                    <input type="email" name='email' className="form-control" placeholder="Enter email" onChange={event => setUser({ ...user, email: event.target.value })} value={user.email} />
+                    <label>Email</label><br />
+                    <input type="email" name='email' required className="form-control" placeholder="Enter email" onChange={event => setUser({ ...user, email: event.target.value })} value={user.email} />
                 </div>
 
                 <div className="form-group">
-                    <label>Phone number</label>
-                    <input type="text" name='phone' className="form-control" placeholder="+27 ..." onChange={event => setUser({ ...user, phone: event.target.value })} value={user.phone} />
+                    <label>Phone number</label><br />
+                    <input type="text" name='phone' required className="form-control" placeholder="0 ..." onChange={event => setUser({ ...user, contact: event.target.value })} value={user.contact} />
                 </div>
 
                 <div className="form-group">
-                    <label>Password</label>
-                    <input type="password" name='password' className="form-control" placeholder="Enter password" onChange={event => setUser({ ...user, password: event.target.value })} value={user.password} />
+                    <label>Password</label><br />
+                    <input type="password" name='password' required className="form-control" placeholder="Enter password" onChange={event => setUser({ ...user, password: event.target.value })} value={user.password} />
                 </div>
 
                 <div className="form-group">
-                    <label>Confirm Password</label>
-                    <input type="password" name='confirm' className="form-control" placeholder="Confirm password" onChange={event => setUser({ ...user, confirm: event.target.value })} value={user.confirm} />
+                    <label>Confirm Password</label><br />
+                    <input type="password" name='confirm' required className="form-control" placeholder="Confirm password" onChange={event => setUser({ ...user, confirm: event.target.value })} value={user.confirm} />
                 </div>
 
-                <button type="submit" className="btn btn-dark btn-xl text-justify btn-block">Register</button>
-                <p className=" text-gray-500 pt-2.5 text-right">
-                    Already registered <a href="/">log in?</a>
-                </p>
+                <button type="submit" onClick={registerUser} />
+                {
+                    registered ? (<div className="">
+                        {
+                            homepage ? (<div>
+                                {/* MODAL FOR SUCCESSFUL Login */}
+                                <div className="   bg-zinc-200 opacity-80 fixed inset-0 z-50   ">
+
+                                    <div className="flex h-screen justify-center items-center ">
+
+                                        <div className="flex-col justify-center  bg-white py-12 px-24 border-4 border-sky-500 rounded-xl ">
+
+                                            <div className=" text-lg  text-zinc-600   mb-10" >
+                                                <p> Please keep the below LAS number safe:</p><br />
+                                                <p className="font-black"> {lasNumber}</p> <br />
+                                                <p>NOTE: Use above LAS number for further login</p>
+
+                                            </div>
+                                            <div className="flex">
+                                                <a href='/'>
+                                                    <button onClick={login} className=" rounded px-4 py-2 text-white  bg-green-400 ">Understood!</button>
+                                                </a>
+                                            </div>
+
+                                        </div>
+                                    </div>
+                                </div>
+
+                                {/* END OF MODAL */}
+                            </div>) : (<div> <button type="button" onClick={confirm} className="flex px-6 py-2.5 bg-blue-600 text-white font-medium text-xs leading-tight uppercase rounded shadow-md hover:bg-blue-700 hover:shadow-lg focus:bg-blue-700 focus:shadow-lg focus:outline-none focus:ring-0 active:bg-blue-800 active:shadow-lg transition duration-150 ease-in-out">
+                                Register <BsCloudArrowDown className='text-centre w-8' />
+                            </button> </div>
+
+                            )
+                        }
+
+                    </div>) : (<div className=" text-gray-500 text-right">
+                        <p> Press Enter once complete </p>
+                    </div>
+                    )
+                }
             </form>
+
+            <p className=" text-gray-500 text-right">
+                Already registered <a href="/">log in?</a>
+            </p>
+
+
         </div>
     )
 }
