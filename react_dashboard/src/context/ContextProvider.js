@@ -16,6 +16,7 @@ const uploadProcess = {
 
 export const ContextProvider = ({ children }) => {
 
+
     const [Upload, setUpload] = useState(uploadProcess)
     const handleUpload = (clicked) => {
         setUpload({ ...uploadProcess, [clicked]: true })

@@ -2,12 +2,14 @@ import React from 'react';
 import { Link, NavLink } from 'react-router-dom';
 import { MdOutlineCancel } from 'react-icons/md';
 import { TooltipComponent } from '@syncfusion/ej2-react-popups';
+import axios from "axios";
 
 import { links } from '../data/dummy';
 import { useStateContext } from '../context/ContextProvider';
 
 const SideBar = () => {
-    const { activeMenu, setActiveMenu, screenSize } = useStateContext();
+    const { activeMenu, setActiveMenu, screenSize, details, fileInfo } = useStateContext();
+
 
     const handleCloseSideBar = () => {
         if (activeMenu !== undefined && screenSize <= 900) {

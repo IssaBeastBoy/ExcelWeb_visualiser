@@ -5,12 +5,23 @@ import org.springframework.core.io.UrlResource;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import javax.servlet.http.HttpServletRequest;
+import java.io.File;
 import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.nio.file.StandardCopyOption;
+import java.nio.file.attribute.BasicFileAttributes;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Date;
 import java.util.Dictionary;
 import java.util.List;
 
@@ -53,7 +64,12 @@ public class Controller {
         if(userCreated){
             userInformationEntity userAdd = userInfo.findUser(user.getLasNumbr()).get(0);
             newUserResponse newUser = new newUserResponse(lasNumber, true, userAdd);
-            return new ResponseEntity<>(newUser, HttpStatus.OK);
+            try{
+                Files.createDirectories(Path.of(userAdd.getFileStorageDir()));
+                return new ResponseEntity<>(newUser, HttpStatus.OK);
+            }catch(Exception ex){
+                return new ResponseEntity<>(null, HttpStatus.OK);
+            }
         }
         else{
             newUserResponse newUser = new newUserResponse("##########", false, null);
@@ -61,16 +77,59 @@ public class Controller {
         }
     }
 
-    @PutMapping("/file")
-    public ResponseEntity<FileResponse> uploadFile(@RequestParam("file") MultipartFile file, @RequestParam("userDetails") userInformationEntity userDetails){
-        String fileName = fileStorageService.storeFile(file, "");
-        String fileDownUri = ServletUriComponentsBuilder.fromCurrentRequestUri().
-                path("/uploads/")
-                .path(fileName)
-                .toUriString();
-        FileResponse fileResponse = new FileResponse(fileName, fileDownUri, file.getContentType(), file.getSize(), userDetails);
-        return  new ResponseEntity<>(fileResponse, HttpStatus.OK);
+    @PostMapping("/delUpload")
+    public Boolean delFile(@RequestParam(value="fileLoc") String fileLoc){
+        List<String> files = new ArrayList<>();
+        File dir = new File(fileLoc);
+        if (dir.delete()) {
+            return true;
+        } else {
+            return false;
+        }
     }
+
+    @PostMapping("/Getuploads")
+    public uploadFilesResponse getFiles(@RequestParam(value="fileLoc") String fileLoc){
+        List<String> files = new ArrayList<>();
+        File dir = new File(fileLoc);
+        String[] dirContent = dir.list();
+        for (int i=0; i<dirContent.length; i++)
+        {
+            File curr = new File(fileLoc+dirContent[i]);
+            Boolean check = curr.exists();
+            DateFormat sdf = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
+            long lastMod = curr.lastModified();
+            Date date = new Date(lastMod);
+            files.add(dirContent[i]+" - Last Modified: "+date);
+        }
+        uploadFilesResponse uploaded = new uploadFilesResponse(files);
+        return uploaded;
+    }
+
+    @PutMapping("/file")
+    public ResponseEntity<FileResponse> uploadFile(@RequestParam("file") MultipartFile file, @RequestParam("userDetails") String userDir){
+        try{
+            String fileName = StringUtils.cleanPath(file.getOriginalFilename());
+            String fileDownUri = ServletUriComponentsBuilder.fromCurrentRequestUri().
+                    path("/userFile/")
+                    .path(fileName)
+                    .toUriString();
+            Path userLocation = Path.of(userDir + fileName);
+            FileResponse fileResponse = new FileResponse(file.getName(), fileDownUri, file.getContentType(), file.getSize(), (userDir + fileName));
+            List<String> fileNameContents = List.of(fileName.split("\\."));
+
+            if(fileNameContents.contains("xlsx") || fileNameContents.contains("xlsm")
+                    || fileNameContents.contains("xlsb") || fileNameContents.contains("xls")) {
+                Files.copy(file.getInputStream(), userLocation, StandardCopyOption.REPLACE_EXISTING);
+                return new ResponseEntity<>(fileResponse, HttpStatus.OK);
+            }
+            else{
+                return  new ResponseEntity<>(null, HttpStatus.FORBIDDEN);
+            }
+            }catch (Exception ex){
+                return  new ResponseEntity<>(null, HttpStatus.FORBIDDEN);
+            }
+        }
 
     @GetMapping("/{fileName:.+}")
     public  ResponseEntity<UrlResource> downloadFile(@PathVariable String fileName, HttpServletRequest request){

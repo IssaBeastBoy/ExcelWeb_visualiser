@@ -24,14 +24,6 @@ public class FileStorageService {
     @Autowired
     public FileStorageService(FileStorageProperties fileStorageProperties) {
         this.fileStorageLocation = Paths.get(fileStorageProperties.getUploadDir()).toAbsolutePath();
-        try{
-            Files.createDirectories(this.fileStorageLocation);
-            String classpath = System.getProperty("user.dir");
-            System.out.println(classpath);
-            System.out.println(this.fileStorageLocation.toString());
-        }catch(Exception ex){
-            throw  new FileStorageException("Error uploading file");
-        }
     }
 
     // File storage function
@@ -39,9 +31,8 @@ public class FileStorageService {
         String fileName = StringUtils.cleanPath(file.getOriginalFilename());
         try {
             Path targetlocation = this.fileStorageLocation.resolve(fileName);
-            Files.copy(file.getInputStream(), targetlocation, StandardCopyOption.REPLACE_EXISTING);
             return fileName;
-        } catch (IOException e) {
+        } catch (Exception e) {
             throw  new FileStorageException("File(s) failed to store "+fileName+" on DB. Please try again!", e);
         }
     }

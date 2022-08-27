@@ -5,9 +5,9 @@ public class FileResponse {
     private String fileSize;
     private String fileDownloadUri;
     private String fileContentType;
-    private userInformationEntity userDetails;
+    private String userDetails;
 
-    public FileResponse(String fileName, String fileDownloadUri, String fileContentType, long fileSize, userInformationEntity userDetails) {
+    public FileResponse(String fileName, String fileDownloadUri, String fileContentType, long fileSize, String userDetails) {
         super();
         this.fileName = fileName;
         this.fileDownloadUri = fileDownloadUri;
@@ -48,11 +48,11 @@ public class FileResponse {
         this.fileSize = fileSize;
     }
 
-    public userInformationEntity getUserDetails() {
+    public String getUserDetails() {
         return userDetails;
     }
 
-    public void setUserDetails(userInformationEntity userDetails) {
+    public void setUserDetails(String userDetails) {
         this.userDetails = userDetails;
     }
 }
