@@ -1,5 +1,7 @@
 package com.backend.backend;
 
+import com.backend.backend.processor.ViewData;
+import com.backend.backend.processor.ingestSheet;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.UrlResource;
 import org.springframework.http.HttpStatus;
@@ -28,6 +30,16 @@ import java.util.List;
 @RestController
 @CrossOrigin(origins = "*", maxAge = 3600)
 public class Controller {
+
+    private Dictionary<Integer, List<String>> customerInfo;
+
+    public Dictionary<Integer, List<String>> getCustomerInfo() {
+        return customerInfo;
+    }
+
+    public void setCustomerInfo(Dictionary<Integer, List<String>> customerInfo) {
+        this.customerInfo = customerInfo;
+    }
 
     @Autowired
     private FileStorageService fileStorageService;
@@ -76,6 +88,36 @@ public class Controller {
             return new ResponseEntity<>(newUser, HttpStatus.FORBIDDEN);
         }
     }
+    @PostMapping("/PieChartView")
+    public List<List<String>> pieChartView (@RequestParam("colName") String colName){
+        ViewData viewData = new ViewData(customerInfo, colName);
+        return viewData.getPieView();
+    }
+
+    @PostMapping("/BarGraphView")
+    public List<List<String>> barGraphView (@RequestParam("colName") String colName){
+        ViewData viewData = new ViewData(customerInfo, colName);
+        return viewData.getBarGraphView();
+    }
+
+    @PostMapping("/TableView")
+    public List<List<String>> tableView (@RequestParam("colName") String colName){
+        ViewData viewData = new ViewData(customerInfo, colName);
+        return viewData.getTableView();
+    }
+
+    @PostMapping("/Excel_sheet")
+    public List<String> inputSheet (@RequestParam("sheetLoc") String sheetLoc){
+        ingestSheet ingest = new ingestSheet();
+        ingest.setExcel_loc(sheetLoc);
+        ingest.parseSheet();
+        setCustomerInfo(ingest.getCustomerInfo());
+        List<String> excludeTotal = new ArrayList<>();
+        for(int index = 0; index < customerInfo.get(-1).size()-1; index++){
+            excludeTotal.add(customerInfo.get(-1).get(index));
+        }
+        return excludeTotal;
+    }
 
     @PostMapping("/delUpload")
     public Boolean delFile(@RequestParam(value="fileLoc") String fileLoc){
@@ -100,7 +142,7 @@ public class Controller {
             DateFormat sdf = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
             long lastMod = curr.lastModified();
             Date date = new Date(lastMod);
-            files.add(dirContent[i]+" - Last Modified: "+date);
+            files.add(dirContent[i]+" - "+date);
         }
         uploadFilesResponse uploaded = new uploadFilesResponse(files);
         return uploaded;

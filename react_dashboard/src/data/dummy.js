@@ -963,55 +963,70 @@ export const userProfileData = [
   },
 ];
 
-export const ordersGrid = [
+export const fileGrid = [
   {
-    headerText: 'Image',
-    template: gridOrderImage,
+    headerText: 'ExcelSheet',
+    headerText: 'Excel Sheet',
     textAlign: 'Center',
-    width: '120',
+    width: '600',
   },
   {
-    field: 'OrderItems',
-    headerText: 'Item',
-    width: '150',
-    editType: 'dropdownedit',
+    field: 'LastModified',
+    headerText: 'Last Modified',
+    width: '300',
     textAlign: 'Center',
-  },
-  {
-    field: 'CustomerName',
-    headerText: 'Customer Name',
-    width: '150',
-    textAlign: 'Center',
-  },
-  {
-    field: 'TotalAmount',
-    headerText: 'Total Amount',
-    format: 'C2',
-    textAlign: 'Center',
-    editType: 'numericedit',
-    width: '150',
-  },
-  {
-    headerText: 'Status',
-    template: gridOrderStatus,
-    field: 'OrderItems',
-    textAlign: 'Center',
-    width: '120',
-  },
-  {
-    field: 'OrderID',
-    headerText: 'Order ID',
-    width: '120',
-    textAlign: 'Center',
-  },
+  }
+]
 
-  {
-    field: 'Location',
-    headerText: 'Location',
-    width: '150',
-    textAlign: 'Center',
-  },
-];
+// export const ordersGrid = [
+//   {
+//     headerText: 'Image',
+//     template: gridOrderImage,
+//     textAlign: 'Center',
+//     width: '120',
+//   },
+//   {
+//     field: 'OrderItems',
+//     headerText: 'Item',
+//     width: '150',
+//     editType: 'dropdownedit',
+//     textAlign: 'Center',
+//   },
+//   {
+//     field: 'CustomerName',
+//     headerText: 'Customer Name',
+//     width: '150',
+//     textAlign: 'Center',
+//   },
+//   {
+//     field: 'TotalAmount',
+//     headerText: 'Total Amount',
+//     format: 'C2',
+//     textAlign: 'Center',
+//     editType: 'numericedit',
+//     width: '150',
+//   },
+//   {
+//     headerText: 'Status',
+//     template: gridOrderStatus,
+//     field: 'OrderItems',
+//     textAlign: 'Center',
+//     width: '120',
+//   },
+//   {
+//     field: 'OrderID',
+//     headerText: 'Order ID',
+//     width: '120',
+//     textAlign: 'Center',
+//   },
+
+//   {
+//     field: 'Location',
+//     headerText: 'Location',
+//     width: '150',
+//     textAlign: 'Center',
+//   },
+// ];
 
 export const customersData = [
   {

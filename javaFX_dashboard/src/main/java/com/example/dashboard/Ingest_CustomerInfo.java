@@ -137,7 +137,7 @@ public class Ingest_CustomerInfo {
                         String cellValue =cell.getStringCellValue(); //dataFormatter.formatCellValue(cell.toString());
                         List<String> columns = customerInfo.get(-1);
                         List<String> chars = List.of(cellValue.split(""));
-                        if(chars.contains(".")){
+                        if(chars.contains(".") && chars.size() > 1){
                             cellValue = setBend(cellValue);
                         }
                         if(rowCount == 1){
@@ -145,7 +145,7 @@ public class Ingest_CustomerInfo {
                             colCount++;
                         }
                         else {
-                            if(cellValue.equals("-1") || cellValue.equals("Null")){
+                            if(cellValue.equals(".") || cellValue.equals("Null")){
                                 customerDetails.add("No_"+columns.get(cellNumber-1));
                                 if(isColsValues.isEmpty()){
                                     List<String> storeUniqueColsItems = new ArrayList<>();
