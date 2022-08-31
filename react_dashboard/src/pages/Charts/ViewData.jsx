@@ -13,10 +13,10 @@ import { fileGrid } from "../../data/dummy";
 import { useStateContext } from '../../context/ContextProvider';
 import { FiPlayCircle } from "react-icons/fi";
 import { RiFolderChartLine } from 'react-icons/ri';
-import { BarGraph, PieChart, Table } from "../../components";
+import { BarGraph, PieChart, Table, RangeSelector } from "../../components";
 
 const ViewData = () => {
-    const { details, setSelectCol, selectedCol, setRenderBar, setRenderTable, setRenderPie } = useStateContext();
+    const { details, renderData, setRender, setSelectCol, selectedCol, setRenderBar, setRenderTable, setRenderPie, reSetSize } = useStateContext();
     const [table, setTable] = useState([]);
     const [pingFile, findFiles] = useState(true);
 
@@ -25,7 +25,6 @@ const ViewData = () => {
     const [colNames, setColNames] = useState([]);
     const [tableData, setTableData] = useState([]);
     const [viewData, setViewData] = useState(false);
-    const [renderData, setRender] = useState(false);
     const [fetchFiles, setFetchFiles] = useState(false);
     const [selected, setSelected] = useState("");
 
@@ -44,9 +43,11 @@ const ViewData = () => {
                 filesAtributes["Last Modified"] = tempAttributes[1].trim();
                 storeAttributes.push(filesAtributes);
             }
-            setTable(storeAttributes);
+            setTable(storeAttributes);            
+            setRender(false);   
         })
         findFiles(false);
+
     }
 
     const display = (event) => {
@@ -57,14 +58,20 @@ const ViewData = () => {
         formData.append("sheetLoc", details.fileStorageDir + fileName);
         const API_URL = "http://localhost:8080/Excel_sheet";
         const response = axios.post(API_URL, formData).then(res => {
-            setColNames(res.data);
-            setLoading(true);
+            setColNames(res.data);            
+            setRender(false);
+            reSetSize(false);
+            setRenderBar(false);
+            setRenderTable(false);
+            setRender(false);   
+            setLoading(true);       
         })
     }
 
     const showData = (event) => {
         setSelectCol(event.target.innerText);
-        setRenderBar(true);
+        reSetSize(true);
+        setRenderBar(true);        
         setRenderTable(true);
         setRenderPie(true);
         setRender(true);
@@ -108,6 +115,7 @@ const ViewData = () => {
                                         {
                                             renderData ? (<div className='p-3 gap-10 col-span-2'>
                                                 <p className='font-extrabold item-center text-center'>{selectedCol} </p>
+                                                <RangeSelector />
                                                 <Table />
                                                 <BarGraph />
                                                 <PieChart />

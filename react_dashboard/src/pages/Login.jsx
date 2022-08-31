@@ -3,7 +3,7 @@ import avatar from '../data/default_IMG.png';
 import loginImage from '../data/login_I.png';
 import axios from "axios";
 import { useStateContext } from '../context/ContextProvider';
-
+import { RangeSelector } from "../components";
 const Login = () => {
     const { setStatus, setState, login } = useStateContext();
 

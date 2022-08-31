@@ -12,6 +12,7 @@ export { default as ViewData } from './Charts/ViewData';
 export { default as ChartsHeader } from './Charts/ChartsHeader';
 export { default as BarGraph } from './Charts/BarGraph';
 export { default as PieChart } from './Charts/PieChart';
+export { default as RangeSelector } from './Charts/RangeSelector';
 export { default as Table } from './Charts/Table';
 export { default as PivotTable } from './Charts/PivotTable';
 export { default as ChartHeader } from './ChartHeader';

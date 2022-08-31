@@ -9,13 +9,15 @@ import {
 import { AiOutlinePieChart } from 'react-icons/ai';
 
 const PieChart = () => {
-    const { selectedCol, setRenderPie, renderPie } = useStateContext();
+    const { selectedCol, setRenderPie, renderPie, range } = useStateContext();
     const [data, ChartData] = useState([]);
     const [show, setShow] = useState(false);
 
     if (renderPie) {
         const formData = new FormData();
         formData.append("colName", selectedCol);
+        formData.append("min", range[0]);
+        formData.append("max", range[1]);
         const API_URL = "http://localhost:8080/PieChartView";
         const response = axios.post(API_URL, formData).then(res => {
             res = res.data;

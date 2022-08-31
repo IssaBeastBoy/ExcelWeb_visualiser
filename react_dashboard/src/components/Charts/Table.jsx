@@ -9,12 +9,12 @@ import {
 } from '@syncfusion/ej2-react-grids';
 import { ChartComponent, SeriesCollectionDirective, SeriesDirective, DateTime, Legend, Tooltip } from '@syncfusion/ej2-react-charts';
 import axios from "axios";
-import { fileGrid } from "../../data/dummy"
+import { fileGrid } from "../../data/dummy";
 import { useStateContext } from '../../context/ContextProvider';
 import { MdOutlineTableChart } from 'react-icons/md';
 
 const Table = () => {
-    const { selectedCol, setRenderTable, renderTable } = useStateContext();
+    const { selectedCol, setRenderTable, renderTable, range } = useStateContext();
     const [render, setRender] = useState(true);
     const [data, ChartData] = useState([]);
     const [show, setShow] = useState(false);
@@ -22,6 +22,8 @@ const Table = () => {
     if (renderTable) {
         const formData = new FormData();
         formData.append("colName", selectedCol);
+        formData.append("min", range[0]);
+        formData.append("max", range[1]);
         const API_URL = "http://localhost:8080/TableView";
         const response = axios.post(API_URL, formData).then(res => {
             res = res.data;

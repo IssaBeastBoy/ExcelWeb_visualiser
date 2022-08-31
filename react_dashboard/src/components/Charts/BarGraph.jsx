@@ -7,7 +7,7 @@ import { useStateContext } from '../../context/ContextProvider';
 import { BsBarChartSteps } from 'react-icons/bs';
 
 const BarGraph = () => {
-    const { selectedCol, setRenderBar, renderBar } = useStateContext();
+    const { selectedCol, setRenderBar, renderBar, range } = useStateContext();
     const [render, setRender] = useState(true)
     const [data, ChartData] = useState([]);
     const [show, setShow] = useState(false);
@@ -16,6 +16,8 @@ const BarGraph = () => {
     if (renderBar) {
         const formData = new FormData();
         formData.append("colName", selectedCol);
+        formData.append("min", range[0]);
+        formData.append("max", range[1]);
         const API_URL = "http://localhost:8080/BarGraphView";
         const response = axios.post(API_URL, formData).then(res => {
             res = res.data;

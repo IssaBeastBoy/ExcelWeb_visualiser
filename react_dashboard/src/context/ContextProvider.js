@@ -19,9 +19,11 @@ export const ContextProvider = ({ children }) => {
 
     const [Upload, setUpload] = useState(uploadProcess)
 
-    const [renderBar, setRenderBar] = useState(true);
-    const [renderPie, setRenderPie] = useState(true);
-    const [renderTable, setRenderTable] = useState(true);
+    const [renderBar, setRenderBar] = useState(false);
+    const [renderPie, setRenderPie] = useState(false);
+    const [renderTable, setRenderTable] = useState(false);
+    const [size, reSetSize] = useState(false);
+    const [range, setRange] = useState([0, 10]);
 
     const handleUpload = (clicked) => {
         setUpload({ ...uploadProcess, [clicked]: true })
@@ -40,6 +42,8 @@ export const ContextProvider = ({ children }) => {
         setIsClicked({ ...initialState, [clicked]: true })
     }
     const [screenSize, setScreenSize] = useState(undefined);
+
+    const [renderData, setRender] = useState(false);
 
     const [currentSilde, setCurrentSlide] = useState(0);
 
@@ -65,7 +69,7 @@ export const ContextProvider = ({ children }) => {
     return (
         <StateContext.Provider
             value={{
-                renderTable, setRenderTable, renderPie, setRenderPie, renderBar, setRenderBar, selectedCol, setSelectCol, details, setState, login, setStatus, activeMenu, handleUpload, Upload, setActiveMenu, isClicked, setIsClicked, handleClick, screenSize,
+                renderData, setRender, size, reSetSize, range, setRange, renderTable, setRenderTable, renderPie, setRenderPie, renderBar, setRenderBar, selectedCol, setSelectCol, details, setState, login, setStatus, activeMenu, handleUpload, Upload, setActiveMenu, isClicked, setIsClicked, handleClick, screenSize,
                 setScreenSize, currentSilde, setCurrentSlide, nextSlide, preSlide, nextVideo, currentVideo
             }
             }>

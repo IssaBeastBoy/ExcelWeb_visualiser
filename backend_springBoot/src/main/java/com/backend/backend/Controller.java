@@ -89,21 +89,30 @@ public class Controller {
         }
     }
     @PostMapping("/PieChartView")
-    public List<List<String>> pieChartView (@RequestParam("colName") String colName){
-        ViewData viewData = new ViewData(customerInfo, colName);
+    public List<List<String>> pieChartView (@RequestParam("colName") String colName, @RequestParam("min") String min,
+                                            @RequestParam("max")String max){
+        ViewData viewData = new ViewData(customerInfo, colName, min, max);
         return viewData.getPieView();
     }
 
     @PostMapping("/BarGraphView")
-    public List<List<String>> barGraphView (@RequestParam("colName") String colName){
-        ViewData viewData = new ViewData(customerInfo, colName);
+    public List<List<String>> barGraphView (@RequestParam("colName") String colName, @RequestParam("min") String min,
+                                            @RequestParam("max")String max){
+        ViewData viewData = new ViewData(customerInfo, colName, min, max);
         return viewData.getBarGraphView();
     }
 
     @PostMapping("/TableView")
-    public List<List<String>> tableView (@RequestParam("colName") String colName){
-        ViewData viewData = new ViewData(customerInfo, colName);
+    public List<List<String>> tableView (@RequestParam("colName") String colName, @RequestParam("min") String min,
+                                         @RequestParam("max")String max){
+        ViewData viewData = new ViewData(customerInfo, colName, min, max);
         return viewData.getTableView();
+    }
+
+    @PostMapping("/Getmax")
+    public int tableView (@RequestParam("colName") String colName){
+        ViewData viewData = new ViewData(customerInfo, colName);
+        return viewData.getSize();
     }
 
     @PostMapping("/Excel_sheet")
