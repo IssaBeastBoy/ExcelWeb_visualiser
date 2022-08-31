@@ -3,9 +3,9 @@ import avatar from '../data/default_IMG.png';
 import loginImage from '../data/login_I.png';
 import axios from "axios";
 import { useStateContext } from '../context/ContextProvider';
-
+import { RangeSelector } from "../components";
 const Login = () => {
-    const { setStatus, setState } = useStateContext();
+    const { setStatus, setState, login } = useStateContext();
 
     const [user, setLogin] = useState({
         name: "",
@@ -66,7 +66,7 @@ const Login = () => {
     }
 
     return (
-        <div className='w-fit h-fit gap-5 p-5'>
+        < div className='w-fit h-fit gap-5 p-5' >
             <form className='bg-white' onSubmit={submit}>
 
                 <div>
@@ -96,7 +96,8 @@ const Login = () => {
                 </div>
 
             </form>
-        </div>
+        </div >
+
     )
 }
 

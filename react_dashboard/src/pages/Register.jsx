@@ -51,18 +51,23 @@ const Register = () => {
             let uniqueID = 1;
             const response = axios.get(API_URL).then(res => {
                 const users = res.data;
-                for (let index = 0; index < users.length; index++) {
-                    let details = users[index];
+                if (users === null) {
+                    alert("User file storage directory could not be created");
+                }
+                else {
+                    for (let index = 0; index < users.length; index++) {
+                        let details = users[index];
 
-                    if (details.email === user.email) {
-                        setDupEm(true);
-                        break;
+                        if (details.email === user.email) {
+                            setDupEm(true);
+                            break;
+                        }
+                        if (details.contact === user.contact) {
+                            setDupCon(true);
+                            break;
+                        }
+                        uniqueID = users.loginName + 1;
                     }
-                    if (details.contact === user.contact) {
-                        setDupCon(true);
-                        break;
-                    }
-                    uniqueID = users.loginName + 1;
                 }
             });
             if (dupEmail) {

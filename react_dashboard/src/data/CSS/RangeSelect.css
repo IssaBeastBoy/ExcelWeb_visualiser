@@ -1,0 +1,102 @@
+input[type="range"] {
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+    outline: none;
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    background-color: transparent;
+    pointer-events: none;
+}
+
+
+
+input[type="range"]::-webkit-slider-runnable-track {
+    -webkit-appearance: none;
+    height: 5px;
+}
+
+input[type="range"]::-moz-range-track {
+    -moz-appearance: none;
+    height: 5px;
+}
+
+input[type="range"]::-ms-track {
+    appearance: none;
+    height: 5px;
+}
+
+input[id="one"]::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    height: 7px;
+    width: 7px;
+    background-color: #f8be09;
+    cursor: pointer;
+    margin-top: -9px;
+    pointer-events: auto;
+    border-radius: 50%;
+}
+
+input[id="one"]::-moz-range-thumb {
+    -webkit-appearance: none;
+    height: 7px;
+    width: 7px;
+    cursor: pointer;
+    border-radius: 50%;
+    background-color: #f8be09;
+    pointer-events: auto;
+}
+
+input[id="one"]::-ms-thumb {
+    appearance: none;
+    height: 7px;
+    width: 7px;
+    cursor: pointer;
+    border-radius: 50%;
+    background-color: #f8be09;
+    pointer-events: auto;
+}
+
+input[id="one"]:active::-webkit-slider-thumb {
+    background-color: #ffffff;
+    border: 3px solid #f8be09;
+}
+
+/* One above <<>>  Two below */
+
+input[id="two"]::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    height: 7px;
+    width: 7px;
+    background-color: #3264fe;
+    cursor: pointer;
+    margin-top: -9px;
+    pointer-events: auto;
+    border-radius: 50%;
+}
+
+input[id="two"]::-moz-range-thumb {
+    -webkit-appearance: none;
+    height: 7px;
+    width: 7px;
+    cursor: pointer;
+    border-radius: 50%;
+    background-color: #3264fe;
+    pointer-events: auto;
+}
+
+input[id="two"]::-ms-thumb {
+    appearance: none;
+    height: 7px;
+    width: 7px;
+    cursor: pointer;
+    border-radius: 50%;
+    background-color: #3264fe;
+    pointer-events: auto;
+}
+
+input[id="two"]:active::-webkit-slider-thumb {
+    background-color: #ffffff;
+    border: 3px solid #3264fe;
+}

@@ -8,14 +8,17 @@ import { TooltipComponent } from '@syncfusion/ej2-react-popups';
 import { Navbar, Footer, SideBar, ThemeSetting } from './components';
 import { Calendar, Chat, Emails, Login, Notes, Profile, Tickets, Uploaded_Files, Welcome, PivotTable, Table, ViewData, Register } from './pages';
 import { useStateContext } from './context/ContextProvider';
-import './App.css'
+import './App.css';
+import axios from "axios";
 
-const App = () => {
+
+const App = () => {    
     const { activeMenu, login } = useStateContext();
+
     return (
         <div>
             <BrowserRouter>
-                <div className='flex relative dark:bg-main-dark-bg'>
+                <div className='relative dark:bg-main-dark-bg'>
                     <div className='fixed right-4 bottom-4' style={{ zIndex: '1000' }}>
                         <TooltipComponent content="Settings" position="Top">
                             <button type='button' className='text-3x1 p-3 hover:bg-light-gray text-white' style={{ background: '#008080', borderRadius: '50%' }}>
@@ -24,29 +27,27 @@ const App = () => {
                         </TooltipComponent>
                     </div>
                     {!login ?
-                        (<div className={`${login ? 'w-0' : "w-fit"}`}>
+                        (<div>
                             <Routes>
                                 <Route path='/' element={<Login />} />
                                 <Route path='/Register' element={<Register />} />
                             </Routes>
                         </div>) :
                         (
-                            <div className='w-auto'>
+                            <div>
                                 {activeMenu ?
                                     (
                                         <div className='w-72 sidebar fixed dark:bg-secondary-dark-bg bg-white'>
                                             <SideBar />
                                         </div>
                                     ) : (
-                                        <div className='w-0 dark:bg-secondary-dark-bg'>
-                                            <SideBar />
-                                        </div>
+                                        <div className='w-0 dark:bg-secondary-dark-bg' />
                                     )}
                                 <div className={
                                     `dark:bg-main-bg bg-main-bg min-h-screen ${activeMenu ? 'md:ml-72' : 'flex-2'}`
 
                                 }>
-                                    <div className='fixed md:static bg-main-bg dark:bg-main-dark-bg navbar '>
+                                    <div className='fixed md:static bg-main-bg dark:bg-main-dark-bg navbar'>
                                         <Navbar />
                                     </div>
 

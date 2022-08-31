@@ -16,13 +16,13 @@ public class userInformationEntity {
         this.email = email;
         this.contact = phoneNum;
         this.img = "C:\\Users\\f5462797\\Applications\\Grad_project\\Grad_Project2022\\backend_springBoot\\src\\main\\resources\\uploads\\"
-                + LASnumber + "\\img";
+                + LASnumber + "\\img\\";
         this.status = "Online";
         this.tasks = "Tasks:";
         this.meetings = "Meet:";
         this.notes = "Notes:";
         this.fileStorageDir = "C:\\Users\\f5462797\\Applications\\Grad_project\\Grad_Project2022\\backend_springBoot\\src\\main\\resources\\uploads\\"
-                + LASnumber + "\\excel";
+                + LASnumber + "\\excel\\";
         this.tickets = "TODO:PROG:DONE:";
         this.chats = "Chats:";
         this.notifications = "Notifications:";

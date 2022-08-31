@@ -1,15 +1,12 @@
-package com.example.dashboard;
+package com.backend.backend.processor;
 
-import org.apache.poi.ss.usermodel.*;
-import org.apache.poi.xssf.usermodel.XSSFWorkbook;
-import com.monitorjbl.xlsx.StreamingReader;
 import java.io.File;
 import java.io.FileInputStream;
-import java.nio.file.Files;
-import java.nio.file.Path;
 import java.util.*;
+import org.apache.poi.ss.usermodel.*;
+import com.monitorjbl.xlsx.StreamingReader;
 
-public class Ingest_CustomerInfo {
+public class ingestSheet {
     private String excel_loc;
     private boolean throwErr = false;
     private String err_Message = "";
@@ -22,7 +19,7 @@ public class Ingest_CustomerInfo {
     private static Row.MissingCellPolicy xRow;
     private int totalCustomerCount;
 
-    public Ingest_CustomerInfo() {
+    public ingestSheet() {
         isColsValues = new Hashtable<>();
         totalCustomerCount = 0;
         colItemsCustomerCount = new Hashtable<>();
@@ -111,9 +108,10 @@ public class Ingest_CustomerInfo {
         try {
             FileInputStream input = new FileInputStream(new File(getExcel_loc()));
             Workbook workbook =  StreamingReader.builder()
-                    .rowCacheSize(2000)
+                    .rowCacheSize(3000)
                     .bufferSize(6000)
                     .open(input);
+
             //workbook.setMissingCellPolicy(xRow.CREATE_NULL_AS_BLANK);
             DataFormatter dataFormatter = new DataFormatter();
             Iterator<Sheet> sheets = workbook.sheetIterator();
@@ -129,7 +127,6 @@ public class Ingest_CustomerInfo {
                     //Cell cells = row.getCell(1)
                     List<String> customerDetails = new ArrayList<>();
                     if (rowCount == 466709){
-                        int num = 10;
                     }
                     cellNumber=1;
                     while (parseCell.hasNext()){
@@ -160,7 +157,7 @@ public class Ingest_CustomerInfo {
                                         isColsValues.put(cellNumber,storeUniqueColsItems);
                                     }
                                     else {
-                                       if(!storeUniqueColsItems.contains("No_"+columns.get(cellNumber-1))){
+                                        if(!storeUniqueColsItems.contains("No_"+columns.get(cellNumber-1))){
                                             storeUniqueColsItems.add("No_"+columns.get(cellNumber-1));
                                             isColsValues.put(cellNumber,storeUniqueColsItems);
                                         }
@@ -224,18 +221,11 @@ public class Ingest_CustomerInfo {
                     rowCount++;
                 }
             }
+        workbook.close();
         }
         catch (Exception ex){
             throwErr = true;
             setErr_Message(ex + "\n\t"+"Excel document at: "+ getExcel_loc()+ "\n\t" +"Sheet name: " + sheetName + "\n \t Row Number: " + rowCount + "\n \t Column Number: " + cellNumber + "\n \n Error message -> \n" + ex + "\n \n Error has occured, please check the given locations...");
         }
     }
-
-    // public static void main(String[] args) {
-    // Ingest_CustomerInfo customerInfo = new Ingest_CustomerInfo();
-    // customerInfo.setExcel_loc("");
-    // customerInfo.parseSheet();
-    // isUnique testing = new isUnique("Affluent", customerInfo.getCustomerInfo());
-    // testing.getUniqueCombination();
-    // }
 }
