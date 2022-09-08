@@ -114,9 +114,9 @@ const ViewData = () => {
                                         </div>
                                         {
                                             renderData ? (<div className='p-3 gap-10 col-span-2'>
-                                                <p className='font-extrabold item-center text-center'>{selectedCol} </p>
-                                                <RangeSelector />
+                                                <p className='font-extrabold item-center text-center'>{selectedCol} </p>                                                
                                                 <Table />
+                                                <RangeSelector />
                                                 <BarGraph />
                                                 <PieChart />
                                             </div>) : (<div />)

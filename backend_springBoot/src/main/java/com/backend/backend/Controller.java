@@ -1,7 +1,9 @@
 package com.backend.backend;
 
+import com.backend.backend.apps.calendar;
 import com.backend.backend.processor.ViewData;
 import com.backend.backend.processor.ingestSheet;
+import org.apache.poi.util.ArrayUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.UrlResource;
 import org.springframework.http.HttpStatus;
@@ -11,6 +13,7 @@ import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
+import org.yaml.snakeyaml.util.ArrayUtils;
 
 import javax.servlet.http.HttpServletRequest;
 import java.io.File;
@@ -22,10 +25,7 @@ import java.nio.file.StandardCopyOption;
 import java.nio.file.attribute.BasicFileAttributes;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.Dictionary;
-import java.util.List;
+import java.util.*;
 
 @RestController
 @CrossOrigin(origins = "*", maxAge = 3600)
@@ -56,6 +56,136 @@ public class Controller {
         }
     }
 
+    @PostMapping("/updateCalendar")
+    public userInformationEntity updateCalendar(@ModelAttribute calendar user){
+        userInfoTransactions userInfo = new userInfoTransactions();
+        userInformationEntity userDetails = userInfo.findUser(user.getUserId()).get(0);
+        String eventDetails = "Id-" +user.getId()+"^Subject-"
+                +user.getSubject()+ "^StartTime-"+user.getStartTime().getTime()+
+                "^IsAllDay-"+user.getAllDay()+"^EndTime-"+user.getEndTime().getTime();
+        if(userDetails.getCalendar().equals("")){
+            if(user.getCancel()!=null)
+                eventDetails += "^cancel-"+user.getCancel();
+            if(user.getLocation() != null)
+                eventDetails += "^Location-"+user.getLocation();
+            if(user.getDescription() != null)
+                eventDetails += "^Description-"+user.getDescription();
+            if(user.getRecurrenceRule() != null)
+                eventDetails += "^RecurrenceRule-"+user.getRecurrenceRule();
+            if(user.getEndTimezone() != null)
+                eventDetails += "^EndTimezone-"+user.getEndTimezone();
+            if(user.getStartTimezone() != null)
+                eventDetails += "^StartTimezone-"+user.getStartTimezone();
+            if(user.getRecurrenceID() != 0)
+                eventDetails += "^RecurrenceID-"+user.getRecurrenceID();
+            if(user.getRecurrenceException() != null)
+                eventDetails += "^RecurrenceException-"+user.getRecurrenceException();
+            userDetails.setCalendar(eventDetails);
+        }
+        else if (user.getEventType().equals("new")){
+            if(user.getCancel()!=null)
+                eventDetails += "^cancel-"+user.getCancel();
+            if(user.getLocation() != null)
+                eventDetails += "^Location-"+user.getLocation();
+            if(user.getDescription() != null)
+                eventDetails += "^Description-"+user.getDescription();
+            if(user.getRecurrenceRule() != null)
+                eventDetails += "^RecurrenceRule-"+user.getRecurrenceRule();
+            if(user.getEndTimezone() != null)
+                eventDetails += "^EndTimezone-"+user.getEndTimezone();
+            if(user.getStartTimezone() != null)
+                eventDetails += "^StartTimezone-"+user.getStartTimezone();
+            if(user.getRecurrenceID() != 0)
+                eventDetails += "^RecurrenceID-"+user.getRecurrenceID();
+            if(user.getRecurrenceException() != null)
+                eventDetails += "^RecurrenceException-"+user.getRecurrenceException();
+            eventDetails = userDetails.getCalendar()+">"+eventDetails;
+            userDetails.setCalendar(eventDetails);
+        }
+        else if (user.getEventType().equals("delete")){
+            String[] currCalendar = userDetails.getCalendar().split(">");
+            String reConStr = "";
+            int addUpdate = 0;
+            int updated = 0;
+            for(int parse = 0; parse<currCalendar.length; parse++){
+                String[] items = currCalendar[parse].split("\\^");
+                if(!currCalendar[parse].equals("")){
+                    String idReset = "";
+                    for(int index=0; index<items.length; index++){
+                        String[] item = items[index].split("-");
+                        if(addUpdate == 1){
+                            int tempID = Integer.parseInt(item[1]) - 1;
+                            String currID = "";
+                            item[1] = String.valueOf(tempID);
+                            currID = item[0] + "-" + item[1];
+                            idReset += currID;
+                            for(int i = 1; i <items.length; i++){
+                                idReset +="^"+items[i];
+                            }
+                            break;
+                        }
+                        else if(item[1].equals(String.valueOf(user.getId())) && addUpdate == 0){
+                            addUpdate = 1;
+                            break;
+                        }
+                        else{
+                            idReset = currCalendar[parse];
+                            break;
+                        }
+                    }
+                    if(!idReset.equals(""))
+                        reConStr += idReset + ">";
+                }
+
+            }
+            userDetails.setCalendar(reConStr);
+        }
+        else if (user.getEventType().equals("update")){
+            if(user.getCancel()!=null)
+                eventDetails += "^cancel-"+user.getCancel();
+            if(user.getLocation() != null)
+                eventDetails += "^Location-"+user.getLocation();
+            if(user.getDescription() != null)
+                eventDetails += "^Description-"+user.getDescription();
+            if(user.getRecurrenceRule() != null)
+                eventDetails += "^RecurrenceRule-"+user.getRecurrenceRule();
+            if(user.getEndTimezone() != null)
+                eventDetails += "^EndTimezone-"+user.getEndTimezone();
+            if(user.getStartTimezone() != null)
+                eventDetails += "^StartTimezone-"+user.getStartTimezone();
+            if(user.getRecurrenceID() != 0)
+                eventDetails += "^RecurrenceID-"+user.getRecurrenceID();
+            if(user.getRecurrenceException() != null)
+                eventDetails += "^RecurrenceException-"+user.getRecurrenceException();
+            String[] currCalendar = userDetails.getCalendar().split(">");
+            boolean breakLoop = false;
+            String reConStr = "";
+            int addUpdate = 0;
+            for(int parse = 0; parse<currCalendar.length; parse++){
+                String[] items = currCalendar[parse].split("\\^");
+                if(!currCalendar[parse].equals("")){
+                    for(int index=0; index<items.length && !breakLoop; index++){
+                    String[] item = items[index].split("-");
+                    if(item[1].equals(String.valueOf(user.getId()))){
+                        breakLoop = true;
+                        addUpdate = 1;
+                    }
+                    break;
+                }
+                    if(addUpdate == 0)
+                        reConStr += currCalendar[parse] +">";
+                    else{
+                        reConStr += eventDetails +">";
+                        addUpdate = 0;
+                    }}
+
+            }
+            userDetails.setCalendar(reConStr);
+        }
+        Boolean update = userInfo.updateUser(userDetails);
+        return userInfo.findUser(user.getUserId()).get(0);
+    }
+
     @GetMapping("/Register/all")
     public List<userInformationEntity> allUsers(){
         userInfoTransactions userInfo = new userInfoTransactions();
@@ -78,6 +208,7 @@ public class Controller {
             newUserResponse newUser = new newUserResponse(lasNumber, true, userAdd);
             try{
                 Files.createDirectories(Path.of(userAdd.getFileStorageDir()));
+                Files.createDirectories(Path.of(userAdd.getImg()));
                 return new ResponseEntity<>(newUser, HttpStatus.OK);
             }catch(Exception ex){
                 return new ResponseEntity<>(null, HttpStatus.OK);
@@ -103,14 +234,13 @@ public class Controller {
     }
 
     @PostMapping("/TableView")
-    public List<List<String>> tableView (@RequestParam("colName") String colName, @RequestParam("min") String min,
-                                         @RequestParam("max")String max){
-        ViewData viewData = new ViewData(customerInfo, colName, min, max);
+    public List<List<String>> tableView (@RequestParam("colName") String colName){
+        ViewData viewData = new ViewData(customerInfo, colName);
         return viewData.getTableView();
     }
 
     @PostMapping("/Getmax")
-    public int tableView (@RequestParam("colName") String colName){
+    public int getMax (@RequestParam("colName") String colName){
         ViewData viewData = new ViewData(customerInfo, colName);
         return viewData.getSize();
     }

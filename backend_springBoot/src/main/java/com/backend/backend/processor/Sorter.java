@@ -1,5 +1,6 @@
 package com.backend.backend.processor;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class Sorter {
@@ -12,7 +13,11 @@ public class Sorter {
 
     public List<int[]> getSortedList() {
         insertionSort();
-        return sortedList;
+        List<int[]> temp = new ArrayList<>();
+        for(int parse = sortedList.size()-1; parse >=0; parse--){
+            temp.add(sortedList.get(parse));
+        }
+        return temp;
     }
 
     private void insertionSort() {

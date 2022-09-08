@@ -22,8 +22,6 @@ const Table = () => {
     if (renderTable) {
         const formData = new FormData();
         formData.append("colName", selectedCol);
-        formData.append("min", range[0]);
-        formData.append("max", range[1]);
         const API_URL = "http://localhost:8080/TableView";
         const response = axios.post(API_URL, formData).then(res => {
             res = res.data;

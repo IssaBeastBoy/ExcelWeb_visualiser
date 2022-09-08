@@ -37,23 +37,12 @@ const Login = () => {
                 }
                 digits++;
             }
-            //console.log(uniqueID);
             const API_URL = "http://localhost:8080/login/" + uniqueID;
             const response = axios.get(API_URL).then(res => {
                 const users = res.data;
                 setState(users);
-                //console.log(digits);
-                // console.log("uniqueID");
-                // console.log(uniqueID);
-                // console.log("details.loginName");
-                // console.log(`${details.loginName}`);
-                // console.log("user.password");
-                // console.log(user.password);
-                // console.log("details.password");
-                // console.log(details.password);
-                // console.log(details);
                 if (users.loginName === undefined || digits !== 5) {
-                    alert("User does not exist.");
+                    alert("Error: Wrong login details. \n Enter correct details.");
                 }
                 else if (uniqueID === `${users.loginName}` && user.password === users.password) {
                     setStatus(true);

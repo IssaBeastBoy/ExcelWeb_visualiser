@@ -16,8 +16,9 @@ const uploadProcess = {
 
 export const ContextProvider = ({ children }) => {
 
-
     const [Upload, setUpload] = useState(uploadProcess)
+
+    const [renderCalender, setCalender] = useState(true);
 
     const [renderBar, setRenderBar] = useState(false);
     const [renderPie, setRenderPie] = useState(false);
@@ -33,7 +34,7 @@ export const ContextProvider = ({ children }) => {
 
     const [details, setState] = useState([])
 
-    const [login, setStatus] = useState(true);
+    const [login, setStatus] = useState(false);
 
     const [activeMenu, setActiveMenu] = useState
         (true);
@@ -69,7 +70,7 @@ export const ContextProvider = ({ children }) => {
     return (
         <StateContext.Provider
             value={{
-                renderData, setRender, size, reSetSize, range, setRange, renderTable, setRenderTable, renderPie, setRenderPie, renderBar, setRenderBar, selectedCol, setSelectCol, details, setState, login, setStatus, activeMenu, handleUpload, Upload, setActiveMenu, isClicked, setIsClicked, handleClick, screenSize,
+                renderCalender, setCalender, renderData, setRender, size, reSetSize, range, setRange, renderTable, setRenderTable, renderPie, setRenderPie, renderBar, setRenderBar, selectedCol, setSelectCol, details, setState, login, setStatus, activeMenu, handleUpload, Upload, setActiveMenu, isClicked, setIsClicked, handleClick, screenSize,
                 setScreenSize, currentSilde, setCurrentSlide, nextSlide, preSlide, nextVideo, currentVideo
             }
             }>
