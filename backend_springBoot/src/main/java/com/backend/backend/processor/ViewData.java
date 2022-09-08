@@ -66,36 +66,33 @@ public class ViewData {
         Dictionary<Integer, String> indexFinder = isUnique.getUniqueCombinationSortedFinder();
         Sorter sorter = new Sorter(isUnique.getOrderedList());
         List<int[]> sorted = sorter.getSortedList();
-        for(int parse = min; parse < sorted.size(); parse++){
+        for(int parse = 0; sorted.size() > parse; parse++){
             List<String> currAxisValues = new ArrayList<>();
             currAxisValues.add(indexFinder.get(sorted.get(parse)[0]));
             float Percentage = (float) sorted.get(parse)[1]*100/isUnique.getTotal();
             currAxisValues.add(String.valueOf(Percentage));
-            if( parse <=max)
+            if(parse<max  && parse >=min)
                 BarGraphView.add(currAxisValues);
-            else
+            else if (parse>max)
                 break;
         }
     }
 
     private void setPieView() {
         isUnique isUnique = new isUnique(selectedCol, customerInfo);
-        Dictionary<String, int[]> getUnique = isUnique.getUniqueCombination();
-        int start = 0;
-        for(Enumeration combination = getUnique.keys(); combination.hasMoreElements();)
-        {
+        Dictionary<Integer, String> indexFinder = isUnique.getUniqueCombinationSortedFinder();
+        Sorter sorter = new Sorter(isUnique.getOrderedList());
+        List<int[]> sorted = sorter.getSortedList();
+        for(int parse = 0; sorted.size() > parse; parse++){
             List<String> currAttributes = new ArrayList<>();
-            String attribute = (String) combination.nextElement();
-            int[] tempAmount = getUnique.get(attribute);
-            float Percentage = (float) tempAmount[1]*100/isUnique.getTotal();
-            currAttributes.add(attribute);
-            currAttributes.add(String.valueOf(tempAmount[1]));
+            currAttributes.add(indexFinder.get(sorted.get(parse)[0]));
+            currAttributes.add(String.valueOf(sorted.get(parse)[1]));
+            float Percentage = (float) sorted.get(parse)[1]*100/isUnique.getTotal();
             currAttributes.add(String.valueOf(Percentage));
-            if(start >= min && start <=max)
+            if( parse < max && parse>=min )
                 pieChartView.add(currAttributes);
-            else if(start >max)
+            else if (parse>max)
                 break;
-            start ++;
         }
     }
 
@@ -112,11 +109,7 @@ public class ViewData {
             currAttributes.add(attribute);
             currAttributes.add(String.valueOf(tempAmount[1]));
             currAttributes.add(String.valueOf(Percentage));
-            if(start >= min && start <=max)
-                tableView.add(currAttributes);
-            else if(start >max)
-                break;
-            start ++;
+            tableView.add(currAttributes);
         }
     }
 }

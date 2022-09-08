@@ -32,9 +32,8 @@ const RangeSelector = () => {
                 setRange([(range[1] - 1), range[1]]);
             }
             else {
-                setRange([Number(event.target.value), range[1]]);
+                setRange([Number(event.target.value) - 1, range[1]]);
                 setRenderBar(true);
-                setRenderTable(true);
                 setRenderPie(true);
             }
         }
@@ -45,9 +44,8 @@ const RangeSelector = () => {
                 setRange([range[0], range[0] + 1]);
             }
             else {
-                setRange([range[0], Number(event.target.value)]);
+                setRange([range[0], Number(event.target.value) + 1]);
                 setRenderBar(true);
-                setRenderTable(true);
                 setRenderPie(true);
             }
         }
@@ -59,11 +57,12 @@ const RangeSelector = () => {
         <div className='relative py-1 px-2' >
             <p className='text-white bg-blue-600 text-xs w-fit rounded-md p-1'>
                 Range: {(range[0] + 1)} - {(range[1] + 1)}
-            </p> <br /> <br /> <br />
-            <span>
+            </p> <br />
+            <p className='italic text-xs'>Select the range of data you want to view using the above selector.</p> <br />
+            <div>
                 <input defaultValue={range[0]} type="range" min="1" max={maxValue - 1} id="one" onInput={bounderies} />
                 <input defaultValue={range[1]} type="range" min="2" max={maxValue} id="two" onInput={bounderies} />
-            </span>
+            </div>
         </div >
     )
 }

@@ -1,6 +1,10 @@
 package com.backend.backend;
 
 import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.Dictionary;
+import java.util.Hashtable;
+import java.util.List;
 
 @Entity(name = "users")
 @Table(name = "users")
@@ -18,14 +22,13 @@ public class userInformationEntity {
         this.img = "C:\\Users\\f5462797\\Applications\\Grad_project\\Grad_Project2022\\backend_springBoot\\src\\main\\resources\\uploads\\"
                 + LASnumber + "\\img\\";
         this.status = "Online";
-        this.tasks = "Tasks:";
-        this.meetings = "Meet:";
-        this.notes = "Notes:";
+        this.calendar = "";
+        this.notes = "";
         this.fileStorageDir = "C:\\Users\\f5462797\\Applications\\Grad_project\\Grad_Project2022\\backend_springBoot\\src\\main\\resources\\uploads\\"
                 + LASnumber + "\\excel\\";
-        this.tickets = "TODO:PROG:DONE:";
-        this.chats = "Chats:";
-        this.notifications = "Notifications:";
+        this.tickets = "";
+        this.chats = "";
+        this.notifications = "";
 
     }
 
@@ -47,10 +50,8 @@ public class userInformationEntity {
     private String img;
     @Column(name = "status")
     private String status;
-    @Column(name = "tasks")
-    private String tasks;
-    @Column(name = "meetings")
-    private String meetings;
+    @Column(name = "calendar")
+    private String calendar;
     @Column(name = "notes")
     private String notes;
     @Column(name = "fileStorageDir")
@@ -126,20 +127,12 @@ public class userInformationEntity {
         this.status = status;
     }
 
-    public String getTasks() {
-        return tasks;
+    public String getCalendar() {
+        return calendar;
     }
 
-    public void setTasks(String tasks) {
-        this.tasks = tasks;
-    }
-
-    public String getMeetings() {
-        return meetings;
-    }
-
-    public void setMeetings(String meetings) {
-        this.meetings = meetings;
+    public void setCalendar(String calendar) {
+        this.calendar = calendar;
     }
 
     public String getNotes() {

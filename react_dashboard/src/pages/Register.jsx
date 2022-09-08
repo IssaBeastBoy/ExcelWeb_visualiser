@@ -10,10 +10,6 @@ const Register = () => {
     const login = () => {
         setStatus(true);
     }
-
-    const confirm = () => {
-        setHomePage(true);
-    }
     const [homepage, setHomePage] = useState(false);
 
     const [user, setUser] = useState({
@@ -24,21 +20,25 @@ const Register = () => {
         confirm: "",
     })
 
-    const [lasNumber, setLasNumber] = useState("")
-    const [registered, setRegistion] = useState(false)
+    const [lasNumber, setLasNumber] = useState("");
+    const [registered, setRegistion] = useState(false);
     const [error, setError] = useState("");
-    const [dupContact, setDupCon] = useState(false);
-    const [dupEmail, setDupEm] = useState(false);
+    const [dupContact, setDupCon] = useState(true);
+    const [dupEmail, setDupEm] = useState(true);
 
     const userDetails = event => {
-        event.preventDefault()
+        event.preventDefault()        
+        setHomePage(false);
         if (user.name === "" || user.surname === "" || user.email === "" || user.contact === ""
             || user.password === "" || user.confirm === "") {
             alert("File in all fields");
         }
-        console.log(user);
+        else {
+            setRegistion(true);
+        }           
     }
     const registerUser = event => {
+        event.preventDefault() 
         if (user.name === "" || user.surname === "" || user.email === "" || user.contact === ""
             || user.password === "" || user.confirm === "") {
             alert("File in all fields");
@@ -48,7 +48,7 @@ const Register = () => {
         }
         else {
             const API_URL = "http://localhost:8080/Register/all";
-            let uniqueID = 1;
+            var uniqueID = 1;
             const response = axios.get(API_URL).then(res => {
                 const users = res.data;
                 if (users === null) {
@@ -57,46 +57,50 @@ const Register = () => {
                 else {
                     for (let index = 0; index < users.length; index++) {
                         let details = users[index];
-
+                        console.log("checking1");
                         if (details.email === user.email) {
-                            setDupEm(true);
+                            alert("Email address already exists");
+                            setRegistion(false);
+                            setDupEm(false);
+                            setDupCon(false);
+                            setHomePage(false);
                             break;
                         }
                         if (details.contact === user.contact) {
-                            setDupCon(true);
+                            alert("Contact number already exists");
+                            setRegistion(false);
+                            setDupEm(false);
+                            setHomePage(false);
+                            setDupCon(false);
                             break;
                         }
-                        uniqueID = users.loginName + 1;
+                    }
+                    if (dupEmail || dupContact) {
+                        const formData = new FormData();
+                        formData.append('lasNumbr', (Number(users.length) + 1));
+                        formData.append('name', user.name);
+                        formData.append('surname', user.surname);
+                        formData.append('email', user.email);
+                        formData.append('contact', user.contact);
+                        formData.append('password', user.password);
+                        const API_URL = "http://localhost:8080/Register/user";
+                        const request = axios.post(API_URL, formData).then(res => {
+                            if (res.data.userAdded) {
+                                setLasNumber(res.data.lasNumber);
+                                setState(res.data.userAdd);
+                                setHomePage(true);
+                            }
+                        });
+                    }
+                    else {
+                        setRegistion(false);
+                        setDupEm(true);
+                        setDupCon(true);
+                        setHomePage(false);
                     }
                 }
             });
-            if (dupEmail) {
-                alert("Email address already exists");
-                setDupEm(false);
-            }
-            else if (dupContact) {
-                alert("Contact number already exists");
-                setDupCon(false);
-            }
-            else {
-                const formData = new FormData();
-                formData.append('lasNumbr', uniqueID);
-                formData.append('name', user.name);
-                formData.append('surname', user.surname);
-                formData.append('email', user.email);
-                formData.append('contact', user.contact);
-                formData.append('password', user.password);
-                const API_URL = "http://localhost:8080/Register/user";
-                const request = axios.post(API_URL, formData).then(res => {
-                    console.log("get User Details");
-                    console.log(res.data);
-                    if (res.data.userAdded) {
-                        setLasNumber(res.data.lasNumber);
-                        setState(res.data.userAdd);
-                        setRegistion(true);
-                    }
-                });
-            }
+
         }
     }
 
@@ -134,9 +138,10 @@ const Register = () => {
                 <div className="form-group">
                     <label>Confirm Password</label><br />
                     <input type="password" name='confirm' required className="form-control" placeholder="Confirm password" onChange={event => setUser({ ...user, confirm: event.target.value })} value={user.confirm} />
-                </div>
-
-                <button type="submit" onClick={registerUser} />
+                </div> 
+                <button type='submit' className='w-0' />
+            </form>
+            <button onClick={registerUser} />
                 {
                     registered ? (<div className="">
                         {
@@ -165,7 +170,7 @@ const Register = () => {
                                 </div>
 
                                 {/* END OF MODAL */}
-                            </div>) : (<div> <button type="button" onClick={confirm} className="flex px-6 py-2.5 bg-blue-600 text-white font-medium text-xs leading-tight uppercase rounded shadow-md hover:bg-blue-700 hover:shadow-lg focus:bg-blue-700 focus:shadow-lg focus:outline-none focus:ring-0 active:bg-blue-800 active:shadow-lg transition duration-150 ease-in-out">
+                        </div>) : (<div> <button type="button" onClick={registerUser} className="flex px-6 py-2.5 bg-blue-600 text-white font-medium text-xs leading-tight uppercase rounded shadow-md hover:bg-blue-700 hover:shadow-lg focus:bg-blue-700 focus:shadow-lg focus:outline-none focus:ring-0 active:bg-blue-800 active:shadow-lg transition duration-150 ease-in-out">
                                 Register <BsCloudArrowDown className='text-centre w-8' />
                             </button> </div>
 
@@ -176,8 +181,7 @@ const Register = () => {
                         <p> Press Enter once complete </p>
                     </div>
                     )
-                }
-            </form>
+            }
 
             <p className=" text-gray-500 text-right">
                 Already registered <a href="/">log in?</a>
