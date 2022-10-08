@@ -1,6 +1,7 @@
 package com.backend.backend;
 
 import com.backend.backend.apps.calendar;
+import com.backend.backend.apps.tickets;
 import com.backend.backend.processor.ViewData;
 import com.backend.backend.processor.ingestSheet;
 import org.apache.poi.util.ArrayUtil;
@@ -54,6 +55,129 @@ public class Controller {
         else{
             return null;
         }
+    }
+
+    @PostMapping("/updateTickets")
+    public userInformationEntity updateTickets(@ModelAttribute tickets user){
+        userInfoTransactions userInfo = new userInfoTransactions();
+        userInformationEntity userDetails = userInfo.findUser(user.getUserId()).get(0);
+        Dictionary<String, String> priorityColor = new Hashtable<>();
+        priorityColor.put("Minor","#FFE000"); priorityColor.put("Low","#F5A623");
+        priorityColor.put("High","#FF4700"); priorityColor.put("Critical","#FF0000");
+        String ticketDetails = "";
+        if(userDetails.getTickets().equals("")){
+            ticketDetails = "Id-1"+"^Priority-"+ user.getPriority()+"^Summary-"+ user.getSummary()+"^Color-"+priorityColor.get(user.getPriority())
+                    +"^Status-" +user.getStatus()+"^Estimate-"+user.getEstimate();
+        }
+        else if(user.getEventType().equals("new")){
+            String[] currTickets = userDetails.getTickets().split(">");
+            ticketDetails = "Id-"+(currTickets.length + 1)+"^Priority-"+ user.getPriority()+"^Summary-"+ user.getSummary()+"^Color-"+priorityColor.get(user.getPriority())
+                    +"^Status-" +user.getStatus()+"^Estimate-"+user.getEstimate();
+            ticketDetails += ">" + userDetails.getTickets();
+        }
+        else if(user.getEventType().equals("cardChange")){
+            String[] currTickets = userDetails.getTickets().split(">");
+            for(int parse = 0; parse< currTickets.length; parse++){
+                String[] ticketItems = currTickets[parse].split("\\^");
+                for(int index =0; index<ticketItems.length; index++){
+                    String[] ticketItem = ticketItems[index].split("-");
+                    if(ticketItem[1].equals(user.getId())){
+                        if(ticketDetails.equals("")){
+                            ticketDetails += "Id-"+user.getId()+"^Priority-"+ user.getPriority()+"^Summary- "+ user.getSummary()+
+                                    "^Color-"+priorityColor.get(user.getPriority())+"^Status-" +user.getStatus()+"^Estimate-"+user.getEstimate() ;
+
+                        }
+                        else{
+                            ticketDetails += ">"+"Id-"+user.getId()+"^Priority-"+ user.getPriority()+"^Summary- "+ user.getSummary()+
+                                    "^Color-"+priorityColor.get(user.getPriority())+"^Status-" +user.getStatus()+"^Estimate-"+user.getEstimate() ;
+
+                        }
+                        break;
+                    }
+                    else{
+                        if(ticketDetails.equals("")){
+                            ticketDetails += currTickets[parse];
+                        }
+                        else{
+                            ticketDetails += ">" + currTickets[parse];
+                        }
+                        break;
+                    }
+                }
+            }
+        }
+        else if(user.getEventType().equals("moveCard")){
+            String[] currTickets = userDetails.getTickets().split(">");
+            Dictionary<String, String> boardPostions = new Hashtable<>();
+            boardPostions.put("0", "Backlog");
+            boardPostions.put("1", "Open");
+            boardPostions.put("2", "InProgress");
+            boardPostions.put("3", "Close");
+            for(int parse = 0; parse< currTickets.length; parse++){
+                String[] ticketItems = currTickets[parse].split("\\^");
+                for(int index =0; index<ticketItems.length; index++){
+                    String[] ticketItem = ticketItems[index].split("-");
+                    if(ticketItem[1].equals(user.getId())){
+                        if(ticketDetails.equals("")){
+                            ticketDetails += "Id-"+user.getId()+"^Priority-"+ user.getPriority()+"^Summary- "+ user.getSummary()+
+                                    "^Color-"+priorityColor.get(user.getPriority())+"^Status-" +boardPostions.get(user.getStatus())+"^Estimate-"+user.getEstimate() ;
+
+                        }
+                        else{
+                            ticketDetails += ">"+"Id-"+user.getId()+"^Priority-"+ user.getPriority()+"^Summary- "+ user.getSummary()+
+                                    "^Color-"+priorityColor.get(user.getPriority())+"^Status-" +boardPostions.get(user.getStatus())+"^Estimate-"+user.getEstimate() ;
+
+                        }
+                        break;
+                    }
+                    else{
+                        if(ticketDetails.equals("")){
+                            ticketDetails += currTickets[parse];
+                        }
+                        else{
+                            ticketDetails += ">" + currTickets[parse];
+                        }
+                        break;
+                    }
+                }
+            }
+        }
+        else if(user.getEventType().equals("cardRemove")){
+            String[] currTickets = userDetails.getTickets().split(">");
+            String updated = "";
+            boolean changeID = false;
+            for(int parse = 0; parse< currTickets.length; parse++){
+                String[] ticketItems = currTickets[parse].split("\\^");
+                for(int index =0; index<ticketItems.length && ticketItems.length !=0; index++){
+                    String[] ticketItem = ticketItems[index].split("-");
+                    if(ticketItem[0].equals("Id") && ticketItem[1].equals(user.getId())){
+                        changeID = true;
+                        break;
+                    }
+                    else if(changeID && ticketItem[0].equals("Id")){
+                        updated += "Id-" +(Integer.valueOf(ticketItem[1]) - 1);
+                    }
+                    else if(changeID){
+                        updated+= "^" + ticketItems[index];
+                    }
+                    else{
+                        ticketDetails +=  ">" + currTickets[parse];
+                        break;
+                    }
+                }
+                if (changeID && !updated.equals("")){
+                    if(ticketDetails.equals(""))
+                        ticketDetails += updated;
+                    else
+                        ticketDetails += ">" + updated;
+                    updated = "";
+                }
+
+            }
+        }
+        userDetails.setTickets(ticketDetails);
+        Boolean update = userInfo.updateUser(userDetails);
+        return userInfo.findUser(user.getUserId()).get(0);
     }
 
     @PostMapping("/updateCalendar")

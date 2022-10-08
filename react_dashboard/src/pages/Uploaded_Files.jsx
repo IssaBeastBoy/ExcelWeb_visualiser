@@ -1,13 +1,11 @@
-import React, { useCallback, createContext, useContext, useState, Fragment } from 'react';
+import React, { useCallback, useState } from 'react';
 import { FiDownload } from 'react-icons/fi';
 import { useStateContext } from '../context/ContextProvider';
 import { useDropzone } from 'react-dropzone';
 import axios from "axios";
-import { eventsLoaded } from '@syncfusion/ej2-react-schedule';
 import { BsTrash, BsHandThumbsDown, BsHandThumbsUp, BsExclamationTriangle } from "react-icons/bs";
 import { ImFilesEmpty } from "react-icons/im";
 import { AiOutlineFileDone } from "react-icons/ai";
-import { Menu } from "@headlessui/react";
 
 
 const Uploaded_Files = () => {

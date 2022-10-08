@@ -72,7 +72,7 @@ const Login = () => {
                     <input type="password" className="form-control" required placeholder="Enter password" onChange={event => setLogin({ ...user, password: event.target.value })} value={user.password} />
                 </div>
 
-                <button type="submit" className='btn flex w-fit justify-left' alt="Sign In">
+                <button type="submit" className='btn m-2 flex w-fit justify-left hover:scale-125' alt="Sign In">
                     <img src={loginImage} className='w-8 h-8' onClick={loginButton} />
                 </button>
                 <div className='flex gap-5'>

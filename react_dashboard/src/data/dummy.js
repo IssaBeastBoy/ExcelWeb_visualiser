@@ -21,6 +21,7 @@ import slide4 from './Slide_show4.png';
 import slide5 from './Slide_show5.png';
 import slide6 from './Slide_show6.png';
 import slide7 from './Slide_show7.png';
+import { IoTicketOutline } from "react-icons/io5";
 
 import avatar1 from './Slide_show1.png';
 import avatar2 from './Slide_show1.png';
@@ -57,6 +58,13 @@ export const gridOrderStatus = (props) => (
 
 export const kanbanGrid = [
   {
+    headerText: 'Backlog',
+    keyField: 'Backlog',
+    allowToggle: true,
+    isExpanded: false,
+  },
+
+  {
     headerText: 'To Do',
     keyField: 'Open',
     allowToggle: true
@@ -66,13 +74,6 @@ export const kanbanGrid = [
     headerText: 'In Progress',
     keyField: 'InProgress',
     allowToggle: true
-  },
-
-  {
-    headerText: 'Testing',
-    keyField: 'Testing',
-    allowToggle: true,
-    isExpanded: false
   },
 
   {
@@ -3344,13 +3345,14 @@ export const kanbanData = [
     Status: 'Open',
     Summary: 'Analyze the new requirements gathered from the customer.',
     Type: 'Story',
-    Priority: 'Low',
+    Priority: 'High',
     Tags: 'Analyze,Customer',
     Estimate: 3.5,
     Assignee: 'Nancy Davloio',
     RankId: 1,
     Color: '#02897B',
     ClassName: 'e-story, e-low, e-nancy-davloio',
+    icon: "./Slide_show1.png",
   },
   {
     Id: 'Task 2',
@@ -3365,6 +3367,7 @@ export const kanbanData = [
     RankId: 1,
     Color: '#673AB8',
     ClassName: 'e-improvement, e-normal, e-andrew-fuller',
+    icon: "./Slide_show1.png",
   },
   {
     Id: 'Task 3',
@@ -3379,6 +3382,7 @@ export const kanbanData = [
     RankId: 2,
     Color: '#1F88E5',
     ClassName: 'e-others, e-critical, e-janet-leverling',
+    icon: "./Slide_show1.png",
   },
   {
     Id: 'Task 4',
@@ -3393,6 +3397,7 @@ export const kanbanData = [
     RankId: 2,
     Color: '#E64A19',
     ClassName: 'e-bug, e-release, e-janet-leverling',
+    icon: "./Slide_show1.png",
   },
   {
     Id: 'Task 5',
@@ -3407,6 +3412,7 @@ export const kanbanData = [
     RankId: 1,
     Color: '#E64A19',
     ClassName: 'e-bug, e-low, e-steven-walker',
+    icon: "./Slide_show1.png",
   },
   {
     Id: 'Task 6',
@@ -3421,6 +3427,7 @@ export const kanbanData = [
     RankId: 1,
     Color: '#673AB8',
     ClassName: 'e-improvement, e-low, e-robert-king',
+    icon: "./Slide_show1.png",
   },
   {
     Id: 'Task 7',
@@ -3435,6 +3442,7 @@ export const kanbanData = [
     RankId: 2,
     Color: '#E64A19',
     ClassName: 'e-bug, e-release, e-nancy-davloio',
+    icon: "./Slide_show1.png",
   },
   {
     Id: 'Task 8',
@@ -3449,6 +3457,7 @@ export const kanbanData = [
     RankId: 3,
     Color: '#02897B',
     ClassName: 'e-story, e-low, e-margaret-hamilt',
+    icon: "./Slide_show1.png",
   },
   {
     Id: 'Task 9',
@@ -3463,6 +3472,7 @@ export const kanbanData = [
     RankId: 1,
     Color: '#02897B',
     ClassName: 'e-story, e-high, e-steven-walker',
+    icon: "./Slide_show1.png",
   },
   {
     Id: 'Task 10',
@@ -3477,6 +3487,7 @@ export const kanbanData = [
     RankId: 4,
     Color: '#02897B',
     ClassName: 'e-story, e-high, e-margaret-hamilt',
+    icon: "./Slide_show1.png",
   },
   {
     Id: 'Task 11',
@@ -3491,6 +3502,7 @@ export const kanbanData = [
     RankId: 4,
     Color: '#E64A19',
     ClassName: 'e-bug, e-critical, e-janet-leverling',
+    icon: "./Slide_show1.png",
   },
   {
     Id: 'Task 12',
@@ -3505,6 +3517,7 @@ export const kanbanData = [
     RankId: 4,
     Color: '#02897B',
     ClassName: 'e-story, e-normal, e-janet-leverling',
+    icon: "./Slide_show1.png",
   },
   {
     Id: 'Task 13',
@@ -3519,6 +3532,7 @@ export const kanbanData = [
     RankId: 4,
     Color: '#02897B',
     ClassName: 'e-story, e-release, e-andrew-fuller',
+    icon: "./Slide_show1.png",
   },
   {
     Id: 'Task 14',
@@ -3533,6 +3547,7 @@ export const kanbanData = [
     RankId: 1,
     Color: '#02897B',
     ClassName: 'e-story, e-low, e-margaret-hamilt',
+    icon: "./Slide_show1.png",
   },
   {
     Id: 'Task 15',
@@ -3547,6 +3562,7 @@ export const kanbanData = [
     RankId: 5,
     Color: '#02897B',
     ClassName: 'e-story, e-high, e-margaret-hamilt',
+    icon: "./Slide_show1.png",
   },
   {
     Id: 'Task 16',
@@ -3561,6 +3577,7 @@ export const kanbanData = [
     RankId: 6,
     Color: '#1F88E5',
     ClassName: 'e-others, e-release, e-steven-walker',
+    icon: "./Slide_show1.png",
   },
   {
     Id: 'Task 17',
@@ -3575,6 +3592,7 @@ export const kanbanData = [
     RankId: 7,
     Color: '#02897B',
     ClassName: 'e-story, e-release, e-janet-leverling',
+    icon: "./Slide_show1.png",
   },
   {
     Id: 'Task 18',
@@ -3589,6 +3607,7 @@ export const kanbanData = [
     RankId: 1,
     Color: '#02897B',
     ClassName: 'e-story, e-critical, e-nancy-davloio',
+    icon: "./Slide_show1.png",
   },
   {
     Id: 'Task 19',
@@ -3603,6 +3622,7 @@ export const kanbanData = [
     RankId: 5,
     Color: '#02897B',
     ClassName: 'e-story, e-normal, e-nancy-davloio',
+    icon: "./Slide_show1.png",
   },
   {
     Id: 'Task 20',
@@ -3617,6 +3637,7 @@ export const kanbanData = [
     RankId: 5,
     Color: '#673AB8',
     ClassName: 'e-improvement, e-low, e-andrew-fuller',
+    icon: "./Slide_show1.png",
   },
   {
     Id: 'Task 21',
@@ -3630,6 +3651,7 @@ export const kanbanData = [
     Assignee: 'Nancy Davloio',
     RankId: 5,
     Color: '#e91e64',
+    icon: "./Slide_show1.png",
     ClassName: 'e-epic, e-high, e-nancy-davloio',
   },
   {
@@ -3645,6 +3667,7 @@ export const kanbanData = [
     RankId: 6,
     Color: '#1F88E5',
     ClassName: 'e-others, e-high, e-steven-walker',
+    icon: "./Slide_show1.png",
   },
   {
     Id: 'Task 23',
@@ -3659,6 +3682,7 @@ export const kanbanData = [
     RankId: 6,
     Color: '#E64A19',
     ClassName: 'e-bug, e-low, e-janet-leverling',
+    icon: "./Slide_show1.png",
   },
   {
     Id: 'Task 24',
@@ -3673,6 +3697,7 @@ export const kanbanData = [
     RankId: 1,
     Color: '#E64A19',
     ClassName: 'e-bug, e-critical, e-steven-walker',
+    icon: "./Slide_show1.png",
   },
   {
     Id: 'Task 25',
@@ -3687,6 +3712,7 @@ export const kanbanData = [
     RankId: 2,
     Color: '#E64A19',
     ClassName: 'e-bug, e-release, e-nancy-davloio',
+    icon: "./Slide_show1.png",
   },
 ];
 

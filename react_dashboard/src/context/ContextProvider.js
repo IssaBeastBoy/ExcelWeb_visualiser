@@ -1,5 +1,8 @@
 import React, { useCallback, createContext, useContext, useState } from 'react';
 import { slider, vidoes } from '../data/dummy';
+import {
+    FcDataBackup, FcApproval, FcSynchronize, FcSupport,
+} from "react-icons/fc";
 
 const StateContext = createContext();
 
@@ -17,6 +20,42 @@ const uploadProcess = {
 export const ContextProvider = ({ children }) => {
 
     const [Upload, setUpload] = useState(uploadProcess)
+
+    const [Board, setBoard] = useState([
+        {
+            "name": "Backlog",
+            "items": [],
+            "icon": <FcDataBackup className='w-5 h-5 text-gray-500' />,
+        },
+        {
+            "name": "Open",
+            "items": [],
+            "icon": <FcSynchronize className='w-5 h-5' />,
+        },
+        {
+            "name": "In Progress",
+            "items": [],
+            "icon": <FcSupport className='w-5 h-5' />,
+        },
+        {
+            "name": "Complete",
+            "items": [],
+            "icon": <FcApproval className='w-5 h-5' />,
+        },
+    ])
+
+    const [editTick, showEdit] = useState(false);
+
+    const [deleteTick, showDelete] = useState(false);
+
+    const [ticketInfo, changeTicket] = useState({
+        Id: "",
+        Status: "",
+        Priority: "",
+        Estimate: "",
+        Summary: "",
+        eventType: "",
+    });
 
     const [renderCalender, setCalender] = useState(true);
 
@@ -70,7 +109,7 @@ export const ContextProvider = ({ children }) => {
     return (
         <StateContext.Provider
             value={{
-                renderCalender, setCalender, renderData, setRender, size, reSetSize, range, setRange, renderTable, setRenderTable, renderPie, setRenderPie, renderBar, setRenderBar, selectedCol, setSelectCol, details, setState, login, setStatus, activeMenu, handleUpload, Upload, setActiveMenu, isClicked, setIsClicked, handleClick, screenSize,
+                ticketInfo, changeTicket, deleteTick, showDelete, editTick, showEdit, Board, setBoard, renderCalender, setCalender, renderData, setRender, size, reSetSize, range, setRange, renderTable, setRenderTable, renderPie, setRenderPie, renderBar, setRenderBar, selectedCol, setSelectCol, details, setState, login, setStatus, activeMenu, handleUpload, Upload, setActiveMenu, isClicked, setIsClicked, handleClick, screenSize,
                 setScreenSize, currentSilde, setCurrentSlide, nextSlide, preSlide, nextVideo, currentVideo
             }
             }>
