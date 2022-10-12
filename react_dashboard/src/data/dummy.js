@@ -626,10 +626,10 @@ export const links = [
         name: 'Tickets',
         icon: <BsKanban />,
       },
-      {
-        name: 'Notes',
-        icon: <FiEdit />,
-      },
+      // {
+      //   name: 'Notes',
+      //   icon: <FiEdit />,
+      // },
     ],
   },
   {

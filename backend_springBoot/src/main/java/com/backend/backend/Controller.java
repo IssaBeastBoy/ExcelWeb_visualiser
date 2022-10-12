@@ -57,6 +57,11 @@ public class Controller {
         }
     }
 
+    @PostMapping("/updateNotes")
+    public userInformationEntity updateNotes(){
+
+    }
+
     @PostMapping("/updateTickets")
     public userInformationEntity updateTickets(@ModelAttribute tickets user){
         userInfoTransactions userInfo = new userInfoTransactions();

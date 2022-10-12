@@ -57,6 +57,8 @@ export const ContextProvider = ({ children }) => {
         eventType: "",
     });
 
+    const [notes, setNotes] = useState([]);
+
     const [renderCalender, setCalender] = useState(true);
 
     const [renderBar, setRenderBar] = useState(false);
@@ -73,7 +75,7 @@ export const ContextProvider = ({ children }) => {
 
     const [details, setState] = useState([])
 
-    const [login, setStatus] = useState(false);
+    const [login, setStatus] = useState(true);
 
     const [activeMenu, setActiveMenu] = useState
         (true);
@@ -109,7 +111,7 @@ export const ContextProvider = ({ children }) => {
     return (
         <StateContext.Provider
             value={{
-                ticketInfo, changeTicket, deleteTick, showDelete, editTick, showEdit, Board, setBoard, renderCalender, setCalender, renderData, setRender, size, reSetSize, range, setRange, renderTable, setRenderTable, renderPie, setRenderPie, renderBar, setRenderBar, selectedCol, setSelectCol, details, setState, login, setStatus, activeMenu, handleUpload, Upload, setActiveMenu, isClicked, setIsClicked, handleClick, screenSize,
+                notes, setNotes, ticketInfo, changeTicket, deleteTick, showDelete, editTick, showEdit, Board, setBoard, renderCalender, setCalender, renderData, setRender, size, reSetSize, range, setRange, renderTable, setRenderTable, renderPie, setRenderPie, renderBar, setRenderBar, selectedCol, setSelectCol, details, setState, login, setStatus, activeMenu, handleUpload, Upload, setActiveMenu, isClicked, setIsClicked, handleClick, screenSize,
                 setScreenSize, currentSilde, setCurrentSlide, nextSlide, preSlide, nextVideo, currentVideo
             }
             }>
