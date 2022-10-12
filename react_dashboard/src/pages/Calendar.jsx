@@ -17,8 +17,16 @@ const Calender = () => {
 
     const [schedule, setSchedule] = useState({});
 
+    const [date, setDate] = useState(
+        { year: 0, month: 0, day: 0, }
+    );
+
     const setClick = (event) => {
-        console.log(event);
+        let currentDate = new Date();
+        let day = currentDate.getDate();
+        let month = currentDate.getMonth();
+        let year = currentDate.getFullYear();
+        setDate({ year: year, month: month, day: day });
         if (event.requestType == "eventChange") {
             let itemChange = event.data;
             if (itemChange.occurrence != undefined) {
@@ -192,7 +200,7 @@ const Calender = () => {
 
             {
                 renderSchedule ? (<p className='flex items-center relative gap-2 justify-center text-xl font-black text-center p-2'><BsCalendarWeek /> Loading calendar...</p>) : (
-                    <ScheduleComponent actionBegin={setClick} height="650px" eventSettings={{ dataSource: schedule }} selectedDate={new Date(2021, 0, 10)}>
+                    <ScheduleComponent actionBegin={setClick} height="650px" eventSettings={{ dataSource: schedule }} selectedDate={new Date(date.year, date.month, date.day)}>
 
                 <Inject services={[Day, Week, WorkWeek, Month, Agenda, Resize, DragAndDrop]}/>
 

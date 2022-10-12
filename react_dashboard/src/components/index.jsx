@@ -3,6 +3,7 @@ export { default as ThemeSetting } from './ThemeSetting';
 export { default as SideBar } from './SideBar';
 // eslint-disable-next-line import/no-cycle
 export { default as Navbar } from './Navbar';
+export { default as Card } from './Card';
 export { default as Footer } from './Footer';
 export { default as Login } from './Login';
 export { default as Chat } from './Chat';
