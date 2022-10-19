@@ -1,10 +1,18 @@
 package com.backend.backend;
 
+import com.backend.backend.DB.userInfoTransactions;
 import com.backend.backend.apps.calendar;
 import com.backend.backend.apps.tickets;
-import com.backend.backend.processor.ViewData;
+import com.backend.backend.chart.*;
 import com.backend.backend.processor.ingestSheet;
-import org.apache.poi.util.ArrayUtil;
+import com.backend.backend.processor.isUnique;
+import com.backend.backend.processor.plotItems;
+import com.backend.backend.uploads.FileResponse;
+import com.backend.backend.uploads.FileStorageService;
+import com.backend.backend.uploads.uploadFilesResponse;
+import com.backend.backend.user.newUserBody;
+import com.backend.backend.user.newUserResponse;
+import com.backend.backend.user.userInformationEntity;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.UrlResource;
 import org.springframework.http.HttpStatus;
@@ -14,16 +22,13 @@ import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
-import org.yaml.snakeyaml.util.ArrayUtils;
 
 import javax.servlet.http.HttpServletRequest;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
-import java.nio.file.attribute.BasicFileAttributes;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.*;
@@ -32,15 +37,8 @@ import java.util.*;
 @CrossOrigin(origins = "*", maxAge = 3600)
 public class Controller {
 
-    private Dictionary<Integer, List<String>> customerInfo;
+    private ingestSheet ingestSheet = new ingestSheet("", "");
 
-    public Dictionary<Integer, List<String>> getCustomerInfo() {
-        return customerInfo;
-    }
-
-    public void setCustomerInfo(Dictionary<Integer, List<String>> customerInfo) {
-        this.customerInfo = customerInfo;
-    }
 
     @Autowired
     private FileStorageService fileStorageService;
@@ -57,10 +55,10 @@ public class Controller {
         }
     }
 
-    @PostMapping("/updateNotes")
-    public userInformationEntity updateNotes(){
-
-    }
+//    @PostMapping("/updateNotes") still to be implemented
+//    public userInformationEntity updateNotes(){
+//
+//    }
 
     @PostMapping("/updateTickets")
     public userInformationEntity updateTickets(@ModelAttribute tickets user){
@@ -348,41 +346,116 @@ public class Controller {
             return new ResponseEntity<>(newUser, HttpStatus.FORBIDDEN);
         }
     }
+
+    @PostMapping("/Table")
+    public plotDetails table (@ModelAttribute plotRequestBody details){
+        if(!this.ingestSheet.getExcel_loc().equals(details.getExcelLoc()) ) {
+            this.ingestSheet = new ingestSheet(details.getFilterOne(), details.getFilterTwo());
+            ingestSheet.setExcel_loc(details.getExcelLoc());
+            ingestSheet.parseSheet();
+        }
+
+        plotDetails plotDetails = new plotDetails();
+        if(!details.getFilterOne().equals("")){
+            int index = ingestSheet.getIsColsValues().get(ingestSheet.getCustomerDetails().indexOf(details.getFilterOneSelect())+1).indexOf(details.getFilterOne());
+            ingestSheet.getIsColsValues().get(ingestSheet.getCustomerDetails().indexOf(details.getFilterOneSelect())+1).remove(index);
+            ingestSheet.getIsColsValues().get(ingestSheet.getCustomerDetails().indexOf(details.getFilterOneSelect())+1).add(0, details.getFilterOne());
+            plotDetails.setFilterOneOptions(ingestSheet.getIsColsValues().get(ingestSheet.getCustomerDetails().indexOf(details.getFilterOneSelect())+1));
+        }
+        else{
+            plotDetails.setFilterOneOptions(ingestSheet.getIsColsValues().get(ingestSheet.getCustomerDetails().indexOf(details.getFilterOneSelect())+1));
+
+        }
+
+        int filterOneIndex = ingestSheet.getCustomerDetails().indexOf(details.getFilterOneSelect());
+        if(!details.getFilterTwo().equals("")){
+            int index = ingestSheet.getIsColsValues().get(ingestSheet.getCustomerDetails().indexOf(details.getFilterTwoSelect())+1).indexOf(details.getFilterTwo());
+            ingestSheet.getIsColsValues().get(ingestSheet.getCustomerDetails().indexOf(details.getFilterTwoSelect())+1).remove(index);
+            ingestSheet.getIsColsValues().get(ingestSheet.getCustomerDetails().indexOf(details.getFilterTwoSelect())+1).add(0, details.getFilterTwo());
+            plotDetails.setFilterTwoOptions(ingestSheet.getIsColsValues().get(ingestSheet.getCustomerDetails().indexOf(details.getFilterTwoSelect())+1));
+        }
+        else{
+            plotDetails.setFilterTwoOptions(ingestSheet.getIsColsValues().get(ingestSheet.getCustomerDetails().indexOf(details.getFilterTwoSelect())+1));
+        }
+        int filterTwoIndex = ingestSheet.getCustomerDetails().indexOf(details.getFilterTwoSelect());
+
+        List<String> tempMain = ingestSheet.getIsColsValues().get(ingestSheet.getCustomerDetails().indexOf(details.getMain())+1);
+        int mainIndex = ingestSheet.getCustomerDetails().indexOf(details.getMain());
+        Dictionary<String, Integer> mainItems = new Hashtable<>();
+
+        List<Integer> tempOfferCount = new ArrayList<>();
+        tempOfferCount.add(Integer.parseInt(details.getMainCount()));
+        for(int parse=0; parse < ingestSheet.getIsColsValues().get(ingestSheet.getCustomerDetails().indexOf(details.getMain())+1).size(); parse++){
+            if (!tempOfferCount.contains((ingestSheet.getIsColsValues().get(ingestSheet.getCustomerDetails().indexOf(details.getMain())+1).get(parse).length()/2))){
+                tempOfferCount.add(ingestSheet.getIsColsValues().get(ingestSheet.getCustomerDetails().indexOf(details.getMain())+1).get(parse).length()/2);
+            }
+        }
+
+        for(int parse=0; parse < tempMain.size(); parse++){
+            if(tempMain.get(parse).length() == Integer.parseInt(details.getMainCount())*2){
+                mainItems.put(tempMain.get(parse), 0);
+            }
+        }
+
+        String selectedOne;
+        String selectedTwo;
+
+        if(details.getFilterOne().equals("") && details.getFilterTwo().equals("")){
+            selectedOne = plotDetails.getFilterOneOptions().get(0);
+            selectedTwo = plotDetails.getFilterTwoOptions().get(0);
+        }
+        else{
+            selectedOne = details.getFilterOne();
+            selectedTwo = details.getFilterTwo();
+        }
+
+        plotItems plotItems = new plotItems(ingestSheet.getCustomerInfo(), mainItems, mainIndex, filterOneIndex, filterTwoIndex,
+                selectedOne,selectedTwo );
+
+        plotDetails.setFilter(tempOfferCount);
+        plotDetails.setItems(plotItems.getMainItems());
+        plotDetails.setItemDisplay(plotItems.getItemDisplay());
+
+        return plotDetails;
+    }
+
     @PostMapping("/PieChartView")
     public List<List<String>> pieChartView (@RequestParam("colName") String colName, @RequestParam("min") String min,
                                             @RequestParam("max")String max){
-        ViewData viewData = new ViewData(customerInfo, colName, min, max);
+        ViewData viewData = new ViewData(this.ingestSheet.getCustomerInfo(), colName, min, max);
         return viewData.getPieView();
     }
 
     @PostMapping("/BarGraphView")
     public List<List<String>> barGraphView (@RequestParam("colName") String colName, @RequestParam("min") String min,
                                             @RequestParam("max")String max){
-        ViewData viewData = new ViewData(customerInfo, colName, min, max);
+        ViewData viewData = new ViewData(this.ingestSheet.getCustomerInfo(), colName, min, max);
         return viewData.getBarGraphView();
     }
 
     @PostMapping("/TableView")
     public List<List<String>> tableView (@RequestParam("colName") String colName){
-        ViewData viewData = new ViewData(customerInfo, colName);
+        ViewData viewData = new ViewData(this.ingestSheet.getCustomerInfo(), colName);
         return viewData.getTableView();
     }
 
     @PostMapping("/Getmax")
     public int getMax (@RequestParam("colName") String colName){
-        ViewData viewData = new ViewData(customerInfo, colName);
+        ViewData viewData = new ViewData(this.ingestSheet.getCustomerInfo(), colName);
         return viewData.getSize();
     }
 
     @PostMapping("/Excel_sheet")
     public List<String> inputSheet (@RequestParam("sheetLoc") String sheetLoc){
-        ingestSheet ingest = new ingestSheet();
-        ingest.setExcel_loc(sheetLoc);
-        ingest.parseSheet();
-        setCustomerInfo(ingest.getCustomerInfo());
+        if(!this.ingestSheet.getExcel_loc().equals(sheetLoc) ) {
+            ingestSheet ingest = new ingestSheet("", "");
+            ingest.setExcel_loc(sheetLoc);
+            ingest.parseSheet();
+        }
+
         List<String> excludeTotal = new ArrayList<>();
-        for(int index = 0; index < customerInfo.get(-1).size()-1; index++){
-            excludeTotal.add(customerInfo.get(-1).get(index));
+        for(int index = 0; index < this.ingestSheet.getCustomerInfo().get(-1).size()-1; index++){
+            excludeTotal.add(this.ingestSheet.getCustomerInfo().get(-1).get(index));
         }
         return excludeTotal;
     }
@@ -397,6 +470,37 @@ public class Controller {
             return false;
         }
     }
+
+    @PostMapping("/getColumnName")
+    public columnNames getColumns (@RequestParam(value="fileLoc") String fileDir){
+        ingestSheet ingest = new ingestSheet("","");
+        ingest.setExcel_loc(fileDir);
+        ingest.parseColumns();
+        columnNames columnNames = new columnNames();
+        columnNames.setColumnNames(ingest.getCustomerDetails());
+        columnNames.setErr(ingest.isThrowErr());
+        columnNames.setErrMessage(ingest.getErr_Message());
+        return columnNames;
+    }
+
+
+    @PostMapping("/getUploadFiles")
+    public uploadFileName getNames (@RequestParam(value="fileLoc") String fileLoc){
+        List<String> files = new ArrayList<>();
+        File dir = new File(fileLoc);
+        String[] dirContent = dir.list();
+        for (int i=0; i<dirContent.length; i++)
+        {
+            File curr = new File(fileLoc+dirContent[i]);
+            Boolean check = curr.exists();
+            if(check)
+                files.add(dirContent[i]);
+        }
+        uploadFileName fileName = new uploadFileName();
+        fileName.setFilesName(files);
+        return fileName;
+    }
+
 
     @PostMapping("/Getuploads")
     public uploadFilesResponse getFiles(@RequestParam(value="fileLoc") String fileLoc){

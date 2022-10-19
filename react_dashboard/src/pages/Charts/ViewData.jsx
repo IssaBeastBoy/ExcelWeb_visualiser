@@ -14,6 +14,7 @@ import { useStateContext } from '../../context/ContextProvider';
 import { FiPlayCircle } from "react-icons/fi";
 import { RiFolderChartLine } from 'react-icons/ri';
 import { BarGraph, PieChart, Table, RangeSelector } from "../../components";
+import { Header } from '../../components';
 
 const ViewData = () => {
     const { details, renderData, setRender, setSelectCol, selectedCol, setRenderBar, setRenderTable, setRenderPie, reSetSize } = useStateContext();
@@ -33,12 +34,11 @@ const ViewData = () => {
         const formData = new FormData();
         formData.append("fileLoc", details.fileStorageDir);
         const API_URL = "http://localhost:8080/Getuploads";
-        var filesAtributes = {};
         var storeAttributes = [];
         const response = axios.post(API_URL, formData).then(res => {
-            res = res.data.filesName;
-            for (let index = 0; index < res.length; index++) {
-                let tempAttributes = res[index].split("-");
+            for (let index = 0; index < res.data.filesName.length; index++) {
+                let tempAttributes = res.data.filesName[index].split("-");
+                var filesAtributes = {};
                 filesAtributes["Excel Sheet"] = tempAttributes[0].trim();
                 filesAtributes["Last Modified"] = tempAttributes[1].trim();
                 storeAttributes.push(filesAtributes);
@@ -50,7 +50,7 @@ const ViewData = () => {
 
     }
 
-    const display = (event) => {
+    const display = async (event) => {
         const fileName = event.target.innerText;
         setLoading(false);
         setShow(true);
@@ -68,7 +68,7 @@ const ViewData = () => {
         })
     }
 
-    const showData = (event) => {
+    const showData = async (event) => {
         setSelectCol(event.target.innerText);
         reSetSize(true);
         setRenderBar(true);        
@@ -80,8 +80,8 @@ const ViewData = () => {
     return (
         <div>
             <div className='m-2 gap-3 md:m-10 p-2 md:p-10 bg-white round-3x1 '>
+                <Header category="Analyse excel" title="View Uploaded Data:" />
                 <div className='gap-10'>
-                    <p className='font-extrabold text-lg'>View Uploaded Data:</p>
                     <p className='italic text-xs'> Click on excel sheet name to ingest.</p>
                     <GridComponent
                         id='gridcomp'
@@ -103,10 +103,10 @@ const ViewData = () => {
                                         <div className='col-span-1'>
                                             {
                                                 colNames.map((item, index) => (
-                                                    <div className=" flex gap-2 py-2 px-2 hover:scale-110 hover:bg-green-600" onClick={showData}>
+                                                    <button value={item} className=" text-xs flex gap-2 py-2 px-2 hover:scale-110 hover:bg-green-600 rounded" onClick={showData}>
                                                         < FiPlayCircle title="Display values" />
-                                                        <span className='text-xs' >{item}</span>
-                                                    </div>
+                                                        {item}
+                                                    </button>
                                                 )
 
                                                 )

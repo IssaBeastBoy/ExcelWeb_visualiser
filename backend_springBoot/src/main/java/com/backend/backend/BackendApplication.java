@@ -1,9 +1,9 @@
 package com.backend.backend;
 
+import com.backend.backend.uploads.FileStorageProperties;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
-import org.springframework.web.bind.annotation.CrossOrigin;
 
 @SpringBootApplication
 @EnableConfigurationProperties({

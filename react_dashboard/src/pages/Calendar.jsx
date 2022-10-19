@@ -21,7 +21,7 @@ const Calender = () => {
         { year: 0, month: 0, day: 0, }
     );
 
-    const setClick = (event) => {
+    const setClick = async (event) => {
         let currentDate = new Date();
         let day = currentDate.getDate();
         let month = currentDate.getMonth();

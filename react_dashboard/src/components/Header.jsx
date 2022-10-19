@@ -2,7 +2,7 @@ import React from 'react'
 
 const header = ({ category, title }) => {
     return (
-        <div className='mb-10'>
+        <div className='mb-10 gap-2'>
             <p className='text-gray-400 '>
                 {category}
             </p>

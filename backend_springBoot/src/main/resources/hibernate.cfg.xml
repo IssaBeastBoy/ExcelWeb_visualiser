@@ -15,11 +15,11 @@
         </property>
 
         <property name = "dialect">
-            com.backend.backend.SQLiteDialect
+            com.backend.backend.DB.SQLiteDialect
         </property>
 
         <!-- List of XML mapping files -->
-        <mapping class = "com.backend.backend.userInformationEntity"/>
+        <mapping class = "com.backend.backend.user.userInformationEntity"/>
 
     </session-factory>
 </hibernate-configuration>
