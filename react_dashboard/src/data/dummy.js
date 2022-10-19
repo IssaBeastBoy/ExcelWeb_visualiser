@@ -640,12 +640,12 @@ export const links = [
         icon: <BsClipboardData />,
       },
       {
-        name: 'Table',
+        name: 'TableView',
         icon: <BsTable />,
       },
 
       {
-        name: 'PivatTable',
+        name: 'PivotTable',
         icon: <MdPivotTableChart />,
       }
     ],

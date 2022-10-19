@@ -1,7 +1,5 @@
 package com.backend.backend.apps;
 
-import com.backend.backend.userInformationEntity;
-
 import java.util.Date;
 
 public class calendar {

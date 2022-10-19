@@ -75,7 +75,7 @@ const App = () => {
 
                                             {/* Charts */}
                                             <Route path='/ViewData' element={<ViewData />} />
-                                            <Route path='/Table' element={<Table />} />
+                                            <Route path='/TableView' element={<Table />} />
                                             <Route path='/PivotTable' element={<PivotTable />} />
                                         </Routes>
                                     </div>

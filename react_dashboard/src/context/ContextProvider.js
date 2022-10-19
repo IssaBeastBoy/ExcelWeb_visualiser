@@ -75,7 +75,7 @@ export const ContextProvider = ({ children }) => {
 
     const [details, setState] = useState([])
 
-    const [login, setStatus] = useState(true);
+    const [login, setStatus] = useState(false);
 
     const [activeMenu, setActiveMenu] = useState
         (true);
