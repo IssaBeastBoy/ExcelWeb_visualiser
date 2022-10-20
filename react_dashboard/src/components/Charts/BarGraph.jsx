@@ -12,6 +12,7 @@ const BarGraph = () => {
     const [data, ChartData] = useState([]);
     const [show, setShow] = useState(false);
     const [primaryXAxis, setPrimary] = useState({});
+    const [primaryYAxis, setPrimaryY] = useState({});
 
     if (renderBar) {
         const formData = new FormData();
@@ -19,7 +20,7 @@ const BarGraph = () => {
         formData.append("min", range[0]);
         formData.append("max", range[1]);
         const API_URL = "http://localhost:8080/BarGraphView";
-        const response = axios.post(API_URL, formData).then(res => {
+        const response = axios.post(API_URL, formData).then(async (res) => {
             res = res.data;
             const results = [];
             for (let parse = 0; parse < res.length; parse++) {
@@ -34,21 +35,27 @@ const BarGraph = () => {
             const barPrimaryXAxis = {
                 valueType: 'Category',
                 majorGridLines: { width: 0 },
+                title: selectedCol,
+            };
+            const barPrimaryYAxis = {
+                title: 'Percentage (%)',
             };
             setPrimary(barPrimaryXAxis);
+            setPrimaryY(barPrimaryYAxis);
             setRenderBar(false);
         })
     }
     return (
 
-        <div className="bg-white dark:bg-secondary-dark-bg rounded-3xl">
+        <div className="bg-white dark:bg-secondary-dark-bg rounded-3xl ">
             {
-                show ? (<div className='py-3 px-2' >
+                show ? (<div className='py-3 px-2 space-y-3' >
                     <p className='italic text-xs font-semibold'> Bar Graph View</p>
-                    <ChartComponent id='charts' primaryXAxis={primaryXAxis}
+                    <ChartComponent id='charts' primaryXAxis={primaryXAxis} primaryYAxis={primaryYAxis} 
                         chartArea={{ border: { width: 0 } }}
                         tooltip={{ enable: true }}
-                        width='auto'>
+                        width='auto'
+                        height='auto'>
                         <Inject services={[ColumnSeries, Legend, Tooltip, BarSeries, Category]} />
                         <SeriesCollectionDirective>
                             <SeriesDirective dataSource={data} xName='x' yName='y' type='Bar' />

@@ -23,7 +23,7 @@ const Table = () => {
         const formData = new FormData();
         formData.append("colName", selectedCol);
         const API_URL = "http://localhost:8080/TableView";
-        const response = axios.post(API_URL, formData).then(res => {
+        const response = axios.post(API_URL, formData).then(async (res) => {
             res = res.data;
             const results = [];
             for (let parse = 0; parse < res.length; parse++) {
@@ -45,7 +45,9 @@ const Table = () => {
         <div className="bg-white dark:bg-secondary-dark-bg rounded-3xl">
             {
                 show ? (<div className='py-3 px-2'>
-                    <p className='italic text-xs font-semibold'> Table View</p>
+                    <p className='italic text-xs font-semibold'> Table View</p> 
+                    <p className='italic text-xs '>The table below shows the amount belonging to the given name and the percentage of that amount account for:</p>
+                    <br />
                     <GridComponent
                         dataSource={data}
                         allowPaging

@@ -12,6 +12,7 @@ const PieChart = () => {
     const { selectedCol, setRenderPie, renderPie, range } = useStateContext();
     const [data, ChartData] = useState([]);
     const [show, setShow] = useState(false);
+    const [title, setTitle] = useState(selectedCol + " vs Percentage (%)");
 
     if (renderPie) {
         const formData = new FormData();
@@ -19,7 +20,7 @@ const PieChart = () => {
         formData.append("min", range[0]);
         formData.append("max", range[1]);
         const API_URL = "http://localhost:8080/PieChartView";
-        const response = axios.post(API_URL, formData).then(res => {
+        const response = axios.post(API_URL, formData).then(async (res) => {
             res = res.data;
             const results = [];
             for (let parse = 0; parse < res.length; parse++) {
@@ -33,6 +34,8 @@ const PieChart = () => {
             ChartData(results);
             setRenderPie(false);
             setShow(true);
+            let name = selectedCol + " vs Percentage (%)";
+            setTitle(name);
         })
     }
 
@@ -46,6 +49,7 @@ const PieChart = () => {
                         id='chart-pie'
                         legendSettings={{ visible: 'legendVisiblity', background: 'white' }}
                         tooltip={{ enable: true }}
+                        title={title}
                     >
                         <Inject services={[AccumulationLegend, PieSeries, AccumulationDataLabel, AccumulationTooltip]} />
                         <AccumulationSeriesCollectionDirective>
