@@ -347,6 +347,8 @@ public class Controller {
         }
     }
 
+
+
     @PostMapping("/Table")
     public plotDetails table (@ModelAttribute plotRequestBody details){
         if(!this.ingestSheet.getExcel_loc().equals(details.getExcelLoc()) ) {

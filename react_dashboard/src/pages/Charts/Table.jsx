@@ -52,7 +52,7 @@ const Table = () => {
         formData.append("excelLoc", details.fileStorageDir + selectedExcel);
         const API_URL = "http://localhost:8080/Table";
         var storeResponse = {};
-        const response = axios.post(API_URL, formData).then(res => {
+        const response = axios.post(API_URL, formData).then(async (res) => {
             if (res.data.err) {
                 alert(res.data.errMessage)
             }
@@ -103,7 +103,7 @@ const Table = () => {
         formData.append("excelLoc", details.fileStorageDir + selectedExcel);
         const API_URL = "http://localhost:8080/Table";
         var storeResponse = {};
-        const response = axios.post(API_URL, formData).then(res => {
+        const response = axios.post(API_URL, formData).then(async (res) => {
             if (res.data.err) {
                 alert(res.data.errMessage)
             }
@@ -146,7 +146,7 @@ const Table = () => {
             const formData = new FormData();
             formData.append("fileLoc", details.fileStorageDir + selectedExcel);
             const API_URL = "http://localhost:8080/getColumnName";
-            const response = axios.post(API_URL, formData).then(res => {
+            const response = axios.post(API_URL, formData).then(async (res) => {
                 if (res.data.err) {
                     alert(res.data.errMessage);
                 }
