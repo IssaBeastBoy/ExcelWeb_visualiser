@@ -448,9 +448,9 @@ public class Controller {
     @PostMapping("/Excel_sheet")
     public List<String> inputSheet (@RequestParam("sheetLoc") String sheetLoc){
         if(!this.ingestSheet.getExcel_loc().equals(sheetLoc) ) {
-            ingestSheet ingest = new ingestSheet("", "");
-            ingest.setExcel_loc(sheetLoc);
-            ingest.parseSheet();
+            this.ingestSheet = new ingestSheet("", "");
+            ingestSheet.setExcel_loc(sheetLoc);
+            ingestSheet.parseSheet();
         }
 
         List<String> excludeTotal = new ArrayList<>();
