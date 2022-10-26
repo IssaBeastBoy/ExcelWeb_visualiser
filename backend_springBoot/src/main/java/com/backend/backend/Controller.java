@@ -348,6 +348,25 @@ public class Controller {
     }
 
 
+    @PostMapping("/pivotTable")
+    public pivotDetails pivotTable (@ModelAttribute pivotTableRequest details){
+        if(!this.ingestSheet.getExcel_loc().equals(details.getExcelLoc()) ) {
+            this.ingestSheet = new ingestSheet("", "");
+            ingestSheet.setExcel_loc(details.getExcelLoc());
+            ingestSheet.parseSheet();
+        }
+
+        int verticalIndex = ingestSheet.getCustomerDetails().indexOf(details.getVerticalSelect());
+        int horizontalIndex = ingestSheet.getCustomerDetails().indexOf(details.getHorizontalSelect());
+
+        pivotTableGen generatePivotTable = new pivotTableGen(verticalIndex, details.getVerticalSelect(),
+                horizontalIndex, details.getHorizontalSelect(), ingestSheet.getCustomerInfo());
+
+        pivotDetails pivotDetails = new pivotDetails(generatePivotTable.getPivotTableValues(), ingestSheet.isThrowErr(), ingestSheet.getErr_Message(),
+                generatePivotTable.getPivotTableBody());
+
+        return pivotDetails;
+    }
 
     @PostMapping("/Table")
     public plotDetails table (@ModelAttribute plotRequestBody details){

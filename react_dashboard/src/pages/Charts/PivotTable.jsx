@@ -4,6 +4,7 @@ import { useStateContext } from '../../context/ContextProvider';
 import { Header } from '../../components';
 import axios from "axios";
 import { HiOutlineVariable } from "react-icons/hi";
+import { FcProcess } from "react-icons/fc";
 
 const PivotTable = () => {
     const { details } = useStateContext();
@@ -13,9 +14,12 @@ const PivotTable = () => {
     const [fileInfo, getFiles] = useState([]);
     const [selectedExcel, setSelected] = useState("");
     const [varDropDown, setVdropDown] = useState(false);
+    const [tableView, showTable] = useState(false);
+    const [pivotTable, setPivotTable] = useState();
+    const [tableBody, setBody] = useState();
 
     const [viewDetail, setDetails] = useState({
-        filterOneSelect: "", filterTwoSelect: "",
+        verticalSelect: "", horizontalSelect: "",
 
     })
 
@@ -32,6 +36,28 @@ const PivotTable = () => {
         setStartUp(false);
     }
 
+    const plotChart = async () => {
+        const formData = new FormData();
+        formData.append("verticalSelect", viewDetail.verticalSelect);
+        formData.append("horizontalSelect", viewDetail.horizontalSelect);
+        formData.append("excelLoc", details.fileStorageDir + selectedExcel);
+        const API_URL = "http://localhost:8080/pivotTable";
+        const response = axios.post(API_URL, formData).then(async (res) => {
+            console.log(res.data);
+            if (res.data.err) {
+                alert(res.data.errMessage);
+                setVdropDown(true);
+                showTable(false);
+            }
+            else {
+                setPivotTable(res.data.values);
+                setBody(res.data.pivotTable);
+                setVdropDown(false);
+                showTable(true);
+            }
+        })
+    }
+
     const getColNames = async () => {
         if (selectedExcel == "") {
             alert("Please select excel file first.");
@@ -44,10 +70,12 @@ const PivotTable = () => {
                 if (res.data.err) {
                     alert(res.data.errMessage);
                     setVdropDown(false);
+                    showTable(false);
                 }
                 else {
                     setColumns(res.data.columnNames);
                     setVdropDown(true);
+                    showTable(false);
                 }
             })
         }
@@ -100,11 +128,11 @@ const PivotTable = () => {
                                 columnNames.map((item) => (
                                     <tr>
                                         <td>
-                                            <input type="radio" name="filterOneSelect" onClick={() => setDetails({ ...viewDetail, filterOneSelect: item })} value={item} />
+                                            <input type="radio" name="verticalSelect" onClick={() => setDetails({ ...viewDetail, verticalSelect: item })} value={item} />
                                             <label> {item}</label>
                                         </td>
                                         <td>
-                                            <input type="radio" name="filterTwoSelect" onClick={() => setDetails({ ...viewDetail, filterTwoSelect: item })} value={item} />
+                                            <input type="radio" name="horizontalSelect" onClick={() => setDetails({ ...viewDetail, horizontalSelect: item })} value={item} />
                                             <label> {item}</label>
                                         </td>
                                     </tr>
@@ -114,10 +142,44 @@ const PivotTable = () => {
                             }
 
                         </table>
-
+                        <button className='bg-red-200 rounded text-xs p-1 hover:bg-red-400 hover:text-sm' onClick={() => setVdropDown(false)}> Close variables </button>
+                        <br /> <br />
+                        <button className='bg-green-300 rounded text-sm p-1 hover:bg-green-500 hover:text-base flex gap-1' onClick={plotChart}><FcProcess />Plot</button>
                     </div>
                 ) : (<div />)
             }
+            {
+                tableView ? (
+                    <div>
+                        <table border="1">
+                            <tr>
+                                {
+                                    pivotTable.Header.map((item) => (
+                                        <td>
+                                            {item}
+                                        </td>
+                                    )
+                                    )
+                                }
+                            </tr>
+                            {
+                                tableBody.Body.map((items) => (
+                                    < tr >
+                                        {
+                                            items.map((item) => (
+                                                <td> {item}</td>
+                                            )
+                                            )
+                                        }
+                                    </tr>
+                                )
+                                )
+                            }
+                        </table>
+                    </div>
+                ) : (<div />)
+            }
+
         </div>
     )
 }
