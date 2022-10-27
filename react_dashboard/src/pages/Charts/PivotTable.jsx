@@ -1,10 +1,13 @@
 import React, { useState } from 'react';
 import { useStateContext } from '../../context/ContextProvider';
+import { ChartComponent, SeriesCollectionDirective, SeriesDirective, Inject, LineSeries, Legend, Category, Tooltip, Highlight } from '@syncfusion/ej2-react-charts';
 
 import { Header } from '../../components';
+import { lineCustomSeries, LinePrimaryXAxis, LinePrimaryYAxis } from '../../data/dummy';
 import axios from "axios";
 import { HiOutlineVariable } from "react-icons/hi";
 import { FcProcess } from "react-icons/fc";
+import { itemMove } from '@syncfusion/ej2/treemap';
 
 const PivotTable = () => {
     const { details } = useStateContext();
@@ -22,6 +25,50 @@ const PivotTable = () => {
         verticalSelect: "", horizontalSelect: "",
 
     })
+
+    const plotLine = (event) => {
+        showLineChart(false);
+        let xVariable = event.target.id;
+        let counter = 0;
+        if (event.target.checked) {
+            let xAxis = pivotTable[xVariable];
+            let dataSource = [];
+            let tempVariablesDictionary = {
+                dataSource: [],
+                xName: 'x',
+                yName: 'y',
+                name: xVariable,
+                width: '2',
+                marker: { visible: true, width: 10, height: 10 },
+                type: 'Line'
+
+            }
+            for (let parse = 0; parse < xAxis.length; parse++) {
+                let tempDictionary = {};
+                tempDictionary['x'] = pivotTable.colNames[parse];
+                tempDictionary['y'] = Number(xAxis[parse]);
+                dataSource.push(tempDictionary);
+            }
+            tempVariablesDictionary.dataSource = dataSource;
+            chartSeries.push(tempVariablesDictionary);
+            setSeries(chartSeries);
+        }
+        else {
+            let newSeries = [];
+            for (let parse = 0; parse < chartSeries.length; parse++) {
+                if (chartSeries[parse].name != xVariable) {
+                    newSeries.push(chartSeries[parse]);
+                }
+            }
+            setSeries(newSeries);
+        }
+        showLineChart(true);
+        console.log(chartSeries);
+    }
+
+    const [lineChart, showLineChart] = useState(false);
+    const [chartSeries, setSeries] = useState([]);
+
 
     if (startView) {
         const formData = new FormData();
@@ -43,7 +90,6 @@ const PivotTable = () => {
         formData.append("excelLoc", details.fileStorageDir + selectedExcel);
         const API_URL = "http://localhost:8080/pivotTable";
         const response = axios.post(API_URL, formData).then(async (res) => {
-            console.log(res.data);
             if (res.data.err) {
                 alert(res.data.errMessage);
                 setVdropDown(true);
@@ -151,8 +197,8 @@ const PivotTable = () => {
             {
                 tableView ? (
                     <div>
-                        <table border="1">
-                            <tr>
+                        <table className='border-2 text-sm'>
+                            <tr className="border-b md-1 bg-cyan-400 text-black">
                                 {
                                     pivotTable.Header.map((item) => (
                                         <td>
@@ -164,7 +210,7 @@ const PivotTable = () => {
                             </tr>
                             {
                                 tableBody.Body.map((items) => (
-                                    < tr >
+                                    < tr className="border-b md-1 p-2">
                                         {
                                             items.map((item) => (
                                                 <td> {item}</td>
@@ -175,7 +221,41 @@ const PivotTable = () => {
                                 )
                                 )
                             }
-                        </table>
+                        </table> <br />
+                        <label className='font-semibold'>
+                            Select which row to plot the line graph:
+                        </label> <br />
+                        {
+                            pivotTable.rowNames.map((item) => (
+                                <div className='inline text-sm gap-2 space-x-2'>
+                                    <span className='p-2'>
+                                        <input type="checkbox" onClick={plotLine} name={item} id={item} />
+                                        <label> {item}</label>
+                                    </span>
+                                </div>
+                            )
+                            )
+                        }
+                        {
+                            lineChart ? (
+                                <ChartComponent
+                                    primaryXAxis={{
+                                        valueType: 'Category', edgeLabelPlacement: 'Shift', majorGridLines: { width: 0 },
+                                    }}
+                                    primaryYAxis={{
+                                        title: 'Amount of Customers'
+                                    }}
+                                    title={pivotTable.Header[0]}>
+                                    <Inject services={[LineSeries, Category, Legend, Tooltip, Highlight]} />
+                                    <SeriesCollectionDirective>
+                                        {
+                                            chartSeries.map((item, index) => (
+                                                <SeriesDirective key={index} {...item} />
+                                            ))
+                                        }
+                                    </SeriesCollectionDirective>
+                                </ChartComponent>) : (<div />)
+                        }
                     </div>
                 ) : (<div />)
             }
