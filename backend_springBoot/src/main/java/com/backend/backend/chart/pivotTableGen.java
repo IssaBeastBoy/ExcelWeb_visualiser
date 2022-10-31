@@ -13,12 +13,13 @@ public class pivotTableGen {
     private List<String> columnNames;
     private List<String> rowNames;
     private int totalCustomers;
+    private String displayType;
     private Dictionary<String, List<List<String>>> pivotTableBody;
     private Dictionary<Integer, List<String>> customerInfo;
     private Dictionary<String, Integer> verticalValuesIndex;
 
     public pivotTableGen(int verticalIndex, String verticalValues, int horizontalIndex, String horizontalValues,
-                         Dictionary<Integer, List<String>> customerInfo) {
+                         Dictionary<Integer, List<String>> customerInfo, int totalCustomers, String displayType) {
         this.verticalIndex = verticalIndex;
         this.horizontalIndex = horizontalIndex;
         this.customerInfo = customerInfo;
@@ -31,6 +32,8 @@ public class pivotTableGen {
         this.rowNames = new ArrayList<>();
         this.verticalValuesIndex = new Hashtable<>();
         this.pivotTableBody = new Hashtable<>();
+        this.totalCustomers = totalCustomers;
+        this.displayType = displayType;
     }
 
     private void setPivotValue(){
@@ -91,7 +94,13 @@ public class pivotTableGen {
             List<String> rowValues = new ArrayList<>();
             rowValues.add(rowNames.get(parseHorizontal));
             for(int parseVertical = 0; parseVertical < columnNames.size(); parseVertical++){
-                rowValues.add(String.valueOf(pivotValue.get(rowNames.get(parseHorizontal)+"^"+columnNames.get(parseVertical))));
+                if(displayType.equals("number"))
+                    rowValues.add(String.valueOf(pivotValue.get(rowNames.get(parseHorizontal)+"^"+columnNames.get(parseVertical))));
+                else{
+                    double currCount = (double) (pivotValue.get(rowNames.get(parseHorizontal)+"^"+columnNames.get(parseVertical)))*100/totalCustomers;
+
+                    rowValues.add(String.valueOf(String.format("%.5f", currCount)));
+                }
             }
             bodyItems.add(rowValues);
         }

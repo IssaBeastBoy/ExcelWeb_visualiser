@@ -360,10 +360,11 @@ public class Controller {
         int horizontalIndex = ingestSheet.getCustomerDetails().indexOf(details.getHorizontalSelect());
 
         pivotTableGen generatePivotTable = new pivotTableGen(verticalIndex, details.getVerticalSelect(),
-                horizontalIndex, details.getHorizontalSelect(), ingestSheet.getCustomerInfo());
+                horizontalIndex, details.getHorizontalSelect(), ingestSheet.getCustomerInfo(), ingestSheet.getTotalCustomerCount(),
+                details.getDisplayType());
 
         pivotDetails pivotDetails = new pivotDetails(generatePivotTable.getPivotTableValues(), ingestSheet.isThrowErr(), ingestSheet.getErr_Message(),
-                generatePivotTable.getPivotTableBody());
+                generatePivotTable.getPivotTableBody(), ingestSheet.getTotalCustomerCount());
 
         return pivotDetails;
     }

@@ -48,6 +48,10 @@ public class ingestSheet {
         return throwErr;
     }
 
+    public int getTotalCustomerCount() {
+        return totalCustomerCount;
+    }
+
     private void setThrowErr(boolean throwErr) {
         this.throwErr = throwErr;
     }

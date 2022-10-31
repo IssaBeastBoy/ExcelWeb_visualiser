@@ -8,13 +8,16 @@ public class pivotDetails {
 
     private Boolean err;
     private String errMessage;
+    private int totalCustonerCount;
+
 
     public pivotDetails(Dictionary<String, List<String>> values, boolean err, String errMessage,
-                        Dictionary<String, List<List<String>>> pivotTable){
+                        Dictionary<String, List<List<String>>> pivotTable, int totalCustomerCount){
         this.values = values;
         this.err = err;
         this.errMessage = errMessage;
         this.pivotTable = pivotTable;
+        this.totalCustonerCount = totalCustomerCount;
     }
 
     public Dictionary<String, List<String>> getValues() {
@@ -39,5 +42,13 @@ public class pivotDetails {
 
     public void setErrMessage(String errMessage) {
         this.errMessage = errMessage;
+    }
+
+    public int getTotalCustonerCount() {
+        return totalCustonerCount;
+    }
+
+    public void setTotalCustonerCount(int totalCustonerCount) {
+        this.totalCustonerCount = totalCustonerCount;
     }
 }

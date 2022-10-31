@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect, forceUpdate } from 'react';
 import { useStateContext } from '../../context/ContextProvider';
 import { ChartComponent, SeriesCollectionDirective, SeriesDirective, Inject, LineSeries, Legend, Category, Tooltip, Highlight } from '@syncfusion/ej2-react-charts';
 
@@ -10,7 +10,7 @@ import { FcProcess } from "react-icons/fc";
 import { itemMove } from '@syncfusion/ej2/treemap';
 
 const PivotTable = () => {
-    const { details } = useStateContext();
+    const { details, lineChart, showLineChart } = useStateContext();
 
     const [startView, setStartUp] = useState(true);
     const [columnNames, setColumns] = useState([]);
@@ -22,15 +22,24 @@ const PivotTable = () => {
     const [tableBody, setBody] = useState();
 
     const [viewDetail, setDetails] = useState({
-        verticalSelect: "", horizontalSelect: "",
+        verticalSelect: "", horizontalSelect: "", totalCustomerCount: 0,
 
     })
 
-    const plotLine = (event) => {
-        showLineChart(false);
+
+    const [chartSeries, setSeries] = useState([]);
+
+
+    const plotLine = async (event) => {
         let xVariable = event.target.id;
-        let counter = 0;
-        if (event.target.checked) {
+        // showLineChart(lineChart => !lineChart);
+        if (lineChart) {
+            showLineChart(false);
+        }
+        else {
+            showLineChart(false);
+        }
+        if (event.target.checked) {     
             let xAxis = pivotTable[xVariable];
             let dataSource = [];
             let tempVariablesDictionary = {
@@ -52,22 +61,26 @@ const PivotTable = () => {
             tempVariablesDictionary.dataSource = dataSource;
             chartSeries.push(tempVariablesDictionary);
             setSeries(chartSeries);
+            //console.log(lineChart);
         }
-        else {
+        else {    
             let newSeries = [];
             for (let parse = 0; parse < chartSeries.length; parse++) {
                 if (chartSeries[parse].name != xVariable) {
                     newSeries.push(chartSeries[parse]);
                 }
             }
-            setSeries(newSeries);
+            setSeries(newSeries); 
         }
-        showLineChart(true);
-        console.log(chartSeries);
-    }
-
-    const [lineChart, showLineChart] = useState(false);
-    const [chartSeries, setSeries] = useState([]);
+        if (lineChart) {
+            //DO NOTHING
+            showLineChart(true);
+        }
+        else {
+            showLineChart(true);
+        }
+        // showLineChart(() => true);
+    }  
 
 
     if (startView) {
@@ -83,11 +96,12 @@ const PivotTable = () => {
         setStartUp(false);
     }
 
-    const plotChart = async () => {
+    const plotChart = async (event) => {
         const formData = new FormData();
         formData.append("verticalSelect", viewDetail.verticalSelect);
         formData.append("horizontalSelect", viewDetail.horizontalSelect);
         formData.append("excelLoc", details.fileStorageDir + selectedExcel);
+        formData.append("displayType", event.target.value)
         const API_URL = "http://localhost:8080/pivotTable";
         const response = axios.post(API_URL, formData).then(async (res) => {
             if (res.data.err) {
@@ -98,6 +112,7 @@ const PivotTable = () => {
             else {
                 setPivotTable(res.data.values);
                 setBody(res.data.pivotTable);
+                viewDetail.totalCustomerCount = res.data.totalCustonerCount;
                 setVdropDown(false);
                 showTable(true);
             }
@@ -190,14 +205,22 @@ const PivotTable = () => {
                         </table>
                         <button className='bg-red-200 rounded text-xs p-1 hover:bg-red-400 hover:text-sm' onClick={() => setVdropDown(false)}> Close variables </button>
                         <br /> <br />
-                        <button className='bg-green-300 rounded text-sm p-1 hover:bg-green-500 hover:text-base flex gap-1' onClick={plotChart}><FcProcess />Plot</button>
+                        <button className='bg-green-300 rounded text-sm p-1 hover:bg-green-500 hover:text-base flex gap-1' value="number" onClick={plotChart}><FcProcess />Plot</button>
                     </div>
                 ) : (<div />)
             }
             {
                 tableView ? (
                     <div>
-                        <table className='border-2 text-sm'>
+                        <div className='text-sm'>
+                            <span>
+                                <input type="radio" name="type" value="number" onClick={plotChart} /> <label>by customer sum</label>
+                            </span>
+                            <span className='p-2'>
+                                <input type="radio" name="type" value="percent" onClick={plotChart} /> <label>by customer percent</label>
+                            </span>
+                        </div>
+                        <table className='border-2 text-sm items-center'>
                             <tr className="border-b md-1 bg-cyan-400 text-black">
                                 {
                                     pivotTable.Header.map((item) => (
@@ -240,12 +263,13 @@ const PivotTable = () => {
                             lineChart ? (
                                 <ChartComponent
                                     primaryXAxis={{
-                                        valueType: 'Category', edgeLabelPlacement: 'Shift', majorGridLines: { width: 0 },
+                                        valueType: 'Category', edgeLabelPlacement: 'Shift', majorGridLines: { width: 0 }, title: viewDetail.verticalSelect,
                                     }}
                                     primaryYAxis={{
                                         title: 'Amount of Customers'
                                     }}
-                                    title={pivotTable.Header[0]}>
+                                    title={pivotTable.Header[0]}
+                                    tooltip={{ enable: true }}>
                                     <Inject services={[LineSeries, Category, Legend, Tooltip, Highlight]} />
                                     <SeriesCollectionDirective>
                                         {

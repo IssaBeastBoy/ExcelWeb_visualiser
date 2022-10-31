@@ -4,6 +4,15 @@ public class pivotTableRequest {
     private String excelLoc;
     private String verticalSelect;
     private String horizontalSelect;
+    private String displayType;
+
+    public String getDisplayType() {
+        return displayType;
+    }
+
+    public void setDisplayType(String displayType) {
+        this.displayType = displayType;
+    }
 
     public String getExcelLoc() {
         return excelLoc;
