@@ -35,7 +35,7 @@ const ViewData = () => {
         formData.append("fileLoc", details.fileStorageDir);
         const API_URL = "http://localhost:8080/Getuploads";
         var storeAttributes = [];
-        const response = axios.post(API_URL, formData).then(res => {
+        const response = axios.post(API_URL, formData).then(async (res) => {
             for (let index = 0; index < res.data.filesName.length; index++) {
                 let tempAttributes = res.data.filesName[index].split("-");
                 var filesAtributes = {};
@@ -57,7 +57,7 @@ const ViewData = () => {
         const formData = new FormData();
         formData.append("sheetLoc", details.fileStorageDir + fileName);
         const API_URL = "http://localhost:8080/Excel_sheet";
-        const response = axios.post(API_URL, formData).then(res => {
+        const response = axios.post(API_URL, formData).then(async (res) => {
             setColNames(res.data);            
             setRender(false);
             reSetSize(false);

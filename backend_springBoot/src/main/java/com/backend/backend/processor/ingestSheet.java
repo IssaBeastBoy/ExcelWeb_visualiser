@@ -24,7 +24,7 @@ public class ingestSheet {
 
     public ingestSheet( String filterOne, String filterTwo) {
         this.filterOne = filterOne;
-        this.filterTwo = filterOne;
+        this.filterTwo = filterTwo;
         isColsValues = new Hashtable<>();
         totalCustomerCount = 0;
         colItemsCustomerCount = new Hashtable<>();
@@ -46,6 +46,10 @@ public class ingestSheet {
 
     public boolean isThrowErr() {
         return throwErr;
+    }
+
+    public int getTotalCustomerCount() {
+        return totalCustomerCount;
     }
 
     private void setThrowErr(boolean throwErr) {

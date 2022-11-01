@@ -73,7 +73,9 @@ export const ContextProvider = ({ children }) => {
 
     const [selectedCol, setSelectCol] = useState("");
 
-    const [details, setState] = useState([])
+    const [details, setState] = useState([]);
+
+    const [lineChart, showLineChart] = useState(false);
 
     const [login, setStatus] = useState(false);
 
@@ -111,7 +113,7 @@ export const ContextProvider = ({ children }) => {
     return (
         <StateContext.Provider
             value={{
-                notes, setNotes, ticketInfo, changeTicket, deleteTick, showDelete, editTick, showEdit, Board, setBoard, renderCalender, setCalender, renderData, setRender, size, reSetSize, range, setRange, renderTable, setRenderTable, renderPie, setRenderPie, renderBar, setRenderBar, selectedCol, setSelectCol, details, setState, login, setStatus, activeMenu, handleUpload, Upload, setActiveMenu, isClicked, setIsClicked, handleClick, screenSize,
+                lineChart, showLineChart, notes, setNotes, ticketInfo, changeTicket, deleteTick, showDelete, editTick, showEdit, Board, setBoard, renderCalender, setCalender, renderData, setRender, size, reSetSize, range, setRange, renderTable, setRenderTable, renderPie, setRenderPie, renderBar, setRenderBar, selectedCol, setSelectCol, details, setState, login, setStatus, activeMenu, handleUpload, Upload, setActiveMenu, isClicked, setIsClicked, handleClick, screenSize,
                 setScreenSize, currentSilde, setCurrentSlide, nextSlide, preSlide, nextVideo, currentVideo
             }
             }>
