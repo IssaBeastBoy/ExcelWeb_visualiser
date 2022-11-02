@@ -13,6 +13,7 @@ import com.backend.backend.uploads.uploadFilesResponse;
 import com.backend.backend.user.newUserBody;
 import com.backend.backend.user.newUserResponse;
 import com.backend.backend.user.userInformationEntity;
+import com.backend.backend.user.userProfile;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.UrlResource;
 import org.springframework.http.HttpStatus;
@@ -55,10 +56,42 @@ public class Controller {
         }
     }
 
+    @PostMapping("/getProfile")
+    public userProfile getProfilePicture(@RequestParam("fileLoc") String directory){
+        File dir = new File(directory);
+        String[] dirContent = dir.list();
+        String errMessage = "Error with loading profile picture. \n Default picture set.";
+        String[] parseDir = directory.split("\\\\");
+        String imgName = "";
+        File curr = new File(directory);
+        Boolean err = false;
+        String imgLoc = "";
+        Boolean addDir = false;
+        if(curr.exists()){
+            for (int parse=0; parse<parseDir.length && dirContent.length == 1; parse++)
+            {
+                imgName = dirContent[0].split("\\.")[0];
+                err = true;
+                if(addDir){
+                    imgLoc += parseDir[parse]+"/";
+                }
+                else if(parseDir[parse].equals("data")){
+                    //imgLoc += "../"+parseDir[parse]+"/";
+                    addDir =  true;
+                }
+            }
+            imgLoc+=imgName;
+        }
+
+        userProfile userProfile = new userProfile(err, errMessage, imgLoc);
+        return userProfile;
+    }
+
 //    @PostMapping("/updateNotes") still to be implemented
 //    public userInformationEntity updateNotes(){
 //
 //    }
+
 
     @PostMapping("/updateTickets")
     public userInformationEntity updateTickets(@ModelAttribute tickets user){

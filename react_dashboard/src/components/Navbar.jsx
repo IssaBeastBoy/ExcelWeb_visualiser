@@ -1,12 +1,13 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { AiOutlineMenu } from 'react-icons/ai';
 import { BsChatLeft } from 'react-icons/bs';
 import { RiNotification3Line } from 'react-icons/ri';
 import { MdKeyboardArrowDown } from 'react-icons/md';
 import { TooltipComponent } from '@syncfusion/ej2-react-popups';
+import axios from "axios";
 
 
-import avatar from '../data/default_IMG.png';
+// import avatar from '../data/default_IMG.png';
 import { Chat, Notification, UserProfile } from '.';
 import { useStateContext } from '../context/ContextProvider';
 
@@ -28,7 +29,7 @@ const NavButton = ({ title, customFunc, icon, color, dotColor }) => (
 );
 
 const Navbar = () => {
-    const { activeMenu, setActiveMenu, details, isClicked, setIsClicked, handleClick, setScreenSize, screenSize } = useStateContext();
+    const { activeMenu, setActiveMenu, details, isClicked, setIsClicked, handleClick, setScreenSize, screenSize, userProfile, setProfile } = useStateContext();
     useEffect(() => {
         const handleResize = () => setScreenSize(() => window.innerWidth);
 
@@ -46,6 +47,28 @@ const Navbar = () => {
             setActiveMenu(true);
         }
     }, [screenSize]);
+
+    const [setter, Set] = useState(true);
+    const [proPic, setImg] = useState(require("../data/default_IMG.png"));
+
+    if (setter) {
+        console.log(userProfile);
+        const formData = new FormData();
+        formData.append("fileLoc", details.img);
+        const API_URL = "http://localhost:8080/getProfile";
+        const response = axios.post(API_URL, formData).then(async (res) => {
+            console.log(res.data);
+            setProfile(res.data);
+            if (res.data.err) {
+                setImg(require(`../data/${res.data.imgLoc}.png`));
+            }
+            else {
+                alert(res.data.errMessage);
+            }
+
+        });
+        Set(false);
+    }
 
     return (
         <div className='flex justify-between p-2 md:mx-6 relative'>
@@ -66,7 +89,7 @@ const Navbar = () => {
                 <NavButton title="Notification" dotColor="rgb(254, 201, 15)" customFunc={() => handleClick('Notifications')} color='blue' icon={<RiNotification3Line />} />
                 <TooltipComponent content="Profile" position="BottomCenter">
                     <div className='flex item-center gap-2 cursor-pointer p-1 hover:bg-light-gray rounded-lg' onClick={() => handleClick("userProfile")}>
-                        <img src={avatar} className="rounded-full w-8 h-8" />
+                        <img src={proPic} alt={"Profile Picture"} className="rounded-full w-8 h-8" />
                         <p>
                             <span className='text-gray-400 text-14'> Hi, {details.name} </span>
                             <span className='text-gray-400 font-bold ml-1 text-14'>Welcome to FNB Leads!</span>
