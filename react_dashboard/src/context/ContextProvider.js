@@ -84,7 +84,7 @@ export const ContextProvider = ({ children }) => {
         (true);
     const [isClicked, setIsClicked] = useState(initialState)
     const handleClick = (clicked) => {
-        setIsClicked({ ...initialState, [clicked]: true })
+        setIsClicked({ ...initialState, [clicked]: initialState[clicked] = !(initialState[clicked]) })
     }
     const [screenSize, setScreenSize] = useState(undefined);
 
@@ -114,7 +114,7 @@ export const ContextProvider = ({ children }) => {
     return (
         <StateContext.Provider
             value={{
-                userProfile, setProfile, lineChart, showLineChart, notes, setNotes, ticketInfo, changeTicket, deleteTick, showDelete, editTick, showEdit, Board, setBoard, renderCalender, setCalender, renderData, setRender, size, reSetSize, range, setRange, renderTable, setRenderTable, renderPie, setRenderPie, renderBar, setRenderBar, selectedCol, setSelectCol, details, setState, login, setStatus, activeMenu, handleUpload, Upload, setActiveMenu, isClicked, setIsClicked, handleClick, screenSize,
+                initialState, userProfile, setProfile, lineChart, showLineChart, notes, setNotes, ticketInfo, changeTicket, deleteTick, showDelete, editTick, showEdit, Board, setBoard, renderCalender, setCalender, renderData, setRender, size, reSetSize, range, setRange, renderTable, setRenderTable, renderPie, setRenderPie, renderBar, setRenderBar, selectedCol, setSelectCol, details, setState, login, setStatus, activeMenu, handleUpload, Upload, setActiveMenu, isClicked, setIsClicked, handleClick, screenSize,
                 setScreenSize, currentSilde, setCurrentSlide, nextSlide, preSlide, nextVideo, currentVideo
             }
             }>

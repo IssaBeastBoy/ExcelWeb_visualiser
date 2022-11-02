@@ -5,15 +5,13 @@ import com.backend.backend.apps.calendar;
 import com.backend.backend.apps.tickets;
 import com.backend.backend.chart.*;
 import com.backend.backend.processor.ingestSheet;
-import com.backend.backend.processor.isUnique;
 import com.backend.backend.processor.plotItems;
 import com.backend.backend.uploads.FileResponse;
 import com.backend.backend.uploads.FileStorageService;
 import com.backend.backend.uploads.uploadFilesResponse;
-import com.backend.backend.user.newUserBody;
-import com.backend.backend.user.newUserResponse;
-import com.backend.backend.user.userInformationEntity;
-import com.backend.backend.user.userProfile;
+import com.backend.backend.user.*;
+import com.google.gson.Gson;
+import org.apache.tomcat.util.json.ParseException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.UrlResource;
 import org.springframework.http.HttpStatus;
@@ -49,7 +47,10 @@ public class Controller {
         userInfoTransactions userInfo = new userInfoTransactions();
         List<userInformationEntity> user = userInfo.findUser(String.valueOf(id));
         if(user.size() == 1){
-            return user.get(0);
+            userInformationEntity userDetails = user.get(0);
+            userDetails.setStatus("Online");
+            Boolean update = userInfo.updateUser(userDetails);
+            return userInfo.findUser(String.valueOf(id)).get(0);
         }
         else{
             return null;
@@ -85,6 +86,37 @@ public class Controller {
 
         userProfile userProfile = new userProfile(err, errMessage, imgLoc);
         return userProfile;
+    }
+
+    @PostMapping("/updatePassword")
+    public userInformationEntity updatePassword(@ModelAttribute updatedPassword user) {
+        userInfoTransactions userInfo = new userInfoTransactions();
+        userInformationEntity userDetails = userInfo.findUser(user.getUserName()).get(0);
+        userDetails.setPassword(user.getNewPassword());
+        Boolean update = userInfo.updateUser(userDetails);
+        return userInfo.findUser(user.getUserName()).get(0);
+    }
+
+    @PostMapping("/updateProfile")
+    public userInformationEntity updateProfile(@ModelAttribute updateProfile user) {
+        userInfoTransactions userInfo = new userInfoTransactions();
+        userInformationEntity userDetails = userInfo.findUser(user.getUserName()).get(0);
+        if(!user.getStatus().equals(""))
+            userDetails.setStatus(user.getStatus());
+        if(!user.getContact().equals(""))
+            userDetails.setContact(user.getContact());
+        if(!user.getEmail().equals(""))
+            userDetails.setStatus(user.getEmail());
+        Boolean update = userInfo.updateUser(userDetails);
+        return userInfo.findUser(user.getUserName()).get(0);
+    }
+
+    @PostMapping("/logout")
+    public void userLogOut(@ModelAttribute userLogOut user) {
+        userInfoTransactions userInfo = new userInfoTransactions();
+        userInformationEntity userDetails = userInfo.findUser(user.getUserName()).get(0);
+        userDetails.setStatus(user.getStatus());
+        Boolean update = userInfo.updateUser(userDetails);
     }
 
 //    @PostMapping("/updateNotes") still to be implemented

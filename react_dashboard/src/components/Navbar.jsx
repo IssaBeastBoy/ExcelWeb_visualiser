@@ -29,7 +29,7 @@ const NavButton = ({ title, customFunc, icon, color, dotColor }) => (
 );
 
 const Navbar = () => {
-    const { activeMenu, setActiveMenu, details, isClicked, setIsClicked, handleClick, setScreenSize, screenSize, userProfile, setProfile } = useStateContext();
+    const { activeMenu, setActiveMenu, details, isClicked, initialState, handleClick, setScreenSize, screenSize, userProfile, setProfile } = useStateContext();
     useEffect(() => {
         const handleResize = () => setScreenSize(() => window.innerWidth);
 
@@ -39,6 +39,13 @@ const Navbar = () => {
 
         return () => window.removeEventListener('resize', handleResize);
     }, []);
+
+    const [status, setStatus] = useState({
+        Online: "#22c55e",
+        Offline: "#64748b",
+        Away: "#f59e0b"
+    })
+    // const [stateColor, setColor] = useState("#22c55e");
 
     useEffect(() => {
         if (screenSize <= 900) {
@@ -52,18 +59,19 @@ const Navbar = () => {
     const [proPic, setImg] = useState(require("../data/default_IMG.png"));
 
     if (setter) {
-        console.log(userProfile);
+        // setColor(status[details.status]);
         const formData = new FormData();
         formData.append("fileLoc", details.img);
         const API_URL = "http://localhost:8080/getProfile";
         const response = axios.post(API_URL, formData).then(async (res) => {
-            console.log(res.data);
             setProfile(res.data);
             if (res.data.err) {
                 setImg(require(`../data/${res.data.imgLoc}.png`));
+                userProfile["imgLoc"] = require(`../data/${res.data.imgLoc}.png`);
             }
             else {
                 alert(res.data.errMessage);
+                userProfile["imgLoc"] = require("../data/default_IMG.png");
             }
 
         });
@@ -88,18 +96,28 @@ const Navbar = () => {
                 <NavButton title="Chat" dotColor="#03C9D7" customFunc={() => handleClick('Chats')} color='blue' icon={<BsChatLeft />} />
                 <NavButton title="Notification" dotColor="rgb(254, 201, 15)" customFunc={() => handleClick('Notifications')} color='blue' icon={<RiNotification3Line />} />
                 <TooltipComponent content="Profile" position="BottomCenter">
-                    <div className='flex item-center gap-2 cursor-pointer p-1 hover:bg-light-gray rounded-lg' onClick={() => handleClick("userProfile")}>
+                    <div>
+                        <div className='flex item-center gap-2 cursor-pointer p-1 hover:bg-gray-200 rounded-lg' onClick={() => handleClick("userProfile")}>
                         <img src={proPic} alt={"Profile Picture"} className="rounded-full w-8 h-8" />
+                            <span
+                                style={{ background: status[details.status] }}
+                                className=" inline-flex rounded-full h-2 w-2 left-2 top-2"
+                            />
                         <p>
                             <span className='text-gray-400 text-14'> Hi, {details.name} </span>
                             <span className='text-gray-400 font-bold ml-1 text-14'>Welcome to FNB Leads!</span>
                             <MdKeyboardArrowDown className='text-gray-400 text-14' />
                         </p>
+                        </div>
+                        {
+                            initialState.userProfile ? (<div>{isClicked.userProfile && <UserProfile />} </div>) : (<div />)
+                        }
+
                     </div>
                 </TooltipComponent>
                 {isClicked.Chats && <Chat />}
                 {isClicked.Notifications && <Notification />}
-                {isClicked.userProfile && <UserProfile />}
+
             </div>
         </div>
 
