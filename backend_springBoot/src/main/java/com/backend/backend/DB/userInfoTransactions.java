@@ -6,6 +6,7 @@ import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
 
+import java.io.File;
 import java.util.List;
 
 public class userInfoTransactions {
@@ -58,7 +59,21 @@ public class userInfoTransactions {
         Boolean User = true;
         Session session = null;
         Transaction transaction = null;
-        userInformationEntity userAdd = new userInformationEntity(password,Name,Surname,email,contactNum,LASnumber);
+        String currentDirectory;
+        File file = new File(".");
+        currentDirectory = file.getAbsolutePath();
+        String[] parseDir = currentDirectory.split("\\\\");
+        String storage = "";
+        for(int parse=0; parse < parseDir.length; parse++){
+            if(parseDir[parse].equals("backend_springBoot")){
+                storage += "react_dashboard\\";
+                break;
+            }
+            else {
+                storage += parseDir[parse]+"\\";
+            }
+        }
+        userInformationEntity userAdd = new userInformationEntity(password,Name,Surname,email,contactNum,LASnumber, storage);
         try {
             session = sessionFactory.openSession();
             transaction = session.beginTransaction();

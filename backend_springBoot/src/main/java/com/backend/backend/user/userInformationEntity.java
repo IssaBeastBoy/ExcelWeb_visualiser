@@ -13,19 +13,17 @@ public class userInformationEntity {
     public userInformationEntity(){}
 
     public userInformationEntity(String password, String Name, String Surname, String email,
-            String phoneNum, String LASnumber) {
+            String phoneNum, String LASnumber, String dir) {
         this.password = password;
         this.name = Name;
         this.surname = Surname;
         this.email = email;
         this.contact = phoneNum;
-        this.img = "C:\\Users\\f5462797\\Applications\\Grad_project\\Grad_Project2022\\backend_springBoot\\src\\main\\resources\\uploads\\"
-                + LASnumber + "\\img\\";
+        this.img = dir+ "src\\data\\" + LASnumber + "\\img\\";
         this.status = "Online";
         this.calendar = "";
         this.notes = "";
-        this.fileStorageDir = "C:\\Users\\f5462797\\Applications\\Grad_project\\Grad_Project2022\\backend_springBoot\\src\\main\\resources\\uploads\\"
-                + LASnumber + "\\excel\\";
+        this.fileStorageDir = dir+ "src\\data\\" + LASnumber + "\\excel\\";
         this.tickets = "";
         this.chats = "";
         this.notifications = "";

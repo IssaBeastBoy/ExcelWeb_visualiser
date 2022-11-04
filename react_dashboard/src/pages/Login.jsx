@@ -5,7 +5,7 @@ import axios from "axios";
 import { useStateContext } from '../context/ContextProvider';
 import { RangeSelector } from "../components";
 const Login = () => {
-    const { setStatus, setState, login } = useStateContext();
+    const { setStatus, setState, login, setProfile } = useStateContext();
 
     const [user, setLogin] = useState({
         name: "",
@@ -19,7 +19,7 @@ const Login = () => {
         }
     }
 
-    const loginButton = event => {
+    const loginButton = async (event) => {
         if (user.name === "" || user.password === "") {
             alert("Ensure both fields are filled in.");
         }
@@ -38,14 +38,14 @@ const Login = () => {
                 digits++;
             }
             const API_URL = "http://localhost:8080/login/" + uniqueID;
-            const response = axios.get(API_URL).then(res => {
-                const users = res.data;
+            const response = axios.get(API_URL).then(async (response) => {
+                const users = response.data;
                 setState(users);
                 if (users.loginName === undefined || digits !== 5) {
                     alert("Error: Wrong login details. \n Enter correct details.");
                 }
                 else if (uniqueID === `${users.loginName}` && user.password === users.password) {
-                    setStatus(true);
+                    setStatus(true);                    
                 }
                 else {
                     alert("Incorrect password or username");
