@@ -94,7 +94,7 @@ const Navbar = () => {
                 )}
             <div className='flex items-center gap-3'>
                 <NavButton title="Chat" dotColor="#03C9D7" customFunc={() => handleClick('Chats')} color='blue' icon={<BsChatLeft />} />
-                <NavButton title="Notification" dotColor="rgb(254, 201, 15)" customFunc={() => handleClick('Notifications')} color='blue' icon={<RiNotification3Line />} />
+                {/* <NavButton title="Notification" dotColor="rgb(254, 201, 15)" customFunc={() => handleClick('Notifications')} color='blue' icon={<RiNotification3Line />} /> */}
                 <TooltipComponent content="Profile" position="BottomCenter">
                     <div>
                         <div className='flex item-center gap-2 cursor-pointer p-1 hover:bg-gray-200 rounded-lg' onClick={() => handleClick("userProfile")}>

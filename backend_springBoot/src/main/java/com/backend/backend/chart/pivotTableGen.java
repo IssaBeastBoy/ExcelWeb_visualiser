@@ -77,6 +77,7 @@ public class pivotTableGen {
             }
 
         }
+        pivotTableHeader.add("Total");
         pivotTableValues.put("Header", pivotTableHeader);
         pivotTableValues.put("colNames", columnNames);
         pivotTableValues.put("rowNames", rowNames);
@@ -93,17 +94,46 @@ public class pivotTableGen {
         for(int parseHorizontal=0; parseHorizontal < rowNames.size(); parseHorizontal++){
             List<String> rowValues = new ArrayList<>();
             rowValues.add(rowNames.get(parseHorizontal));
+            int rowSum=0;
+            double rowPercent=0.0;
             for(int parseVertical = 0; parseVertical < columnNames.size(); parseVertical++){
-                if(displayType.equals("number"))
-                    rowValues.add(String.valueOf(pivotValue.get(rowNames.get(parseHorizontal)+"^"+columnNames.get(parseVertical))));
+                if(displayType.equals("number")) {
+                    rowSum+= pivotValue.get(rowNames.get(parseHorizontal) + "^" + columnNames.get(parseVertical));
+                    rowValues.add(String.valueOf(pivotValue.get(rowNames.get(parseHorizontal) + "^" + columnNames.get(parseVertical))));
+                }
                 else{
                     double currCount = (double) (pivotValue.get(rowNames.get(parseHorizontal)+"^"+columnNames.get(parseVertical)))*100/totalCustomers;
-
+                    rowPercent += currCount;
                     rowValues.add(String.valueOf(String.format("%.5f", currCount)));
                 }
             }
+            if(displayType.equals("number"))
+                rowValues.add(String.valueOf(rowSum));
+            else
+                rowValues.add(String.valueOf(String.format("%.5f", rowPercent)));
             bodyItems.add(rowValues);
         }
+        List<String> rowValues = new ArrayList<>();
+        for(int parse=0; parse < bodyItems.size(); parse++){
+            List<String> tempStorage = bodyItems.get(parse);
+            for(int index=1; index < tempStorage.size(); index++){
+                if(parse==0){
+                    rowValues.add(tempStorage.get(index));
+                }
+                else{
+                    if(displayType.equals("number")){
+                        int currNum = Integer.parseInt(rowValues.get(index-1))+ Integer.parseInt(tempStorage.get(index));
+                        rowValues.set(index-1,String.valueOf(currNum));
+                    }
+                    else{
+                        double currNum = Double.parseDouble(rowValues.get(index-1))+ Double.parseDouble(tempStorage.get(index));
+                        rowValues.set(index-1, String.valueOf(String.format("%.5f", currNum)));
+                    }
+                }
+            }
+        }
+        rowValues.add(0, "Total");
+        bodyItems.add(rowValues);
         pivotTableBody.put("Body", bodyItems);
     }
 

@@ -443,14 +443,14 @@ const Tickets = () => {
                     </div>
                 )
             }
-            <div>
+            {/* <div>
                 <KanbanComponent actionBegin={updateTicket} id="tickets" dataSource={kanbanData} cardSettings={{ contentField: 'Summary', headerField: 'Id', grabberField: "Color" }} keyField="Status">
                     <ColumnsDirective>
                         {kanbanGrid.map((item, index) => <ColumnDirective key={index} {...item} />)}
             </ColumnsDirective>
         </KanbanComponent>
 
-        </div>
+        </div> */}
         </div>
 
     )

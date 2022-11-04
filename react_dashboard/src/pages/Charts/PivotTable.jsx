@@ -146,7 +146,7 @@ const PivotTable = () => {
 
     return (
         <div className="m-2 md:m-10 mt-24 p-2 md:p-10 bg-white rounded-3xl">
-            <Header category="Comparative Analysis" title="Pivat Table View" />
+            <Header category="Comparative Analysis" title="Pivot Table View" />
             <div>
                 <label>
                     Please select Excel sheet to use:
