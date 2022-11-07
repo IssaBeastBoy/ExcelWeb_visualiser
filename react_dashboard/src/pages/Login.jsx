@@ -24,24 +24,15 @@ const Login = () => {
             alert("Ensure both fields are filled in.");
         }
         else {
-            const getUniqueID = user.name.split('');
-            let uniqueID = "";
-            let leadZeros = true;
-            let digits = 0;
-            for (let index = 3; index < getUniqueID.length; index++) {
-                if (getUniqueID[index] !== "0" && leadZeros) {
-                    leadZeros = false;
-                }
-                if (!leadZeros) {
-                    uniqueID = uniqueID + getUniqueID[index];
-                }
-                digits++;
-            }
-            const API_URL = "http://localhost:8080/login/" + uniqueID;
+            let userName = user.name.toLowerCase();
+            const getUniqueID = userName.split('r');
+            let uniqueID = getUniqueID[1];
+            if (getUniqueID[0] == "vsuse") {
+                const API_URL = "http://localhost:8080/login/" + getUniqueID[1];
             const response = axios.get(API_URL).then(async (response) => {
                 const users = response.data;
                 setState(users);
-                if (users.loginName === undefined || digits !== 5) {
+                if (users.loginName === undefined || uniqueID == "") {
                     alert("Error: Wrong login details. \n Enter correct details.");
                 }
                 else if (uniqueID === `${users.loginName}` && user.password === users.password) {
@@ -51,6 +42,10 @@ const Login = () => {
                     alert("Incorrect password or username");
                 }
             });
+            }
+            else {
+                alert("Wrong user name or password!")
+            }
         }
     }
 
@@ -63,8 +58,8 @@ const Login = () => {
                 </div>
 
                 <div className="form-group">
-                    <label>LAS number</label> <br />
-                    <input type="text" className="form-control" required placeholder="Enter LAS number" onChange={event => setLogin({ ...user, name: event.target.value })} value={user.name} />
+                    <label>User name</label> <br />
+                    <input type="text" className="form-control" required placeholder="Enter VSUser..." onChange={event => setLogin({ ...user, name: event.target.value })} value={user.name} />
                 </div>
 
                 <div className="form-group">

@@ -55,27 +55,28 @@ const Navbar = () => {
         }
     }, [screenSize]);
 
-    const [setter, Set] = useState(true);
+    const [setter, Set] = useState(true);    
+
     const [proPic, setImg] = useState(require("../data/default_IMG.png"));
 
     if (setter) {
-        // setColor(status[details.status]);
         const formData = new FormData();
         formData.append("fileLoc", details.img);
         const API_URL = "http://localhost:8080/getProfile";
         const response = axios.post(API_URL, formData).then(async (res) => {
-            setProfile(res.data);
             if (res.data.err) {
                 setImg(require(`../data/${res.data.imgLoc}.png`));
-                userProfile["imgLoc"] = require(`../data/${res.data.imgLoc}.png`);
+                setProfile(res.data);               
             }
             else {
                 alert(res.data.errMessage);
-                userProfile["imgLoc"] = require("../data/default_IMG.png");
+                setImg(require("../data/default_IMG.png"));
+                setProfile({
+                    imgLoc: "default_IMG",
+                });
             }
-
+            Set(false);
         });
-        Set(false);
     }
 
     return (
@@ -88,8 +89,8 @@ const Navbar = () => {
                 ) : (
                     <div className='items-center gap-1 ml-3 mt-4 flex text-xl font-extrabold tracking-tight dark:text-white text-slate-900'>
                         <NavButton title="Menu" className='h-1' customFunc={() => setActiveMenu((prevActiveMenu) => !prevActiveMenu)} color='blue' icon={<AiOutlineMenu />} />
-                        <img src={require("../data/FNB_LOGO.png")} alt={"Logo"} />
-                        <span>FNB Leads Analysis System</span>
+                        <img src={require("../data/LOGO.png")} className="rounded-full scale-50 w-36 h-36" alt={"Logo"} />
+                        <span>Excel Visualiser Analysis System</span>
                     </div>
                 )}
             <div className='flex items-center gap-3'>
@@ -97,15 +98,16 @@ const Navbar = () => {
                 {/* <NavButton title="Notification" dotColor="rgb(254, 201, 15)" customFunc={() => handleClick('Notifications')} color='blue' icon={<RiNotification3Line />} /> */}
                 <TooltipComponent content="Profile" position="BottomCenter">
                     <div>
+
                         <div className='flex item-center gap-2 cursor-pointer p-1 hover:bg-gray-200 rounded-lg' onClick={() => handleClick("userProfile")}>
-                        <img src={proPic} alt={"Profile Picture"} className="rounded-full w-8 h-8" />
+                            <img src={proPic} alt={"Profile Picture"} className="rounded-full w-8 h-8" />
                             <span
                                 style={{ background: status[details.status] }}
                                 className=" inline-flex rounded-full h-2 w-2 left-2 top-2"
                             />
                         <p>
                             <span className='text-gray-400 text-14'> Hi, {details.name} </span>
-                            <span className='text-gray-400 font-bold ml-1 text-14'>Welcome to FNB Leads!</span>
+                                <span className='text-gray-400 font-bold ml-1 text-14'>Welcome to Excel Visualiser!</span>
                             <MdKeyboardArrowDown className='text-gray-400 text-14' />
                         </p>
                         </div>

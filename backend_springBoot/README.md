@@ -12,7 +12,7 @@ Using this link to download the appropriate Maven version: https://maven.apache.
 
 **Suggested IDE: Intellij IDEA**
 
-###Installation
+### Installation:
 Install all the mentioned requirements.
 
 #### Spring Boot start up

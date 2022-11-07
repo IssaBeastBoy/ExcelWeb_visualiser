@@ -57,7 +57,6 @@ const Register = () => {
                 else {
                     for (let index = 0; index < users.length; index++) {
                         let details = users[index];
-                        console.log("checking1");
                         if (details.email === user.email) {
                             alert("Email address already exists");
                             setRegistion(false);
@@ -154,9 +153,9 @@ const Register = () => {
                                         <div className="flex-col justify-center  bg-white py-12 px-24 border-4 border-sky-500 rounded-xl ">
 
                                             <div className=" text-lg  text-zinc-600   mb-10" >
-                                                <p> Please keep the below LAS number safe:</p><br />
+                                            <p> Please keep the below User name safe:</p><br />
                                                 <p className="font-black"> {lasNumber}</p> <br />
-                                                <p>NOTE: Use above LAS number for further login</p>
+                                            <p>NOTE: Use above User number for further login</p>
 
                                             </div>
                                             <div className="flex">
