@@ -7,7 +7,7 @@ This is the directory which contains all the ReactJS functionality of this web a
 #### NodeJS
 Link: https://nodejs.org/en/download/
 
-### Installations
+### Installations:
 Download the aproperiate file type based on the OS being used to install **NodeJS**.
 
 ##### `npm install react react-dom `

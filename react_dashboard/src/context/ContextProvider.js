@@ -78,7 +78,11 @@ export const ContextProvider = ({ children }) => {
     const [lineChart, showLineChart] = useState(false);
 
     const [login, setStatus] = useState(false);
-    const [userProfile, setProfile] = useState({});
+    const [userProfile, setProfile] = useState(
+        {
+            imgLoc: "default_IMG",
+        }
+    );
 
     const [activeMenu, setActiveMenu] = useState
         (true);

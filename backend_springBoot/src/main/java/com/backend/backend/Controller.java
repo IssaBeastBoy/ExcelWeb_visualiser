@@ -111,6 +111,60 @@ public class Controller {
         return userInfo.findUser(user.getUserName()).get(0);
     }
 
+    @PostMapping("/updatePicture")
+    public pictureUpdate updatePicture(@ModelAttribute userPicture user) {
+        Boolean err = false;
+        String message = "";
+        String imgLoc = "";
+        try{
+            String fileName = StringUtils.cleanPath(user.getImgFile().getOriginalFilename());
+            fileName.toLowerCase();
+            File dir = new File(user.getImgDir());
+            String[] dirContent = dir.list();
+            String[] parseDir = user.getImgDir().split("\\\\");
+            for (int i=0; i<dirContent.length; i++)
+            {
+                File curr = new File(user.getImgDir()+dirContent[i]);
+                if (curr.delete()) {
+                    message += dirContent[i] + " successfully deleted. \n";
+                } else {
+                    message += "Error: \n Failed to delete " + dirContent[i];
+                    err= true;
+                }
+            }
+            if(!err){
+                try{
+                    message += "Profile picture updated: " + fileName;
+                    Path userLocation = Path.of(user.getImgDir() + fileName);
+                    Files.copy(user.getImgFile().getInputStream(), userLocation, StandardCopyOption.REPLACE_EXISTING);
+                    Boolean addDir = false;
+                    for (int parse=0; parse<parseDir.length && dirContent.length == 1; parse++)
+                    {
+                        if(addDir){
+                            imgLoc += parseDir[parse]+"/";
+                        }
+                        else if(parseDir[parse].equals("data")){
+                            //imgLoc += "../"+parseDir[parse]+"/";
+                            addDir =  true;
+                        }
+                    }
+                }
+                catch (Exception ex){
+                    message = ex.toString();
+                }
+            }
+            imgLoc += fileName.split("\\.")[0];
+        }
+        catch (Exception ex){
+            err= true;
+            message = "Error: \n" + ex;
+        }
+
+        pictureUpdate update = new pictureUpdate(err, message, imgLoc);
+
+        return update;
+    }
+
     @PostMapping("/logout")
     public void userLogOut(@ModelAttribute userLogOut user) {
         userInfoTransactions userInfo = new userInfoTransactions();
@@ -388,10 +442,7 @@ public class Controller {
     public ResponseEntity<newUserResponse> registerUser(@ModelAttribute newUserBody user){
         userInfoTransactions userInfo = new userInfoTransactions();
         String[] createLas = user.getLasNumbr().split("");
-        String lasNumber = "LAS";
-        for(int digit = 5- createLas.length; digit > 0; digit--){
-            lasNumber += "0";
-        }
+        String lasNumber = "VSuser";
         lasNumber += user.getLasNumbr();
         Boolean userCreated = userInfo.addUser(user.getPassword(),user.getName(),user.getSurname()
                 ,user.getEmail(),user.getContact(),lasNumber);
@@ -411,7 +462,6 @@ public class Controller {
             return new ResponseEntity<>(newUser, HttpStatus.FORBIDDEN);
         }
     }
-
 
     @PostMapping("/pivotTable")
     public pivotDetails pivotTable (@ModelAttribute pivotTableRequest details){

@@ -30,7 +30,7 @@ const Table = () => {
                 let tempValue = res[parse];
                 let tempDic = {};
                 tempDic["Name"] = tempValue[0];
-                tempDic["Customer Count"] = Number(tempValue[1]);
+                tempDic["Total Count"] = Number(tempValue[1]);
                 tempDic["Percentage (%)"] = parseFloat(tempValue[2]);
                 results.push(tempDic);
             }

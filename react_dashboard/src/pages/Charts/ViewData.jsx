@@ -124,7 +124,7 @@ const ViewData = () => {
                                     </div>
                                 </div>) : (
                                     <div className=' p-5 gap-20 fixed items-center'>
-                                        <img className='text-xl items-center' src={require("../../data/FNB_LOGO.png")} alt={"Logo"} />
+                                            <img className='text-xl items-centerrounded-full scale-50 w-36 h-36' src={require("../../data/LOGO.png")} alt={"Logo"} />
                                         <span className='font-extrabold'>Loading excel sheet ...</span>
                                     </div>
                                 )

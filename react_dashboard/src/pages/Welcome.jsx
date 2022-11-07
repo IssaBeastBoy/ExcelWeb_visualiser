@@ -10,7 +10,7 @@ const Welcome = () => {
         <div>
             <div className='p-4 justify-between'>
                 <p >
-                    Welcome to the FNB Lead Analysis System: <br />
+                    Welcome to the Excel Visualiser System: <br />
                     Defination of the System...
                 </p>
             </div>

@@ -25,7 +25,7 @@ const SideBar = () => {
                     <Link to='/Welcome' onClick={() => setActiveMenu(false)} className='items-center gap-3 ml-3 mt-4 flex text-xl 
                     font-extrabold tracking-tight dark:text-white text-slate-900'>
                         {handleCloseSideBar}
-                        <img src={require("../data/FNB_LOGO.png")} alt={"Logo"} /> <span>FNB Leads</span>
+                        <img src={require("../data/LOGO.png")} className="rounded-full scale-50 w-36 h-36" alt={"Logo"} /> <span>EXCEL VS</span>
                     </Link>
                     <TooltipComponent content="Menu" position="BottomCenter">
                         <button type='button' onClick={() => setActiveMenu((prevActiveMenu => !prevActiveMenu))} className="text-x1 rounded-full mp-3
